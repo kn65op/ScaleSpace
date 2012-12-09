@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Main", "Main\Main.vcxproj", "{B21B91B1-314A-4669-BB6A-60331A6147BE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C81A83E4-5FC2-48E9-A9CD-BF5835601892} = {C81A83E4-5FC2-48E9-A9CD-BF5835601892}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenCLInterface", "..\BFIOCL\BayerFilter\OpenCLInterface\OpenCLInterface.vcxproj", "{C81A83E4-5FC2-48E9-A9CD-BF5835601892}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenCLAlgorithmTest", "..\BFIOCL\BayerFilter\OpenCLAlgorithmTest\OpenCLAlgorithmTest.vcxproj", "{626BE3A3-67B7-43CA-8447-3904C5B84FFE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenCLDeviceTest", "..\BFIOCL\BayerFilter\OpenCLDeviceTest\OpenCLDeviceTest.vcxproj", "{8B071259-3D40-4D45-9FD1-9F5ADF744577}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B21B91B1-314A-4669-BB6A-60331A6147BE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B21B91B1-314A-4669-BB6A-60331A6147BE}.Debug|Win32.Build.0 = Debug|Win32
+		{B21B91B1-314A-4669-BB6A-60331A6147BE}.Release|Win32.ActiveCfg = Release|Win32
+		{B21B91B1-314A-4669-BB6A-60331A6147BE}.Release|Win32.Build.0 = Release|Win32
+		{C81A83E4-5FC2-48E9-A9CD-BF5835601892}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C81A83E4-5FC2-48E9-A9CD-BF5835601892}.Debug|Win32.Build.0 = Debug|Win32
+		{C81A83E4-5FC2-48E9-A9CD-BF5835601892}.Release|Win32.ActiveCfg = Release|Win32
+		{C81A83E4-5FC2-48E9-A9CD-BF5835601892}.Release|Win32.Build.0 = Release|Win32
+		{626BE3A3-67B7-43CA-8447-3904C5B84FFE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{626BE3A3-67B7-43CA-8447-3904C5B84FFE}.Debug|Win32.Build.0 = Debug|Win32
+		{626BE3A3-67B7-43CA-8447-3904C5B84FFE}.Release|Win32.ActiveCfg = Release|Win32
+		{626BE3A3-67B7-43CA-8447-3904C5B84FFE}.Release|Win32.Build.0 = Release|Win32
+		{8B071259-3D40-4D45-9FD1-9F5ADF744577}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8B071259-3D40-4D45-9FD1-9F5ADF744577}.Debug|Win32.Build.0 = Debug|Win32
+		{8B071259-3D40-4D45-9FD1-9F5ADF744577}.Release|Win32.ActiveCfg = Release|Win32
+		{8B071259-3D40-4D45-9FD1-9F5ADF744577}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
