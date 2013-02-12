@@ -1,0 +1,3 @@
+[submodule "OpenCLpp"]
+	path = OpenCLpp
+	url = git@github.com:kn65op/OpenCLpp.git

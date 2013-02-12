@@ -8,12 +8,13 @@
 
 int main()
 {
+  int a = 0;
   try
   {
-    OpenCLDevice device = OpenCLDevice::getDevices().front();
-
     OpenCLGaussian gaussian;
-
+    
+    OpenCLDevice device = OpenCLDevice::getDevices().front();
+    
     gaussian.setDevice(device);
 
     gaussian.prepare();
@@ -36,5 +37,5 @@ int main()
     std::cout << ex.getFullMessage() << "\n";
   }
 
-  return 0;
+  return a;
 }
