@@ -50,7 +50,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetName>ScaleSpace</TargetName>
-    <IncludePath>..\..\BFIOCL\BayerFilter\OpenCLInterface;$(IncludePath)</IncludePath>
+    <IncludePath>..\OpenCLpp\OpenCLInterface;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
     <LibraryPath>..\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>

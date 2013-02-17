@@ -12,15 +12,11 @@ int main()
   try
   {
     OpenCLAlgorithmsStream gaussian_stream;
-    OpenCLAlgorithm *gaussian = new OpenCLGaussianImage();
+    OpenCLImageAlgorithm *gaussian = new OpenCLGaussianImage();
 
     gaussian_stream.pushAlgorithm(gaussian);
     
     OpenCLDevice device = OpenCLDevice::getDevices().front();
-    
-    gaussian_stream.setDevice(device);
-
-    gaussian_stream.prepare();
 
     cv::Mat input, input_tmp;
     input_tmp = cv::imread("in.bmp", CV_LOAD_IMAGE_GRAYSCALE);
@@ -28,11 +24,16 @@ int main()
     
     cv::Mat output(input.size(), input.type());
     
-    gaussian_stream.setDataSize(input.size().width, input.size().height));
+    gaussian_stream.setDataSize(input.size().width, input.size().height);
+    
+    gaussian_stream.setDevice(device);
+
+    gaussian_stream.prepare();
 
     gaussian_stream.processImage(input.data, output.data);
 
-    output.convertTo(output, CV_8U, 255);
+    std::cout << output.at<float>(0,0) << "\n";
+    output.convertTo(output, CV_8U, 255.0);
     cv::imwrite("out.bmp", output);
   }
   catch (OpenCLException ex)
