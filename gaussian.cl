@@ -3,8 +3,8 @@ __kernel void  gaussian_not_image( __constant float * mask, __global float* inpu
   int width_output = get_global_size(0); 
   int width = get_global_size(0) + 2; 
 
-  int j = get_global_id(0); //column number
-  int i = get_global_id(1) + 1; //row number
+  int i = get_global_id(0); //column number
+  int j = get_global_id(1) + 1; //row number
   int iout = get_global_id(1); 
 
   int ptr = i * width + j; 
@@ -36,14 +36,14 @@ __kernel void  gaussian(__read_only image2d_t input, __write_only image2d_t outp
   
   
   write_imagef(output, (int2)(i,j), 
-  read_imagef(input, sampler, (int2)(i-1, j-1)) * 0.1 + 
-  read_imagef(input, sampler, (int2)(i, j-1)) * 0.1 + 
-  read_imagef(input, sampler, (int2)(i+1, j-1)) * 0.1 +
-  read_imagef(input, sampler, (int2)(i-1, j)) * 0.1 +
-  read_imagef(input, sampler, (int2)(i, j)) * 0.1 +
-  read_imagef(input, sampler, (int2)(i+1, j)) * 0.1 +
-  read_imagef(input, sampler, (int2)(i-1, j+1)) * 0.1 +
-  read_imagef(input, sampler, (int2)(i, j+1)) * 0.1 +
-  read_imagef(input, sampler, (int2)(i+1, j+1)) * 0.1);
+  read_imagef(input, sampler, (int2)(i-1, j-1)) * 0.111111111111 + 
+  read_imagef(input, sampler, (int2)(i, j-1)) * 0.111111111111 + 
+  read_imagef(input, sampler, (int2)(i+1, j-1)) * 0.111111111111 +
+  read_imagef(input, sampler, (int2)(i-1, j)) * 0.111111111111 +
+  read_imagef(input, sampler, (int2)(i, j)) * 0.111111111111 +
+  read_imagef(input, sampler, (int2)(i+1, j)) * 0.111111111111 +
+  read_imagef(input, sampler, (int2)(i-1, j+1)) * 0.111111111111 +
+  read_imagef(input, sampler, (int2)(i, j+1)) * 0.111111111111 +
+  read_imagef(input, sampler, (int2)(i+1, j+1)) * 0.111111111111);
   
 }
