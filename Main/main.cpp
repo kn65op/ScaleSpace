@@ -14,10 +14,10 @@ int main()
     OpenCLAlgorithmsStream gaussian_stream;
     OpenCLImageAlgorithm *gaussian = new OpenCLGaussianImage();
 
-    cv::Mat gaussian_kernel = cv::getGaussianKernel(9, -1, CV_32F);
+    cv::Mat gaussian_kernel = cv::getGaussianKernel(400, -1, CV_32F);
 
     OpenCLGaussianParams params;
-    params.setMask(3, gaussian_kernel.data);
+    params.setMask(20, gaussian_kernel.data);
     gaussian->setParams(params);
 
     gaussian_stream.pushAlgorithm(gaussian);
@@ -39,6 +39,7 @@ int main()
     gaussian_stream.processImage(input.data, output.data);
 
     std::cout << output.at<float>(0,0) << "\n";
+    std::cout << gaussian_stream.getTime() << "\n";
     output.convertTo(output, CV_8U, 255.0);
     cv::imwrite("out.bmp", output);
   }
