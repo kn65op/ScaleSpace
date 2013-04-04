@@ -3,6 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Main", "Main\Main.vcxproj", "{B21B91B1-314A-4669-BB6A-60331A6147BE}"
 	ProjectSection(ProjectDependencies) = postProject
+		{CE2E28E3-0A39-427E-891B-0353B0AAF61D} = {CE2E28E3-0A39-427E-891B-0353B0AAF61D}
 		{C81A83E4-5FC2-48E9-A9CD-BF5835601892} = {C81A83E4-5FC2-48E9-A9CD-BF5835601892}
 	EndProjectSection
 EndProject
@@ -16,6 +17,13 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenCLAlgorithmTest", "OpenCLpp\OpenCLAlgorithmTest\OpenCLAlgorithmTest.vcxproj", "{626BE3A3-67B7-43CA-8447-3904C5B84FFE}"
 	ProjectSection(ProjectDependencies) = postProject
 		{C81A83E4-5FC2-48E9-A9CD-BF5835601892} = {C81A83E4-5FC2-48E9-A9CD-BF5835601892}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ScaleSpace", "ScaleSpace\ScaleSpace.vcxproj", "{CE2E28E3-0A39-427E-891B-0353B0AAF61D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ScaleSpaceTest", "ScaleSpaceTest\ScaleSpaceTest.vcxproj", "{597EF6D2-EF4C-4782-9B4C-7A9EB6CD025D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CE2E28E3-0A39-427E-891B-0353B0AAF61D} = {CE2E28E3-0A39-427E-891B-0353B0AAF61D}
 	EndProjectSection
 EndProject
 Global
@@ -49,6 +57,18 @@ Global
 		{626BE3A3-67B7-43CA-8447-3904C5B84FFE}.DLL|Win32.Build.0 = Debug|Win32
 		{626BE3A3-67B7-43CA-8447-3904C5B84FFE}.Release|Win32.ActiveCfg = Release|Win32
 		{626BE3A3-67B7-43CA-8447-3904C5B84FFE}.Release|Win32.Build.0 = Release|Win32
+		{CE2E28E3-0A39-427E-891B-0353B0AAF61D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CE2E28E3-0A39-427E-891B-0353B0AAF61D}.Debug|Win32.Build.0 = Debug|Win32
+		{CE2E28E3-0A39-427E-891B-0353B0AAF61D}.DLL|Win32.ActiveCfg = Debug|Win32
+		{CE2E28E3-0A39-427E-891B-0353B0AAF61D}.DLL|Win32.Build.0 = Debug|Win32
+		{CE2E28E3-0A39-427E-891B-0353B0AAF61D}.Release|Win32.ActiveCfg = Release|Win32
+		{CE2E28E3-0A39-427E-891B-0353B0AAF61D}.Release|Win32.Build.0 = Release|Win32
+		{597EF6D2-EF4C-4782-9B4C-7A9EB6CD025D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{597EF6D2-EF4C-4782-9B4C-7A9EB6CD025D}.Debug|Win32.Build.0 = Debug|Win32
+		{597EF6D2-EF4C-4782-9B4C-7A9EB6CD025D}.DLL|Win32.ActiveCfg = Debug|Win32
+		{597EF6D2-EF4C-4782-9B4C-7A9EB6CD025D}.DLL|Win32.Build.0 = Debug|Win32
+		{597EF6D2-EF4C-4782-9B4C-7A9EB6CD025D}.Release|Win32.ActiveCfg = Release|Win32
+		{597EF6D2-EF4C-4782-9B4C-7A9EB6CD025D}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
