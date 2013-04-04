@@ -41,7 +41,7 @@
     <Import Project="..\..\PropertySheets\OpenCV.props" />
     <Import Project="..\..\PropertySheets\OpenCVD.props" />
     <Import Project="OpenCLInterface.props" />
-    <Import Project="..\ScaleSpace.props" />
+    <Import Project="..\ScaleSpaceD.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
