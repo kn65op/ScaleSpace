@@ -1,6 +1,7 @@
 #pragma once
 
 #include <opencv\cxcore.h>
+#include <string>
 
 #include "ScaleSpaceImage.h"
 
@@ -8,6 +9,21 @@
  * requirements:
  * load image, process, get result
  */
+
+class ScaleSpaceException
+{
+  std::string message;
+public:
+  ScaleSpaceException(std::string m) : message(m)
+  {
+    
+  }
+  
+  operator std::string ()
+  {
+    return message;
+  }
+};
 
 /** Scale Space process.
  * It contains all data, which is need to process image with Scale Space algorithm.
