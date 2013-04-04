@@ -18,10 +18,10 @@ int main()
     OpenCLImageAlgorithm *itf = new OpenCLIntToFloat();
     OpenCLImageAlgorithm *fti = new OpenCLFloatToInt();
 
-    cv::Mat gaussian_kernel = cv::getGaussianKernel(9, -1, CV_32F);
+    cv::Mat gaussian_kernel = cv::getGaussianKernel(25, -1, CV_32F);
 
     OpenCLGaussianParams params;
-    params.setMask(3, gaussian_kernel.data);
+    params.setMask(5, gaussian_kernel.data);
     gaussian->setParams(params);
 
     gaussian_stream.pushAlgorithm(itf);
