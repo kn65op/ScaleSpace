@@ -58,7 +58,7 @@ public:
   void setScaleStep(unsigned int step, unsigned int nr);
   
   /** Set max scale with number of scales.
-   * It will create scales from 1 (original image) to max with step (max - 1) / nr. If step will be not integer it will throw exception.
+   * It will create scales from 1 (original image) to max with step (max - 1) / nr. If step will be not even integer it will throw exception.
    * @param max Max scale. Has to be more then 0, otherwise throws ScaleSpaceException.
    * @param nr Number of scales. Has to be more then 0, otherwise throws ScaleSpaceException
    */
