@@ -20,7 +20,12 @@ void ScaleSpace::setMaxScale(unsigned int max, unsigned int nr)
   {
     throw ScaleSpaceException("setMaxScale: can't calculate step");
   }
-  scale_step = (max - 1) / nr;
+  unsigned int step = (max - 1) / nr;
+  if (step % 2)
+  {
+    throw ScaleSpaceException("setMaxScale: step is not odd");
+  }
+  scale_step = step;
   nr_scales = nr;
 }
 

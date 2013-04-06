@@ -120,9 +120,9 @@ TEST(SetMaxScale, SetValidMaxScale1)
 TEST(SetMaxScale, SetValidMaxScale2)
 {
   ScaleSpace ss;
-  EXPECT_NO_THROW(ss.setMaxScale(13, 4));
-  EXPECT_EQ(3, ss.getNrScales());
-  EXPECT_EQ(4, ss.getScaleStep());
+  EXPECT_NO_THROW(ss.setMaxScale(25, 4));
+  EXPECT_EQ(4, ss.getNrScales());
+  EXPECT_EQ(6, ss.getScaleStep());
 }
 
 TEST(SetMaxScale, SetInvalidMaxScale1)
