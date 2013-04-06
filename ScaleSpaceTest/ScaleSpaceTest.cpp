@@ -3,6 +3,18 @@
 #include <ScaleSpace.h>
 
 
+TEST(InitScaleSpace, CheckNrScales)
+{
+  ScaleSpace ss;
+  EXPECT_EQ(0, ss.getNrScales());
+}
+
+TEST(InitScaleSpace, CheckScaleStep)
+{
+  ScaleSpace ss;
+  EXPECT_EQ(0, ss.getScaleStep());
+}
+
 TEST(SetScalesRange, SetValidRange1)
 {
   ScaleSpace ss;
@@ -38,3 +50,4 @@ TEST(SetScalesRange, SetValidRangeWithNoMaxInScalesSeletion)
   EXPECT_EQ(6, ss.getScaleStep());
   EXPECT_EQ(3, ss.getNrScales());
 }
+
