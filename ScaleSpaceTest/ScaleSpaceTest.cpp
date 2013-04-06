@@ -89,7 +89,7 @@ TEST(SetScaleStep, SetInvalidScaleStep)
 TEST(SetScaleStep, SetStep0)
 {
   ScaleSpace ss;
-  EXPECT_THROW(ss.setScaleStep(0, 2), ScaleSpaceException);
+  EXPECT_THROW(ss.setScaleStep(0, 2), ScaleSpaceZeroException);
   test_no_change(ss);
 }
 
