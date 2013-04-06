@@ -25,6 +25,15 @@ public:
   }
 };
 
+class ScaleSpaceZeroException : ScaleSpaceException
+{
+public:
+  ScaleSpaceZeroException(std::string m) : ScaleSpaceException(m)
+  {
+    
+  }
+};
+
 /** Scale Space process.
  * It contains all data, which is need to process image with Scale Space algorithm.
  * Currently step can be only even.

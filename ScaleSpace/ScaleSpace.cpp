@@ -14,6 +14,8 @@ ScaleSpace::~ScaleSpace(void)
 
 void ScaleSpace::setMaxScale(unsigned int max, unsigned int nr)
 {
+  if (max == 0) throw ScaleSpaceZeroException("setMaxScale: max cannot be0");
+  if (nr == 0) throw ScaleSpaceZeroException("setMaxScale: nr cannot be0");
   if ((max - 1) % nr)
   {
     throw ScaleSpaceException("setMaxScale: can't calculate step");
