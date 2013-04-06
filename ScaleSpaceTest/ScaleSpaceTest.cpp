@@ -15,6 +15,8 @@ TEST(InitScaleSpace, CheckScaleStep)
   EXPECT_EQ(0, ss.getScaleStep());
 }
 
+
+
 TEST(SetScalesRange, SetValidRange1)
 {
   ScaleSpace ss;
@@ -49,5 +51,21 @@ TEST(SetScalesRange, SetValidRangeWithNoMaxInScalesSeletion)
   EXPECT_FALSE(ss.setScalesRange(20,6));
   EXPECT_EQ(6, ss.getScaleStep());
   EXPECT_EQ(3, ss.getNrScales());
+}
+
+
+
+TEST(SetScaleStep, SetValidScaleStep)
+{
+  ScaleSpace ss;
+  EXPECT_NO_THROW(ss.setScaleStep(2, 5));
+  EXPECT_EQ(5, ss.getNrScales());
+  EXPECT_EQ(2, ss.getScaleStep());
+}
+
+TEST(SetScaleStep, SetInvalidScaleStep)
+{
+  ScaleSpace ss;
+  EXPECT_THROW(ss.setScaleStep(1, 5), ScaleSpaceException);
 }
 
