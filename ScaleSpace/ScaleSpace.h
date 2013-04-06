@@ -44,23 +44,23 @@ public:
 
   /** Set range of scales.
    * Scales will be set from 1 (original image) to max with step step.
-   * @param max Max scale. Has to be more then 0.
-   * @param step Scale step which has to be even.
+   * @param max Max scale. Has to be more then 0, otherwise throws ScaleSpaceException.
+   * @param step Scale step which has to be even and not 0, otherwise throws ScaleSpaceException.
    * @return true if max is part of scales selection, false otherwise.
    */
   bool setScalesRange(unsigned int max, unsigned int step);
   
   /** Set scale step with number of scales.
    * It will create scales from 1 (original image) to nr * step + 1 with step step.
-   * @param step Scale step which has to be even.
-   * @param nr Number of scales.
+   * @param step Scale step which has to be even and not 0, otherwise throws ScaleSpaceException.
+   * @param nr Number of scales. Has to be more then 0, otherwise throws ScaleSpaceException
    */
   void setScaleStep(unsigned int step, unsigned int nr);
   
   /** Set max scale with number of scales.
    * It will create scales from 1 (original image) to max with step (max - 1) / nr. If step will be not integer it will throw exception.
-   * @param max Max scale. Has to be more then 0.
-   * @param nr Number of scales.
+   * @param max Max scale. Has to be more then 0, otherwise throws ScaleSpaceException.
+   * @param nr Number of scales. Has to be more then 0, otherwise throws ScaleSpaceException
    */
   void setMaxScale(unsigned int max, unsigned int nr);
   
