@@ -11,7 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="ScaleSpaceTest.cpp" />
+    <ClCompile Include="ScaleSpaceImageTest.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{597EF6D2-EF4C-4782-9B4C-7A9EB6CD025D}</ProjectGuid>

@@ -25,7 +25,17 @@ void ScaleSpace::setScaleStep(unsigned int step, unsigned int nr)
   
 }
 
-void ScaleSpace::setScalesRange(unsigned int max, unsigned int step)
+bool ScaleSpace::setScalesRange(unsigned int max, unsigned int step)
 {
-  
+  return true;
+}
+
+unsigned int ScaleSpace::getNrScales()
+{
+  return nr_scales;
+}
+
+unsigned int ScaleSpace::getScaleStep()
+{
+  return scale_step;
 }

@@ -27,6 +27,7 @@ public:
 
 /** Scale Space process.
  * It contains all data, which is need to process image with Scale Space algorithm.
+ * Currently step can be only even.
  */
 class ScaleSpace
 {
@@ -43,21 +44,22 @@ public:
 
   /** Set range of scales.
    * Scales will be set from 1 (original image) to max with step step.
-   * @param max Max scale.
-   * @param step Scale step.
+   * @param max Max scale. Has to be more then 0.
+   * @param step Scale step which has to be even.
+   * @return true if max is part of scales selection, false otherwise.
    */
-  void setScalesRange(unsigned int max, unsigned int step);
+  bool setScalesRange(unsigned int max, unsigned int step);
   
   /** Set scale step with number of scales.
    * It will create scales from 1 (original image) to nr * step + 1 with step step.
-   * @param step Scale step.
+   * @param step Scale step which has to be even.
    * @param nr Number of scales.
    */
   void setScaleStep(unsigned int step, unsigned int nr);
   
   /** Set max scale with number of scales.
    * It will create scales from 1 (original image) to max with step (max - 1) / nr. If step will be not integer it will throw exception.
-   * @param max Max scale.
+   * @param max Max scale. Has to be more then 0.
    * @param nr Number of scales.
    */
   void setMaxScale(unsigned int max, unsigned int nr);
@@ -68,6 +70,18 @@ public:
    * @param output ScaleSpaceImage with computed representations in specified scales.
    */
   void processImage(cv::Mat & input, ScaleSpaceImage & output);
+  
+  /**
+   * Reutnrs unsigned int with number of scales.
+   * @return Number of scales.
+   */
+  unsigned int getNrScales();
+  
+  /**
+   * Reutnrs unsigned int with scale step.
+   * @return Scale step.
+   */
+  unsigned int getScaleStep();
 
 private:
   unsigned int nr_scales; //number of scales
