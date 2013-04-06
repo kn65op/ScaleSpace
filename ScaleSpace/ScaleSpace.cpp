@@ -41,9 +41,19 @@ void ScaleSpace::setScaleStep(unsigned int step, unsigned int nr)
 
 bool ScaleSpace::setScalesRange(unsigned int max, unsigned int step)
 {
-  if (max == 0) throw ScaleSpaceZeroException("setMaxScale: max cannot be 0");
-  if (step == 0) throw ScaleSpaceZeroException("setMaxScale: step cannot be 0");
-  return true;
+  if (max == 0) throw ScaleSpaceZeroException("setScalesRange: max cannot be 0");
+  if (step == 0) throw ScaleSpaceZeroException("setScalesRange: step cannot be 0");
+  if (step % 2) throw ScaleSpaceException("setScalesRange: step has to be even");
+
+  bool ret = true;
+  if ((max - 1) % step)
+  {
+    ret = false;
+  }
+
+  nr_scales = (max - 1) / step;
+  scale_step = step;
+  return ret;
 }
 
 unsigned int ScaleSpace::getNrScales()

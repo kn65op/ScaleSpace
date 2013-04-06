@@ -35,7 +35,7 @@ TEST(SetScalesRange, SetValidRange1)
 TEST(SetScalesRange, SetValidRange2)
 {
   ScaleSpace ss;
-  EXPECT_TRUE(ss.setScalesRange(11,4));
+  EXPECT_TRUE(ss.setScalesRange(9,4));
   EXPECT_EQ(4, ss.getScaleStep());
   EXPECT_EQ(2, ss.getNrScales());
 }
