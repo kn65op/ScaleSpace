@@ -1,7 +1,4 @@
-#include <OpenCLGaussian.h>
-#include <OpenCLFloatToInt.h>
-#include <OpenCLIntToFloat.h>
-#include <OpenCLAlgorithmsStream.h>
+#include <ScaleSpace.h>
 
 #include <opencv\cv.h>
 #include <opencv\highgui.h>
@@ -10,6 +7,29 @@
 
 int main()
 {
+  
+  cv::Mat input;
+  input = cv::imread("in.bmp", CV_LOAD_IMAGE_GRAYSCALE);
+
+  ScaleSpaceImage output;
+  try
+  {
+    ScaleSpace ss;
+    ss.setScaleStep(2, 4);
+    ss.prepare();
+    ss.processImage(input, output);
+  }
+  catch(OpenCLException &ex)
+  {
+    std::cout << ex.getFullMessage() << "\n";
+  }
+  catch (ScaleSpaceException &ex)
+  {
+    std::cout << (std::string)ex << "\n";
+  }
+  return 0;
+
+#if 0
   int a = 0;
   try
   {
@@ -60,4 +80,5 @@ int main()
   }
 
   return a;
+#endif
 }

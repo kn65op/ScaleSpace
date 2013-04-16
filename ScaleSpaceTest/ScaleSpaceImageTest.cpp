@@ -2,9 +2,8 @@
 
 #include <ScaleSpaceImage.h>
 
-
-TEST(AssertTrueOF, AssertTrueOF)
+TEST(GetDataForScale, NonScaleNonReturn)
 {
-  ScaleSpaceImage sci;
-  ASSERT_TRUE(true);
+  ScaleSpaceImage ssi;
+  EXPECT_THROW(ssi.getDataForScale(23), ScaleSpaceImageException);
 }

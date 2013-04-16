@@ -2,6 +2,8 @@
 
 #include <opencv\cxcore.h>
 #include <string>
+#include <list>
+#include <OpenCLAlgorithmsStream.h>
 
 #include "ScaleSpaceImage.h"
 
@@ -74,7 +76,7 @@ public:
   void setMaxScale(unsigned int max, unsigned int nr);
   
   /** Process cv::Mat image.
-   * If scales is not set throws ScaleSpaceException.
+   * If ScaleSpace is not prepared it will be. If error occure during preparation will throw ScaleSpaceException.
    * @param input cv::Mat image to process.
    * @param output ScaleSpaceImage with computed representations in specified scales.
    */
@@ -91,11 +93,23 @@ public:
    * @return Scale step.
    */
   unsigned int getScaleStep();
+  
+  /**
+   * Prepare stream for computing.
+   */
+  void prepare();
 
 private:
   unsigned int nr_scales; //number of scales
   unsigned int scale_step; //scale step
+  
+  bool prepared; //if streams is prepared
 
+  typedef std::list<OpenCLAlgorithmsStream*> streams_t;
+  streams_t streams; //streams - one for each scale
+  
+  //clearing streams
+  void clearStreams();
 
 };
 
