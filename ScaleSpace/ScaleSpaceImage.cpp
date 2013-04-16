@@ -13,24 +13,25 @@ ScaleSpaceImage::~ScaleSpaceImage(void)
 
 void ScaleSpaceImage::createImage(unsigned int width, unsigned int height, unsigned int scales)
 {
-  
+  int *dims =  new int [3];
+  dims[0] = scales;
+  dims[1] = width;
+  dims[2] = height;
+  image = cv::Mat(3, dims, CV_8UC1);
+  delete [] dims;
+  nr_scales = 10;
 }
 
 void * ScaleSpaceImage::getDataForScale(unsigned int scale)
 {
-  if (scale < nr_scales)
+  if (scale <= nr_scales)
   {
     return image.data + scale * (image.elemSize() * image.cols * image.rows);
   }
   throw ScaleSpaceImageException("Too much scale parameter");
 }
 
-void ScaleSpaceImage::setNumberOfScales(unsigned int scales)
+void ScaleSpaceImage::setOriginalImage(cv::Mat original_image)
 {
-  nr_scales = scales;
-}
-
-void ScaleSpaceImage::setOriginalImage(cv::Mat image)
-{
-  
+  memcpy(image.data, image.data, image.elemSize1() * image.cols * image.rows);
 }

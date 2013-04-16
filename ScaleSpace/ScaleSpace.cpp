@@ -126,7 +126,7 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
     prepare();
   }
 
-  output.createImage(input.size().width, input.size().height, nr_scales + 1); //one for original image
+  output.createImage(input.size().width, input.size().height, nr_scales);
   output.setOriginalImage(input);
 
   int i = 1;

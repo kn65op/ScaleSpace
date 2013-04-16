@@ -38,13 +38,7 @@ public:
    * Set original image.
    * @param image Original image.
    */
-  void setOriginalImage(cv::Mat image);
-  
-  /**
-   * Set number of scales.
-   * @param scales Number of scales.
-   */
-  void setNumberOfScales(unsigned int scales);
+  void setOriginalImage(cv::Mat original_image);
   
   /**
    * Get image data for image in specified scale.
