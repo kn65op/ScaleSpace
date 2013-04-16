@@ -3,6 +3,7 @@
 
 ScaleSpaceImage::ScaleSpaceImage(void)
 {
+  nr_scales = 0;
 }
 
 
@@ -15,14 +16,18 @@ void ScaleSpaceImage::createImage(unsigned int width, unsigned int height, unsig
   
 }
 
-void * ScaleSpaceImage::getDataForScale(int scale)
+void * ScaleSpaceImage::getDataForScale(unsigned int scale)
 {
-  return nullptr;
+  if (scale < nr_scales)
+  {
+    return image.data + scale * (image.elemSize() * image.cols * image.rows);
+  }
+  throw ScaleSpaceImageException("Too much scale parameter");
 }
 
-void ScaleSpaceImage::setNumberOfScales(int scales)
+void ScaleSpaceImage::setNumberOfScales(unsigned int scales)
 {
-  
+  nr_scales = scales;
 }
 
 void ScaleSpaceImage::setOriginalImage(cv::Mat image)

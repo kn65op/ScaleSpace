@@ -44,14 +44,14 @@ public:
    * Set number of scales.
    * @param scales Number of scales.
    */
-  void setNumberOfScales(int scales);
+  void setNumberOfScales(unsigned int scales);
   
   /**
    * Get image data for image in specified scale.
    * @param scale Scale number.
    * @return Image data.
    */
-  void * getDataForScale(int scale);
+  void * getDataForScale(unsigned int scale);
   
 private:
   cv::Mat image;
