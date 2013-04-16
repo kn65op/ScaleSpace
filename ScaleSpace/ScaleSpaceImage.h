@@ -46,7 +46,7 @@ public:
    * @return Image data.
    */
   void * getDataForScale(unsigned int scale);
-  
+  void show();
 private:
   cv::Mat image;
   

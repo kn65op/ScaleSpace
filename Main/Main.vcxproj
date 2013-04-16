@@ -51,9 +51,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetName>ScaleSpace</TargetName>
-    <IncludePath>..\OpenCLpp\OpenCLInterface;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
-    <LibraryPath>..\Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

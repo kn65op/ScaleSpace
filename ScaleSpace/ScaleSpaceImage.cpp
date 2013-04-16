@@ -1,5 +1,7 @@
 #include "ScaleSpaceImage.h"
 
+#include <opencv\highgui.h>
+
 
 ScaleSpaceImage::ScaleSpaceImage(void)
 {
@@ -34,4 +36,10 @@ void * ScaleSpaceImage::getDataForScale(unsigned int scale)
 void ScaleSpaceImage::setOriginalImage(cv::Mat original_image)
 {
   memcpy(image.data, image.data, image.elemSize1() * image.cols * image.rows);
+}
+
+void ScaleSpaceImage::show()
+{
+  cv::imshow("im", image);
+  while (cv::waitKey(10));
 }

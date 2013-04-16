@@ -88,18 +88,20 @@ void ScaleSpace::clearStreams()
 
 void ScaleSpace::prepare()
 {
-  if (streams.empty())
+  if (!streams.empty())
   {
-    throw ScaleSpaceZeroException("prepare: There is no scales to prepare");
+    clearStreams();
+    //throw ScaleSpaceZeroException("prepare: There is no scales to prepare");
   }
-  streams = streams_t(nr_scales + 1, nullptr);
+  //streams = streams_t(nr_scales + 1, nullptr);
 
   OpenCLDevice device = OpenCLDevice::getDevices().front();
 
   OpenCLImageAlgorithm *itf = new OpenCLIntToFloat();
   OpenCLImageAlgorithm *fti = new OpenCLFloatToInt();
  
-  for (auto s : streams)
+  for (unsigned int i=0; i< nr_scales; ++i)
+  //for (auto & s : streams)
   {
     OpenCLImageAlgorithm *gaussian = new OpenCLGaussianImage();
     unsigned int n = 5;
@@ -108,12 +110,14 @@ void ScaleSpace::prepare()
     params.setMask(n, gaussian_kernel.data);
     gaussian->setParams(params);
 
-    s = new OpenCLAlgorithmsStream();
+    auto s = new OpenCLAlgorithmsStream();
 
     s->pushAlgorithm(itf);
     s->pushAlgorithm(gaussian);
     s->pushAlgorithm(fti);
     s->setDevice(device);
+
+    streams.push_back(s);
   }
 
   prepared = true;
@@ -132,6 +136,10 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
   int i = 1;
   for (auto s : streams)
   {
+    //TMP
+    s->setDataSize(input.size().width, input.size().height);
+    s->prepare();
+    //END TMP
     s->processImage(input.data, output.getDataForScale(i++));
   }
 

@@ -18,6 +18,7 @@ int main()
     ss.setScaleStep(2, 4);
     ss.prepare();
     ss.processImage(input, output);
+    output.show();
   }
   catch(OpenCLException &ex)
   {
@@ -26,6 +27,10 @@ int main()
   catch (ScaleSpaceException &ex)
   {
     std::cout << (std::string)ex << "\n";
+  }
+  catch (ScaleSpaceImageException &ex)
+  {
+    std::cout << (std::string)ex << "\n" << "Image\n";
   }
   return 0;
 
