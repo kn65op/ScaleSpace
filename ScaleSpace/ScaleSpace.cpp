@@ -14,7 +14,6 @@ ScaleSpace::ScaleSpace(void)
   prepared = false;
 }
 
-
 ScaleSpace::~ScaleSpace(void)
 {
   clearStreams();
@@ -128,6 +127,8 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
   if (!prepared)
   {
     prepare();
+
+
   }
 
   output.createImage(input.size().width, input.size().height, nr_scales);
@@ -137,6 +138,7 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
   for (auto s : streams)
   {
     //TMP
+
     s->setDataSize(input.size().width, input.size().height);
     s->prepare();
     //END TMP

@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-int main()
+int main(int argc, char * argv[])
 {
   
   cv::Mat input;
@@ -18,6 +18,7 @@ int main()
     ss.setScaleStep(2, 4);
     ss.prepare();
     ss.processImage(input, output);
+
     output.show();
   }
   catch(OpenCLException &ex)

@@ -51,5 +51,8 @@ private:
   cv::Mat image;
   
   unsigned int nr_scales;
+
+  unsigned int width;
+  unsigned int height;
 };
 
