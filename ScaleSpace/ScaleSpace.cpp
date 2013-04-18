@@ -11,6 +11,7 @@ ScaleSpace::ScaleSpace(void)
   nr_scales = 0;
   scale_step = 0;
   streams =  streams_t();
+
   prepared = false;
 }
 
