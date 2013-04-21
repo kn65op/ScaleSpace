@@ -13,7 +13,7 @@ ScaleSpaceImage::~ScaleSpaceImage(void)
 {
 }
 
-void ScaleSpaceImage::createImage(unsigned int width, unsigned int height, unsigned int scales)
+void ScaleSpaceImage::createImage(unsigned int height, unsigned int width, unsigned int scales)
 {
   int *dims =  new int [3];
   dims[0] = scales + 1;
@@ -36,13 +36,14 @@ void * ScaleSpaceImage::getDataForScale(unsigned int scale)
 
 void ScaleSpaceImage::setOriginalImage(cv::Mat original_image)
 {
-  memcpy(image.data, image.data, image.elemSize1() * width * height);
+  memcpy(image.data, original_image.data, image.elemSize1() * width * height);
 }
 
 void ScaleSpaceImage::show()
 {
-  cv::Mat tmp(width, height, image.type());
+  cv::Mat tmp(height, width, image.type());
   memcpy(tmp.data, getDataForScale(0), image.elemSize() * width * height);
-  cv::imshow("im", tmp);
-  while (cv::waitKey(10));
+  cv::imwrite("original.bmp", tmp);
+  memcpy(tmp.data, getDataForScale(1), image.elemSize() * width * height);
+  cv::imwrite("scale1.bmp", tmp);
 }

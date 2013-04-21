@@ -5,9 +5,18 @@
 
 #include <iostream>
 
+#ifdef OLD
+
+#include <opencv\cv.h>
+
+#include <OpenCLGaussian.h>
+#include <OpenCLIntToFloat.h>
+#include <OpenCLFloatToInt.h>
+#endif
+
 int main(int argc, char * argv[])
 {
-  
+#ifndef OLD
   cv::Mat input;
   input = cv::imread("in.bmp", CV_LOAD_IMAGE_GRAYSCALE);
 
@@ -34,8 +43,9 @@ int main(int argc, char * argv[])
     std::cout << (std::string)ex << "\n" << "Image\n";
   }
   return 0;
+#endif
 
-#if 0
+#ifdef OLD
   int a = 0;
   try
   {
