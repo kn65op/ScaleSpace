@@ -6,11 +6,6 @@
 #include <OpenCLIntToFloat.h>
 #include <OpenCLFloatToInt.h>
 
-//TMP
-#include <opencv\highgui.h>
-#include <iostream>
-//ENDTMP
-
 ScaleSpace::ScaleSpace(void)
 {
   nr_scales = 0;
@@ -97,7 +92,6 @@ void ScaleSpace::prepare()
     clearStreams();
     //throw ScaleSpaceZeroException("prepare: There is no scales to prepare");
   }
-  //streams = streams_t(nr_scales + 1, nullptr);
 
   OpenCLDevice device = OpenCLDevice::getDevices().front();
 
@@ -105,13 +99,13 @@ void ScaleSpace::prepare()
   OpenCLImageAlgorithm *fti = new OpenCLFloatToInt();
  
   for (unsigned int i=0; i< nr_scales; ++i)
-  //for (auto & s : streams)
   {
     OpenCLImageAlgorithm *gaussian = new OpenCLGaussianImage();
-    unsigned int n = 3;
-    cv::Mat gaussian_kernel = cv::getGaussianKernel(n * n, -1, CV_32F);
+    unsigned int n = i * 2 + 3;
+    cv::Mat gaussian_kernel = cv::getGaussianKernel(n, -1, CV_32F);
+    cv::Mat gaussian_kernel_2d = gaussian_kernel * gaussian_kernel.t();
     OpenCLGaussianParams params;
-    params.setMask(n, gaussian_kernel.data);
+    params.setMask(n, gaussian_kernel_2d.data);
     gaussian->setParams(params);
 
     auto s = new OpenCLAlgorithmsStream();
@@ -138,8 +132,8 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
   output.setOriginalImage(input);
 
   int i = 1;
- // for (auto s : streams)
-  auto s = streams.front();
+  for (auto s : streams)
+ // auto s = streams.front();
   {
     //TMP
 
@@ -147,25 +141,7 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
     s->prepare();
     //END TMP
 
-    //cv::Mat tmp(input.size().height, input.size().width, input.type());
-    cv::Mat tmp(input.size().height, input.size().width, CV_8UC1);
-    //memcpy(tmp.data, output.getDataForScale(i), input.total());
-    cv::imwrite("before.bmp", input);
-    
-    //s->processImage(input.data, tmp.data);
     s->processImage(input.data, output.getDataForScale(i++));
-    //std::cout << (int)tmp.at<unsigned char>(23,1) << "\n";
-    /*std::cout << (int)input.at<unsigned char>(23,1) << "\n";
-    std::cout << (int)input.at<unsigned char>(21,83) << "\n";
-    std::cout << (int)input.at<unsigned char>(243,485) << "\n";
-    std::cout << (int)input.at<unsigned char>(7,394) << "\n";
-    std::cout << (int)tmp.at<unsigned char>(23,1) << "\n";
-    std::cout << (int)tmp.at<unsigned char>(21,83) << "\n";
-    std::cout << (int)tmp.at<unsigned char>(243,485) << "\n";
-    std::cout << (int)tmp.at<unsigned char>(7,394) << "\n";
-    */
-    memcpy(tmp.data, output.getDataForScale(i - 1), input.total());
-    cv::imwrite("after.bmp", tmp);
   }
 
 }
