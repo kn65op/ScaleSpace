@@ -5,13 +5,15 @@
 #include <OpenCLGaussian.h>
 #include <OpenCLIntToFloat.h>
 #include <OpenCLFloatToInt.h>
-
+   
 ScaleSpace::ScaleSpace(void)
 {
   nr_scales = 0;
   scale_step = 0;
   streams =  streams_t();
   prepared = false;
+
+  last_height = last_width = last_scale = 0;
 }
 
 ScaleSpace::~ScaleSpace(void)
@@ -95,11 +97,11 @@ void ScaleSpace::prepare()
 
   OpenCLDevice device = OpenCLDevice::getDevices().front();
 
-  OpenCLImageAlgorithm *itf = new OpenCLIntToFloat();
-  OpenCLImageAlgorithm *fti = new OpenCLFloatToInt();
  
   for (unsigned int i=0; i< nr_scales; ++i)
   {
+  OpenCLImageAlgorithm *itf = new OpenCLIntToFloat();
+  OpenCLImageAlgorithm *fti = new OpenCLFloatToInt();
     OpenCLImageAlgorithm *gaussian = new OpenCLGaussianImage();
     unsigned int n = i * 2 + 3;
     cv::Mat gaussian_kernel = cv::getGaussianKernel(n, -1, CV_32F);
@@ -128,19 +130,22 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
     prepare();
   }
 
-  output.createImage(input.size().height, input.size().width, nr_scales);
-  output.setOriginalImage(input);
+  if (last_height != input.size().height || last_width != input.size().width || last_scale != nr_scales)
+  {
+    output.createImage(input.size().height, input.size().width, nr_scales);
+    for (auto s : streams)
+    {
+      s->setDataSize(input.size().width, input.size().height); //not like OpenCV
+      s->prepare();
+    }
+  }
 
+
+  output.setOriginalImage(input);
+  cv::Mat tmp(input.size().height, input.size().width, CV_8UC1);
   int i = 1;
   for (auto s : streams)
- // auto s = streams.front();
   {
-    //TMP
-
-    s->setDataSize(input.size().width, input.size().height); //not like OpenCV
-    s->prepare();
-    //END TMP
-
     s->processImage(input.data, output.getDataForScale(i++));
   }
 

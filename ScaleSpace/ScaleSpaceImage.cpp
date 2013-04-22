@@ -44,7 +44,7 @@ void ScaleSpaceImage::show()
   cv::Mat tmp(height, width, image.type());
   memcpy(tmp.data, getDataForScale(0), image.elemSize() * width * height);
   cv::imwrite("original.bmp", tmp);
-  for (unsigned int i = 1; i < nr_scales; ++i)
+  for (unsigned int i = 1; i < nr_scales + 1; ++i)
   {
     std::string s;
     s = "Scale" + std::to_string(i) + ".bmp";

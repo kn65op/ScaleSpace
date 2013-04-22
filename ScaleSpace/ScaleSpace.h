@@ -111,5 +111,10 @@ private:
   //clearing streams
   void clearStreams();
 
+  //information about last processed image (to avoid alocating and dealocating memory etc.)
+  unsigned int last_height;
+  unsigned int last_width;
+  unsigned int last_scale;
+
 };
 
