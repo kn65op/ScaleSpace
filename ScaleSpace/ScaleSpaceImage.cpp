@@ -41,14 +41,16 @@ void ScaleSpaceImage::setOriginalImage(cv::Mat original_image)
 
 void ScaleSpaceImage::show()
 {
+  static int image_nr = 0;
   cv::Mat tmp(height, width, image.type());
   memcpy(tmp.data, getDataForScale(0), image.elemSize() * width * height);
   cv::imwrite("original.bmp", tmp);
   for (unsigned int i = 1; i < nr_scales + 1; ++i)
   {
     std::string s;
-    s = "Scale" + std::to_string(i) + ".bmp";
+    s = "Output" + std::to_string(image_nr)  + std::to_string(i) + ".bmp";
     memcpy(tmp.data, getDataForScale(i), image.elemSize() * width * height);
     cv::imwrite(s.c_str(), tmp);
   }
+  image_nr++;
 }

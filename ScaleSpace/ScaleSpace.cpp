@@ -5,6 +5,13 @@
 #include <OpenCLGaussian.h>
 #include <OpenCLIntToFloat.h>
 #include <OpenCLFloatToInt.h>
+
+
+#define DEBUG_SS
+
+#ifdef DEBUG_SS
+#include <iostream>
+#endif
    
 ScaleSpace::ScaleSpace(void)
 {
@@ -103,11 +110,16 @@ void ScaleSpace::prepare()
   OpenCLImageAlgorithm *itf = new OpenCLIntToFloat();
   OpenCLImageAlgorithm *fti = new OpenCLFloatToInt();
     OpenCLImageAlgorithm *gaussian = new OpenCLGaussianImage();
-    unsigned int n = i * 2 + 3;
-    cv::Mat gaussian_kernel = cv::getGaussianKernel(n, -1, CV_32F);
+    unsigned int scale = 1 + scale_step * (i + 1);
+
+    #ifdef DEBUG_SS
+    std::cout << "Scale step: " << scale << "\n";
+    #endif
+
+    cv::Mat gaussian_kernel = cv::getGaussianKernel(scale, -1, CV_32F);
     cv::Mat gaussian_kernel_2d = gaussian_kernel * gaussian_kernel.t();
     OpenCLGaussianParams params;
-    params.setMask(n, gaussian_kernel_2d.data);
+    params.setMask(scale, gaussian_kernel_2d.data);
     gaussian->setParams(params);
 
     auto s = new OpenCLAlgorithmsStream();
@@ -138,14 +150,23 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
       s->setDataSize(input.size().width, input.size().height); //not like OpenCV
       s->prepare();
     }
+    last_height = input.size().height;
+    last_width = input.size().width;
+    last_scale = nr_scales;
+    #ifdef DEBUG_SS
+    std::cout << "NEW\n";
+    #endif
   }
-
 
   output.setOriginalImage(input);
   cv::Mat tmp(input.size().height, input.size().width, CV_8UC1);
   int i = 1;
   for (auto s : streams)
   {
+    
+    #ifdef DEBUG_SS
+    std::cout << "processing: " << i << "\n";
+    #endif
     s->processImage(input.data, output.getDataForScale(i++));
   }
 

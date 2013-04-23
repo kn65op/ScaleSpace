@@ -24,8 +24,17 @@ int main(int argc, char * argv[])
   try
   {
     ScaleSpace ss;
-    ss.setScaleStep(2, 4);
+    ss.setScaleStep(40, 4);
     ss.prepare();
+    ss.processImage(input, output);
+
+    output.show();
+    input = cv::imread("in2.bmp", CV_LOAD_IMAGE_GRAYSCALE);
+    ss.processImage(input, output);
+
+    output.show();
+    
+    input = cv::imread("in3.bmp", CV_LOAD_IMAGE_GRAYSCALE);
     ss.processImage(input, output);
 
     output.show();
