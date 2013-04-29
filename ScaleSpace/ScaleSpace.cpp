@@ -107,8 +107,8 @@ void ScaleSpace::prepare()
  
   for (unsigned int i=0; i< nr_scales; ++i)
   {
-  OpenCLImageAlgorithm *itf = new OpenCLIntToFloat();
-  OpenCLImageAlgorithm *fti = new OpenCLFloatToInt();
+    OpenCLImageAlgorithm *itf = new OpenCLIntToFloat();
+    OpenCLImageAlgorithm *fti = new OpenCLFloatToInt();
     OpenCLImageAlgorithm *gaussian = new OpenCLGaussianImage();
     unsigned int scale = 1 + scale_step * (i + 1);
 
@@ -165,9 +165,12 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
   {
     
     #ifdef DEBUG_SS
-    std::cout << "processing: " << i << "\n";
+    std::cout << "processing: " << i << " - ";
     #endif
     s->processImage(input.data, output.getDataForScale(i++));
+    #ifdef DEBUG_SS
+    std::cout << s->getTime() << "\n";
+    #endif
   }
 
 }
