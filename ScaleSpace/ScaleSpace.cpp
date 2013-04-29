@@ -5,6 +5,7 @@
 #include <OpenCLGaussian.h>
 #include <OpenCLIntToFloat.h>
 #include <OpenCLFloatToInt.h>
+#include <OpenCLLaplacian.h>
 
 
 #define DEBUG_SS
@@ -13,7 +14,7 @@
 #include <iostream>
 #endif
    
-ScaleSpace::ScaleSpace(void)
+ScaleSpace::ScaleSpace(ScaleSpaceMode mode /* = Pure */)
 {
   nr_scales = 0;
   scale_step = 0;
@@ -21,6 +22,8 @@ ScaleSpace::ScaleSpace(void)
   prepared = false;
 
   last_height = last_width = last_scale = 0;
+
+  calc_mode = mode;
 }
 
 ScaleSpace::~ScaleSpace(void)
@@ -126,6 +129,18 @@ void ScaleSpace::prepare()
 
     s->pushAlgorithm(itf);
     s->pushAlgorithm(gaussian);
+
+    OpenCLImageAlgorithm *laplacian = nullptr;
+    switch (calc_mode)
+    {
+    case ScaleSpaceMode::Laplacian:
+      laplacian = new OpenCLLaplacian();
+      s->pushAlgorithm(laplacian);
+      break;
+    default: //and Pure
+      break;
+    }
+
     s->pushAlgorithm(fti);
     s->setDevice(device);
 

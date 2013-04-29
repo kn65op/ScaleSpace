@@ -9,9 +9,12 @@
 
 /**
  * requirements:
- * load image, process, get result
+ * load image, process (Gaussian and optionally other operators [laplacian]), get result
  */
 
+/**
+ * Scale Space Exception class.
+ */
 class ScaleSpaceException
 {
   std::string message;
@@ -36,6 +39,17 @@ public:
   }
 };
 
+/** Enum for selecting what processing will be done.
+ * Supproted values:
+ * - Pure - means that only SpaleSpace representation will be calculed
+ * - Laplacian - means that after ScaleSpace representation Lapalacian will be calculted, which can detect blobs
+ */
+enum class ScaleSpaceMode
+{
+  Pure,
+  Laplacian
+};
+
 /** Scale Space process.
  * It contains all data, which is need to process image with Scale Space algorithm.
  * Currently step can be only even.
@@ -44,9 +58,9 @@ class ScaleSpace
 {
 public:
   /**
-   * Default constructor.
+   * Contructor which setting mode (ScaleSpaceMode).
    */
-  ScaleSpace(void);
+  ScaleSpace(ScaleSpaceMode mode = ScaleSpaceMode::Pure);
   
   /**
    * Destructor.
@@ -115,6 +129,8 @@ private:
   unsigned int last_height;
   unsigned int last_width;
   unsigned int last_scale;
+
+  ScaleSpaceMode calc_mode;
 
 };
 
