@@ -132,5 +132,8 @@ private:
 
   ScaleSpaceMode calc_mode;
 
+  //sigmas
+  std::list<float> sigmas;
+
 };
 

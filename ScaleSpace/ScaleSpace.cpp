@@ -102,6 +102,7 @@ void ScaleSpace::prepare()
   if (!streams.empty())
   {
     clearStreams();
+    sigmas.clear();
     //throw ScaleSpaceZeroException("prepare: There is no scales to prepare");
   }
 
@@ -119,7 +120,11 @@ void ScaleSpace::prepare()
     std::cout << "Scale step: " << scale << "\n";
     #endif
 
-    cv::Mat gaussian_kernel = cv::getGaussianKernel(scale, -1, CV_32F);
+    // 0.3*((ksize-1)*0.5 - 1) + 0.8 .
+    float sigma = 0.3f * ((scale) * 0.5f - 1.0f) + 0.8f;
+    sigmas.push_back(sigma);
+
+    cv::Mat gaussian_kernel = cv::getGaussianKernel(scale, sigma, CV_32F);
     cv::Mat gaussian_kernel_2d = gaussian_kernel * gaussian_kernel.t();
     OpenCLGaussianParams params;
     params.setMask(scale, gaussian_kernel_2d.data);
@@ -131,10 +136,13 @@ void ScaleSpace::prepare()
     s->pushAlgorithm(gaussian);
 
     OpenCLImageAlgorithm *laplacian = nullptr;
+    OpenCLLaplacianParams laplacian_params;
+    laplacian_params.setSigma(sigma*sigma);
     switch (calc_mode)
     {
     case ScaleSpaceMode::Laplacian:
       laplacian = new OpenCLLaplacian();
+      laplacian->setParams(laplacian_params);
       s->pushAlgorithm(laplacian);
       break;
     default: //and Pure
