@@ -5,6 +5,12 @@
 
 #include <iostream>
 
+//#define LIST_IMAGES
+
+#ifdef LIST_IMAGES
+#include <OpenCLHelpers.h>
+#endif
+
 #ifdef OLD
 
 #include <opencv\cv.h>
@@ -16,6 +22,12 @@
 
 int main(int argc, char * argv[])
 {
+#ifdef LIST_IMAGES
+  list_devices();
+  list_supported_image_formats();
+  return 0;
+#endif
+
 #ifndef OLD
   cv::Mat input;
   input = cv::imread("in.bmp", CV_LOAD_IMAGE_GRAYSCALE);
@@ -24,7 +36,7 @@ int main(int argc, char * argv[])
   try
   {
     ScaleSpace ss/*;//*/(ScaleSpaceMode::Laplacian);
-    ss.setScaleStep(4, 20);
+    ss.setScaleStep(6, 2);
     ss.prepare();
     /*ss.processImage(input, output);
 
@@ -39,10 +51,10 @@ int main(int argc, char * argv[])
 
     output.show();
     */
-    input = cv::imread("in4.bmp", CV_LOAD_IMAGE_GRAYSCALE);
+    input = cv::imread("in.bmp", CV_LOAD_IMAGE_GRAYSCALE);
     ss.processImage(input, output);
 
-    output.show();
+//    output.show();
   }
   catch(OpenCLException &ex)
   {

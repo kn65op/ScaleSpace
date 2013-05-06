@@ -4,6 +4,7 @@
 #include <string>
 #include <list>
 #include <OpenCLAlgorithmsStream.h>
+#include <OpenCLFindMaxin3DImage.h>
 
 #include "ScaleSpaceImage.h"
 
@@ -112,6 +113,8 @@ public:
    * Prepare stream for computing.
    */
   void prepare();
+  
+  void findMax();
 
 private:
   unsigned int nr_scales; //number of scales
@@ -121,6 +124,8 @@ private:
 
   typedef std::list<OpenCLAlgorithmsStream*> streams_t;
   streams_t streams; //streams - one for each scale
+
+  OpenCLFindMaxin3DImage fmi3Dimage;
   
   //clearing streams
   void clearStreams();

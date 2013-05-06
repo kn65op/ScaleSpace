@@ -107,7 +107,7 @@ void ScaleSpace::prepare()
   }
 
   OpenCLDevice device = OpenCLDevice::getDevices().front();
-
+  fmi3Dimage.setDevice(device);
  
   for (unsigned int i=0; i< nr_scales; ++i)
   {
@@ -179,6 +179,8 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
     #ifdef DEBUG_SS
     std::cout << "NEW\n";
     #endif
+    fmi3Dimage.setDataSize(input.size().width, input.size().height, nr_scales);
+    fmi3Dimage.prepare();
   }
 
   output.setOriginalImage(input);
@@ -195,5 +197,11 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
     std::cout << s->getTime() << "\n";
     #endif
   }
+  output.show(); 
+  fmi3Dimage.processData(output.getDataForScale(1), output.getDataForScale(1));
+  output.show();
+}
 
+void ScaleSpace::findMax()
+{
 }
