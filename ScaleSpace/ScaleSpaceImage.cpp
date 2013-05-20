@@ -2,7 +2,6 @@
 
 #include <opencv\highgui.h>
 
-
 ScaleSpaceImage::ScaleSpaceImage(void)
 {
   nr_scales = 0;
@@ -68,13 +67,13 @@ void ScaleSpaceImage::show(cv::Mat & blobs, std::vector<float> & sigmas)
   cv::Mat tmp2(height, width, image.type()), tmp;
   memcpy(tmp2.data, getDataForScale(0), image.elemSize() * width * height);
   tmp2.convertTo(tmp, CV_8UC1, 256.0);
-  for (int i=0; i < height; ++i)
+  for (unsigned int i=0; i < height; ++i)
   {
-    for (int j=0; j < width; ++j)
+    for (unsigned int j=0; j < width; ++j)
     {
       if (uchar scale = blobs.at<uchar>(i,j))
       {
-        cv::circle(tmp, cv::Point2i(j, i), sigmas[scale] * 1.412f, cv::Scalar(127), 1);
+        cv::circle(tmp, cv::Point2i(j, i), static_cast<int>(sigmas[scale] * 1.412f + 0.5f), cv::Scalar(127), 1);
       }
     }
   }
