@@ -2,7 +2,7 @@
 
 #include <opencv\cxcore.h>
 #include <string>
-#include <list>
+#include <vector>
 #include <OpenCLAlgorithmsStream.h>
 #include <OpenCLFindMaxin3DImage.h>
 
@@ -138,7 +138,9 @@ private:
   ScaleSpaceMode calc_mode;
 
   //sigmas
-  std::list<float> sigmas;
+  std::vector<float> sigmas;
+
+  int type;//TODO: tmp
 
 };
 

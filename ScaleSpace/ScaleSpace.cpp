@@ -11,6 +11,7 @@
 #define DEBUG_SS
 
 #ifdef DEBUG_SS
+#include <opencv\highgui.h>
 #include <iostream>
 #endif
    
@@ -144,12 +145,14 @@ void ScaleSpace::prepare()
       laplacian = new OpenCLLaplacian();
       laplacian->setParams(laplacian_params);
       s->pushAlgorithm(laplacian);
+      type = CV_32FC1;
       break;
     default: //and Pure
+      s->pushAlgorithm(fti);
+      type = CV_8UC1;
       break;
     }
 
-    s->pushAlgorithm(fti);
     s->setDevice(device);
 
     streams.push_back(s);
@@ -167,7 +170,7 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
 
   if (last_height != input.size().height || last_width != input.size().width || last_scale != nr_scales)
   {
-    output.createImage(input.size().height, input.size().width, nr_scales);
+    output.createImage(input.size().height, input.size().width, nr_scales, type);
     for (auto s : streams)
     {
       s->setDataSize(input.size().width, input.size().height); //not like OpenCV
@@ -195,11 +198,17 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
     s->processImage(input.data, output.getDataForScale(i++));
     #ifdef DEBUG_SS
     std::cout << s->getTime() << "\n";
+    //std::cout << (int)(*((unsigned char*)output.getDataForScale(i - 1))) << "\n";
     #endif
   }
-  output.show(); 
-  fmi3Dimage.processData(output.getDataForScale(1), output.getDataForScale(1));
-  output.show();
+  output.show("before"); 
+  cv::Mat outp = cv::Mat::zeros(input.size(), input.type());
+  fmi3Dimage.processData(output.getDataForScale(1), outp.data);
+  output.show(outp, sigmas); 
+  outp = outp * 255 / nr_scales;
+  cv::imwrite("outp.bmp", outp);//*/
+  //output /= nr_scales;
+  //output.show("after");
 }
 
 void ScaleSpace::findMax()

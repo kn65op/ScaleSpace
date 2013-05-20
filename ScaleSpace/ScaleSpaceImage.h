@@ -2,6 +2,8 @@
 
 #include <opencv\cxcore.h>
 
+#include <vector>
+
 class ScaleSpaceImageException
 {
   std::string message;
@@ -32,7 +34,7 @@ public:
    * @param height Image height.
    * @param scales Number of scales.
    */
-  void createImage(unsigned int width, unsigned int height, unsigned int scales);
+  void createImage(unsigned int width, unsigned int height, unsigned int scales, int type);//TODO: temp
   
   /**
    * Set original image.
@@ -46,7 +48,14 @@ public:
    * @return Image data.
    */
   void * getDataForScale(unsigned int scale);
-  void show();
+  void show(std::string );
+  void show(cv::Mat &blobs, std::vector<float> & sigmas);
+
+  ScaleSpaceImage & operator/=(int d)
+  {
+    image /= d;
+    return *this;
+  }
 private:
   cv::Mat image;
   
@@ -54,5 +63,7 @@ private:
 
   unsigned int width;
   unsigned int height;
+
+  int type;//TODO: remove
 };
 
