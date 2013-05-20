@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="getoptpp\getopt_pp.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -22,6 +23,9 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="getoptpp\getopt_pp.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B21B91B1-314A-4669-BB6A-60331A6147BE}</ProjectGuid>

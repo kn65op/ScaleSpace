@@ -1,4 +1,5 @@
 #include <ScaleSpace.h>
+#include "getoptpp\getopt_pp.h"
 
 #include <opencv\cv.h>
 #include <opencv\highgui.h>
@@ -20,8 +21,66 @@
 #include <OpenCLFloatToInt.h>
 #endif
 
+void printHelp();
+
 int main(int argc, char * argv[])
 {
+  GetOpt::GetOpt_pp opt(argc, argv);
+  if (opt >> GetOpt::OptionPresent('h', "help"))
+  {
+    printHelp();
+    return 0;
+  }
+  std::string in_file;
+  if (!(opt >> GetOpt::Option('i', "in", in_file)))
+  {
+    printHelp();
+    return 0;
+  }
+
+  cv::Mat input;
+  ScaleSpaceImage output;
+  try
+  {
+    ScaleSpace ss/*;//*/(ScaleSpaceMode::Laplacian);
+    ss.setScaleStep(8, 20);
+    ss.prepare();
+    /*ss.processImage(input, output);
+
+    output.show();
+    input = cv::imread("in2.bmp", CV_LOAD_IMAGE_GRAYSCALE);
+    ss.processImage(input, output);
+
+    output.show();
+    
+    input = cv::imread("in3.bmp", CV_LOAD_IMAGE_GRAYSCALE);
+    ss.processImage(input, output);
+
+    output.show();
+    */
+    input = cv::imread(in_file.c_str(), CV_LOAD_IMAGE_GRAYSCALE);
+    ss.processImage(input, output);
+
+//    output.show();
+  }
+  catch(OpenCLException &ex)
+  {
+    std::cout << ex.getFullMessage() << "\n";
+  }
+  catch (ScaleSpaceException &ex)
+  {
+    std::cout << (std::string)ex << "\n";
+  }
+  catch (ScaleSpaceImageException &ex)
+  {
+    std::cout << (std::string)ex << "\n" << "Image\n";
+  }
+  return 0;
+}
+
+#if 0
+
+
 #ifdef LIST_IMAGES
   list_devices();
   list_supported_image_formats();
@@ -123,4 +182,11 @@ int main(int argc, char * argv[])
 
   return a;
 #endif
+}
+
+#endif
+
+void printHelp()
+{
+  std::cout << "Help\n";
 }
