@@ -169,3 +169,6 @@ nbproject
 
 #Make not supported yet
 Makefile
+
+# reg
+*.reg

@@ -36,7 +36,7 @@ int main(int argc, char * argv[])
   try
   {
     ScaleSpace ss/*;//*/(ScaleSpaceMode::Laplacian);
-    ss.setScaleStep(4, 20);
+    ss.setScaleStep(8, 20);
     ss.prepare();
     /*ss.processImage(input, output);
 
@@ -51,7 +51,7 @@ int main(int argc, char * argv[])
 
     output.show();
     */
-    input = cv::imread("in7.bmp", CV_LOAD_IMAGE_GRAYSCALE);
+    input = cv::imread("in4.bmp", CV_LOAD_IMAGE_GRAYSCALE);
     ss.processImage(input, output);
 
 //    output.show();
