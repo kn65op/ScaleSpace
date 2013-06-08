@@ -48,7 +48,10 @@ public:
 enum class ScaleSpaceMode
 {
   Pure,
-  Laplacian
+  Laplacian,
+  Edges,
+  Blobs,
+  Corners
 };
 
 /** Scale Space process.

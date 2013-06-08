@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="getoptpp\getopt_pp.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ProgramController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ScaleSpace\ScaleSpace.vcxproj">
@@ -26,6 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="getoptpp\getopt_pp.h" />
+    <ClInclude Include="ProgramController.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B21B91B1-314A-4669-BB6A-60331A6147BE}</ProjectGuid>

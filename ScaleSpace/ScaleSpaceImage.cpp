@@ -26,6 +26,10 @@ void ScaleSpaceImage::createImage(unsigned int height, unsigned int width, unsig
 
 void * ScaleSpaceImage::getDataForScale(unsigned int scale)
 {
+  if (!image.isContinuous())
+  {
+    throw ScaleSpaceImageException("Data is not continuous");
+  }
   if (scale <= nr_scales)
   {
     int tmp = scale * (image.elemSize() * width * height);
@@ -37,7 +41,18 @@ void * ScaleSpaceImage::getDataForScale(unsigned int scale)
 void ScaleSpaceImage::setOriginalImage(cv::Mat original_image)
 {
   cv::Mat tmp;
-  original_image.convertTo(tmp, type, 1.0/256.0);
+  if (type == CV_32FC1)
+  {
+    original_image.convertTo(tmp, type, 1.0/256.0);
+  }
+  else if (type == CV_8UC1)
+  {
+    original_image.copyTo(tmp);
+  }
+  else
+  {
+    throw ScaleSpaceImageException("Not supoorted output image type");
+  }
   memcpy(image.data, tmp.data, image.elemSize1() * width * height);
 }
 
@@ -47,7 +62,18 @@ void ScaleSpaceImage::show(std::string fn)
   cv::Mat tmp(height, width, image.type());
   memcpy(tmp.data, getDataForScale(0), image.elemSize() * width * height);
   cv::Mat tmp2;
-  tmp.convertTo(tmp2, CV_8UC1, 256.0);
+  if (type == CV_32FC1)
+  {
+    tmp.convertTo(tmp2, CV_8UC1, 256.0);
+  }
+  else if (type == CV_8UC1)
+  {
+    tmp2 = tmp;
+  }
+  else
+  {
+    throw ScaleSpaceImageException("Not supported output image type");
+  }
   cv::imwrite("original.bmp", tmp2);
 
   for (unsigned int i = 1; i < nr_scales + 1; ++i)
@@ -56,7 +82,18 @@ void ScaleSpaceImage::show(std::string fn)
     s = fn + std::to_string(i) + ".jpg";
     memcpy(tmp.data, getDataForScale(i), image.elemSize() * width * height);
     cv::Mat tmp2;
-    tmp.convertTo(tmp2, CV_8UC1, 256.0);
+    if (type == CV_32FC1)
+    {
+      tmp.convertTo(tmp2, CV_8UC1, 256.0);
+    }
+    else if (type == CV_8UC1)
+    {
+      tmp2 = tmp;
+    }
+    else
+    {
+      throw ScaleSpaceImageException("Not supported output image type");
+    }
     cv::imwrite(s.c_str(), tmp2);
   }
   image_nr++;

@@ -6,7 +6,9 @@
 #include <OpenCLIntToFloat.h>
 #include <OpenCLFloatToInt.h>
 #include <OpenCLLaplacian.h>
-
+#include <OpenCLEdgeDetector.h>
+#include <OpenCLCornerDetector.h>
+#include <OpenCLBlobDetector.h>
 
 #define DEBUG_SS
 
@@ -113,7 +115,6 @@ void ScaleSpace::prepare()
   for (unsigned int i=0; i< nr_scales; ++i)
   {
     OpenCLImageAlgorithm *itf = new OpenCLIntToFloat();
-    OpenCLImageAlgorithm *fti = new OpenCLFloatToInt();
     OpenCLImageAlgorithm *gaussian = new OpenCLGaussianImage();
     unsigned int scale = 1 + scale_step * (i + 1);
 
@@ -127,6 +128,16 @@ void ScaleSpace::prepare()
 
     cv::Mat gaussian_kernel = cv::getGaussianKernel(scale, sigma, CV_32F);
     cv::Mat gaussian_kernel_2d = gaussian_kernel * gaussian_kernel.t();
+    #ifdef DEBUG_SS_GAUSSIAN
+    for (unsigned int i = 0; i < scale; ++i)
+    {
+      for (unsigned int j = 0; j < scale; ++j)
+      {
+        std::cout << gaussian_kernel_2d.at<float>(i,j) << " ";
+      }
+      std::cout << "\n";
+    }
+    #endif
     OpenCLGaussianParams params;
     params.setMask(scale, gaussian_kernel_2d.data);
     gaussian->setParams(params);
@@ -136,19 +147,48 @@ void ScaleSpace::prepare()
     s->pushAlgorithm(itf);
     s->pushAlgorithm(gaussian);
 
-    OpenCLImageAlgorithm *laplacian = nullptr;
+    OpenCLImageAlgorithm *recognizer = nullptr;
     OpenCLLaplacianParams laplacian_params;
     laplacian_params.setSigma(sigma*sigma);
     switch (calc_mode)
     {
     case ScaleSpaceMode::Laplacian:
-      laplacian = new OpenCLLaplacian();
-      laplacian->setParams(laplacian_params);
-      s->pushAlgorithm(laplacian);
+      recognizer = new OpenCLLaplacian();
+      recognizer->setParams(laplacian_params);
+      s->pushAlgorithm(recognizer);
       type = CV_32FC1;
+      #ifdef DEBUG_SS
+      std::cout << "Mode: laplacian\n";
+      #endif
+      break;
+    case ScaleSpaceMode::Edges:
+      recognizer = new OpenCLEdgeDetector();
+      s->pushAlgorithm(recognizer);
+      type = CV_32FC1;
+      #ifdef DEBUG_SS
+      std::cout << "Mode: edges\n";
+      #endif
+      break;
+    case ScaleSpaceMode::Blobs:
+      recognizer = new OpenCLBlobDetector();
+      s->pushAlgorithm(recognizer);
+      type = CV_32FC1;
+      #ifdef DEBUG_SS
+      std::cout << "Mode: blobs\n";
+      #endif
+      break;
+    case ScaleSpaceMode::Corners:
+      recognizer = new OpenCLCornerDetector();
+      s->pushAlgorithm(recognizer);
+      type = CV_32FC1;
+      #ifdef DEBUG_SS
+      std::cout << "Mode: corners\n";
+      #endif
       break;
     default: //and Pure
-      s->pushAlgorithm(fti);
+      //throw ScaleSpaceException("Pure not working for now");
+      recognizer = new OpenCLFloatToInt();
+      s->pushAlgorithm(recognizer);
       type = CV_8UC1;
       break;
     }
@@ -203,7 +243,7 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
   }
   output.show("before"); 
   cv::Mat outp = cv::Mat::zeros(input.size(), input.type());
-  fmi3Dimage.processData(output.getDataForScale(1), outp.data);
+  fmi3Dimage.processData(output.getDataForScale(1), outp.data); //TODO: remove from non laplacian
   output.show(outp, sigmas); 
   outp = outp * 255 / nr_scales;
   cv::imwrite("outp.bmp", outp);//*/

@@ -1,5 +1,5 @@
 #include <ScaleSpace.h>
-#include "getoptpp\getopt_pp.h"
+#include "ProgramController.h"
 
 #include <opencv\cv.h>
 #include <opencv\highgui.h>
@@ -21,20 +21,13 @@
 #include <OpenCLFloatToInt.h>
 #endif
 
-void printHelp();
 
 int main(int argc, char * argv[])
 {
-  GetOpt::GetOpt_pp opt(argc, argv);
-  if (opt >> GetOpt::OptionPresent('h', "help"))
+  ProgramController controller(argc, argv);
+  if (!controller.areOptionsValid())
   {
-    printHelp();
-    return 0;
-  }
-  std::string in_file;
-  if (!(opt >> GetOpt::Option('i', "in", in_file)))
-  {
-    printHelp();
+    controller.printHelp();
     return 0;
   }
 
@@ -42,8 +35,8 @@ int main(int argc, char * argv[])
   ScaleSpaceImage output;
   try
   {
-    ScaleSpace ss/*;//*/(ScaleSpaceMode::Laplacian);
-    ss.setScaleStep(8, 20);
+    ScaleSpace ss/*;//*/(controller.getMode());
+    ss.setScaleStep(controller.getScaleStep(), controller.getNrScales());
     ss.prepare();
     /*ss.processImage(input, output);
 
@@ -58,7 +51,12 @@ int main(int argc, char * argv[])
 
     output.show();
     */
-    input = cv::imread(in_file.c_str(), CV_LOAD_IMAGE_GRAYSCALE);
+    input = cv::imread(controller.getInputFile().c_str(), CV_LOAD_IMAGE_GRAYSCALE);
+    if (!input.size().width)
+    {
+      std::cout << "File is not valid image\n";
+      return 0;
+    }
     ss.processImage(input, output);
 
 //    output.show();
@@ -186,7 +184,3 @@ int main(int argc, char * argv[])
 
 #endif
 
-void printHelp()
-{
-  std::cout << "Help\n";
-}
