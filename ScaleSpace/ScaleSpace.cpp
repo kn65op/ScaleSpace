@@ -114,8 +114,8 @@ void ScaleSpace::prepare()
  
   for (unsigned int i=0; i< nr_scales; ++i)
   {
-    OpenCLImageAlgorithm *itf = new OpenCLIntToFloat();
-    OpenCLImageAlgorithm *gaussian = new OpenCLGaussianImage();
+    OpenCL2DTo2DImageAlgorithmForStream *itf = new OpenCLIntToFloat();
+    OpenCL2DTo2DImageAlgorithmForStream *gaussian = new OpenCLGaussianImage();
     unsigned int scale = 1 + scale_step * (i + 1);
 
     #ifdef DEBUG_SS
@@ -147,7 +147,7 @@ void ScaleSpace::prepare()
     s->pushAlgorithm(itf);
     s->pushAlgorithm(gaussian);
 
-    OpenCLImageAlgorithm *recognizer = nullptr;
+    OpenCL2DTo2DImageAlgorithmForStream *recognizer = nullptr;
     OpenCLLaplacianParams laplacian_params;
     laplacian_params.setSigma(sigma*sigma);
     switch (calc_mode)

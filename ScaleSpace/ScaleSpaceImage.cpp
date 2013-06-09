@@ -2,6 +2,8 @@
 
 #include <opencv\highgui.h>
 
+#include <fstream>
+
 ScaleSpaceImage::ScaleSpaceImage(void)
 {
   nr_scales = 0;
@@ -81,6 +83,8 @@ void ScaleSpaceImage::show(std::string fn)
     std::string s;
     s = fn + std::to_string(i) + ".jpg";
     memcpy(tmp.data, getDataForScale(i), image.elemSize() * width * height);
+   /* std::ofstream out("data" + std::to_string(image_nr) +  std::to_string(i) + ".txt");
+    out << tmp;*/ //very slow
     cv::Mat tmp2;
     if (type == CV_32FC1)
     {

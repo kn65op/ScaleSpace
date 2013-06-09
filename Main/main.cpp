@@ -21,6 +21,7 @@
 #include <OpenCLFloatToInt.h>
 #endif
 
+#include <fstream>
 
 int main(int argc, char * argv[])
 {
