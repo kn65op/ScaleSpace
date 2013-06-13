@@ -16,13 +16,14 @@ ScaleSpaceImage::~ScaleSpaceImage(void)
 
 void ScaleSpaceImage::createImage(unsigned int height, unsigned int width, unsigned int scales, int type, unsigned int images)//TODO: temp
 {
+  image.clear();
   int *dims =  new int [3];
   dims[0] = scales + 1;
   dims[1] = this->width = width;
   dims[2] = this->height = height;
   for (unsigned int i=0; i < images; ++i)
   {
-    image[i] = cv::Mat(3, dims, type);
+    image.push_back(cv::Mat(3, dims, type));
   }
   this->type = type;
   nr_scales = scales;
