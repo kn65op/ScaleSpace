@@ -210,7 +210,14 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
 
   if (last_height != input.size().height || last_width != input.size().width || last_scale != nr_scales)
   {
-    output.createImage(input.size().height, input.size().width, nr_scales, type);
+    unsigned int images = 1;
+    switch (calc_mode)
+    {
+    case ScaleSpaceMode::Edges:
+      images = 2;
+      break;
+    }
+    output.createImage(input.size().height, input.size().width, nr_scales, type, images);
     for (auto s : streams)
     {
       s->setDataSize(input.size().width, input.size().height); //not like OpenCV
