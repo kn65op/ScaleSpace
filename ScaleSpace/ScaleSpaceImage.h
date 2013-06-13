@@ -34,7 +34,7 @@ public:
    * @param height Image height.
    * @param scales Number of scales.
    */
-  void createImage(unsigned int width, unsigned int height, unsigned int scales, int type);//TODO: temp
+  void createImage(unsigned int width, unsigned int height, unsigned int scales, int type, unsigned int images = 1);//TODO: temp
   
   /**
    * Set original image.
@@ -45,21 +45,23 @@ public:
   /**
    * Get image data for image in specified scale.
    * @param scale Scale number.
+   * @param image_number Image number for scale. Default is 0. Some algorithms has to provide two images durig processing.
    * @return Image data.
    */
-  void * getDataForScale(unsigned int scale);
+  void * getDataForScale(unsigned int scale, unsigned int image_number = 0);
   void show(std::string );
   void show(cv::Mat &blobs, std::vector<float> & sigmas);
 
   ScaleSpaceImage & operator/=(int d)
   {
-    image /= d;
+    image[0] /= d;
     return *this;
   }
 private:
-  cv::Mat image;
+  std::vector<cv::Mat> image;
   
   unsigned int nr_scales;
+  unsigned int nr_images;
 
   unsigned int width;
   unsigned int height;

@@ -14,55 +14,62 @@ ScaleSpaceImage::~ScaleSpaceImage(void)
 {
 }
 
-void ScaleSpaceImage::createImage(unsigned int height, unsigned int width, unsigned int scales, int type)//TODO: temp
+void ScaleSpaceImage::createImage(unsigned int height, unsigned int width, unsigned int scales, int type, unsigned int images)//TODO: temp
 {
   int *dims =  new int [3];
   dims[0] = scales + 1;
   dims[1] = this->width = width;
   dims[2] = this->height = height;
-  image = cv::Mat(3, dims, type);
+  for (unsigned int i=0; i < images; ++i)
+  {
+    image[i] = cv::Mat(3, dims, type);
+  }
   this->type = type;
-  delete [] dims;
   nr_scales = scales;
+  nr_images = images;
+  delete [] dims;
 }
 
-void * ScaleSpaceImage::getDataForScale(unsigned int scale)
+void * ScaleSpaceImage::getDataForScale(unsigned int scale, unsigned int image_number)
 {
-  if (!image.isContinuous())
+  if (!image[image_number].isContinuous())
   {
     throw ScaleSpaceImageException("Data is not continuous");
   }
   if (scale <= nr_scales)
   {
-    int tmp = scale * (image.elemSize() * width * height);
-    return image.data + scale * (image.elemSize() * width * height);
+    int tmp = scale * (image[image_number].elemSize() * width * height);
+    return image[0].data + scale * (image[image_number].elemSize() * width * height);
   }
   throw ScaleSpaceImageException("Wrong scale parameter");
 }
 
 void ScaleSpaceImage::setOriginalImage(cv::Mat original_image)
 {
-  cv::Mat tmp;
-  if (type == CV_32FC1)
+  for (unsigned int i = 0; i < nr_images; ++i)
   {
-    original_image.convertTo(tmp, type, 1.0/256.0);
+    cv::Mat tmp;
+    if (type == CV_32FC1)
+    {
+      original_image.convertTo(tmp, type, 1.0/256.0);
+    }
+    else if (type == CV_8UC1)
+    {
+      original_image.copyTo(tmp);
+    }
+    else
+    {
+      throw ScaleSpaceImageException("Not supoorted output image type");
+    }
+    memcpy(image[i].data, tmp.data, image[i].elemSize1() * width * height);
   }
-  else if (type == CV_8UC1)
-  {
-    original_image.copyTo(tmp);
-  }
-  else
-  {
-    throw ScaleSpaceImageException("Not supoorted output image type");
-  }
-  memcpy(image.data, tmp.data, image.elemSize1() * width * height);
 }
 
-void ScaleSpaceImage::show(std::string fn)
+void ScaleSpaceImage::show(std::string fn)//TODO: not only one image
 {
   static int image_nr = 0;
-  cv::Mat tmp(height, width, image.type());
-  memcpy(tmp.data, getDataForScale(0), image.elemSize() * width * height);
+  cv::Mat tmp(height, width, image[0].type());
+  memcpy(tmp.data, getDataForScale(0), image[0].elemSize() * width * height);
   cv::Mat tmp2;
   if (type == CV_32FC1)
   {
@@ -82,7 +89,7 @@ void ScaleSpaceImage::show(std::string fn)
   {
     std::string s;
     s = fn + std::to_string(i) + ".jpg";
-    memcpy(tmp.data, getDataForScale(i), image.elemSize() * width * height);
+    memcpy(tmp.data, getDataForScale(i), image[0].elemSize() * width * height);
    /* std::ofstream out("data" + std::to_string(image_nr) +  std::to_string(i) + ".txt");
     out << tmp;*/ //very slow
     cv::Mat tmp2;
@@ -105,8 +112,8 @@ void ScaleSpaceImage::show(std::string fn)
 
 void ScaleSpaceImage::show(cv::Mat & blobs, std::vector<float> & sigmas)
 {
-  cv::Mat tmp2(height, width, image.type()), tmp;
-  memcpy(tmp2.data, getDataForScale(0), image.elemSize() * width * height);
+  cv::Mat tmp2(height, width, image[0].type()), tmp;
+  memcpy(tmp2.data, getDataForScale(0), image[0].elemSize() * width * height);
   tmp2.convertTo(tmp, CV_8UC1, 256.0);
   for (unsigned int i=0; i < height; ++i)
   {
