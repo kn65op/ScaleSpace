@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <OpenCLAlgorithmsStream.h>
-#include <OpenCLFindMaxin3DImage.h>
+#include <OpenCL3DTo2DImageAlgorithm.h>
 
 #include "ScaleSpaceImage.h"
 
@@ -128,7 +128,7 @@ private:
   typedef std::list<OpenCLAlgorithmsStream*> streams_t;
   streams_t streams; //streams - one for each scale
 
-  OpenCLFindMaxin3DImage fmi3Dimage;
+  OpenCL3DTo2DImageAlgorithm* post_processing;
   
   //clearing streams
   void clearStreams();

@@ -9,6 +9,8 @@
 #include <OpenCLEdgeDetector.h>
 #include <OpenCLCornerDetector.h>
 #include <OpenCLBlobDetector.h>
+#include <OpenCLFindMaxin3DImage.h>
+#include <OpenCLFindEdgesIn3DImage.h>
 
 #define DEBUG_SS
 
@@ -27,6 +29,8 @@ ScaleSpace::ScaleSpace(ScaleSpaceMode mode /* = Pure */)
   last_height = last_width = last_scale = 0;
 
   calc_mode = mode;
+
+  post_processing = nullptr;
 }
 
 ScaleSpace::~ScaleSpace(void)
@@ -110,7 +114,6 @@ void ScaleSpace::prepare()
   }
 
   OpenCLDevice device = OpenCLDevice::getDevices().front();
-  fmi3Dimage.setDevice(device);
  
   for (unsigned int i=0; i< nr_scales; ++i)
   {
@@ -160,6 +163,7 @@ void ScaleSpace::prepare()
       #ifdef DEBUG_SS
       std::cout << "Mode: laplacian\n";
       #endif
+      post_processing = new OpenCLFindMaxin3DImage();
       break;
     case ScaleSpaceMode::Edges:
       recognizer = new OpenCLEdgeDetector();
@@ -168,6 +172,7 @@ void ScaleSpace::prepare()
       #ifdef DEBUG_SS
       std::cout << "Mode: edges\n";
       #endif
+      post_processing = new OpenCLFindEdgesIn3DImage();
       break;
     case ScaleSpaceMode::Blobs:
       recognizer = new OpenCLBlobDetector();
@@ -192,7 +197,8 @@ void ScaleSpace::prepare()
       type = CV_8UC1;
       break;
     }
-
+    
+    post_processing->setDevice(device);
     s->setDevice(device);
 
     streams.push_back(s);
@@ -229,8 +235,14 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
     #ifdef DEBUG_SS
     std::cout << "NEW\n";
     #endif
-    fmi3Dimage.setDataSize(input.size().width, input.size().height, nr_scales);
-    fmi3Dimage.prepare();
+    post_processing->setDataSize(input.size().width, input.size().height, nr_scales);
+    post_processing->prepare();
+    if (calc_mode == ScaleSpaceMode::Edges)
+    {
+      OpenCLFindEdgesIn3DImageParams p;
+      p.setData(output.getDataForScale(1,1));
+      post_processing->setParams(p);
+    }
   }
 
   output.setOriginalImage(input);
@@ -254,9 +266,26 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
   }
   output.show("before"); 
   cv::Mat outp = cv::Mat::zeros(input.size(), input.type());
-  fmi3Dimage.processData(output.getDataForScale(1), outp.data); //TODO: remove from non laplacian
-  output.show(outp, sigmas); 
-  outp = outp * 255 / nr_scales;
+  if (post_processing)
+  {
+    post_processing->processData(output.getDataForScale(1), outp.data); //TODO: remove from non laplacian
+  }
+  switch (calc_mode)
+  {
+  case ScaleSpaceMode::Laplacian:
+    output.show(outp, sigmas); 
+    outp = outp * 255 / nr_scales;
+    break;
+  case ScaleSpaceMode::Edges:
+    break;
+  case ScaleSpaceMode::Blobs:
+    break;
+  case ScaleSpaceMode::Corners:
+    break;
+  default: //and Pure
+    break;
+  }
+
   cv::imwrite("outp.bmp", outp);//*/
   //output /= nr_scales;
   //output.show("after");
