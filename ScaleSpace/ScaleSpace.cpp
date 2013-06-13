@@ -228,17 +228,17 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
 
   output.setOriginalImage(input);
   cv::Mat tmp(input.size().height, input.size().width, CV_8UC1);
-  int i = 1;
+  int i = 0;
   for (auto s : streams)
   {
     #ifdef DEBUG_SS
     std::cout << "processing: " << i << " - ";
     #endif
-    s->processImage(input.data, output.getDataForScale(i++)); //not copy original image data
+    s->processImage(input.data, output.getDataForScale(++i)); //not copy original image data
     void * additional_output = s->getLastAlgorithmAdditionalOutput();
     if (additional_output)
     {
-
+      memcpy(output.getDataForScale(i, 1), additional_output, output.getOneImageSize());
     }
     #ifdef DEBUG_SS
     std::cout << s->getTime() << "\n";

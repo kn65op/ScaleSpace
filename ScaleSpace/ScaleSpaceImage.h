@@ -52,6 +52,8 @@ public:
   void show(std::string );
   void show(cv::Mat &blobs, std::vector<float> & sigmas);
 
+  unsigned int getOneImageSize() const;
+
   ScaleSpaceImage & operator/=(int d)
   {
     image[0] /= d;

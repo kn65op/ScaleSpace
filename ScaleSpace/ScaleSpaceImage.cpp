@@ -127,3 +127,17 @@ void ScaleSpaceImage::show(cv::Mat & blobs, std::vector<float> & sigmas)
   }
   cv::imwrite("result.bmp",tmp);
 }
+
+unsigned int ScaleSpaceImage::getOneImageSize() const
+{
+  unsigned int size = image[0].size().height * image[0].size().width;
+  if (type == CV_32FC1)
+  {
+    return size * sizeof(float);
+  }
+  else if (type == CV_8UC1)
+  {
+    return size * sizeof(unsigned char);
+  }
+  throw ScaleSpaceImageException("Not supported output image type");
+}
