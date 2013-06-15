@@ -240,7 +240,7 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
     if (calc_mode == ScaleSpaceMode::Edges)
     {
       OpenCLFindEdgesIn3DImageParams p;
-      p.setData(output.getDataForScale(1,1));
+      p.setData(output.getDataForScale(0,1));
       post_processing->setParams(p);
     }
   }
@@ -253,7 +253,7 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
     #ifdef DEBUG_SS
     std::cout << "processing: " << i << " - ";
     #endif
-    s->processImage(input.data, output.getDataForScale(++i)); //not copy original image data
+    s->processImage(input.data, output.getDataForScale(i)); //not copy original image data
     void * additional_output = s->getLastAlgorithmAdditionalOutput();
     if (additional_output)
     {
@@ -263,12 +263,13 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
     std::cout << s->getTime() << "\n";
     //std::cout << (int)(*((unsigned char*)output.getDataForScale(i - 1))) << "\n";
     #endif
+    ++i;
   }
   output.show("before"); 
   cv::Mat outp = cv::Mat::zeros(input.size(), input.type());
   if (post_processing)
   {
-    post_processing->processData(output.getDataForScale(1), outp.data); //TODO: remove from non laplacian
+    post_processing->processData(output.getDataForScale(0), outp.data); //TODO: remove from non laplacian
   }
   switch (calc_mode)
   {

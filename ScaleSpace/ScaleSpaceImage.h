@@ -40,7 +40,7 @@ public:
    * Set original image.
    * @param image Original image.
    */
-  void setOriginalImage(cv::Mat original_image);
+  void setOriginalImage(cv::Mat oimage);
   
   /**
    * Get image data for image in specified scale.
@@ -61,6 +61,7 @@ public:
   }
 private:
   std::vector<cv::Mat> image;
+  cv::Mat original_image;
   
   unsigned int nr_scales;
   unsigned int nr_images;

@@ -60,15 +60,15 @@ int main(int argc, char * argv[])
   }
   catch(OpenCLException &ex)
   {
-    std::cout << ex.getFullMessage() << "\n";
+    std::cout << "OpenCLException: " << ex.getFullMessage() << "\n";
   }
   catch (ScaleSpaceException &ex)
   {
-    std::cout << (std::string)ex << "\n";
+    std::cout << "ScaleSpaceExcetpion: " << (std::string)ex << "\n";
   }
   catch (ScaleSpaceImageException &ex)
   {
-    std::cout << (std::string)ex << "\n" << "Image\n";
+    std::cout << "ScaleSpaceImageException: " << (std::string)ex << "\n";
   }
   return 0;
 }

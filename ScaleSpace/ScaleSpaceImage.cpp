@@ -18,7 +18,7 @@ void ScaleSpaceImage::createImage(unsigned int height, unsigned int width, unsig
 {
   image.clear();
   int *dims =  new int [3];
-  dims[0] = scales + 1;
+  dims[0] = scales;
   dims[1] = this->width = width;
   dims[2] = this->height = height;
   for (unsigned int i=0; i < images; ++i)
@@ -37,17 +37,18 @@ void * ScaleSpaceImage::getDataForScale(unsigned int scale, unsigned int image_n
   {
     throw ScaleSpaceImageException("Data is not continuous");
   }
-  if (scale <= nr_scales)
+  if (scale >= nr_scales)
   {
-    int tmp = scale * (image[image_number].elemSize() * width * height);
-    return image[0].data + scale * (image[image_number].elemSize() * width * height);
+    throw ScaleSpaceImageException("Wrong scale parameter: " + std::to_string(scale) + ". Can be 0 -" + std::to_string(nr_scales - 1));  
   }
-  throw ScaleSpaceImageException("Wrong scale parameter");
+  int tmp = scale * (image[image_number].elemSize() * width * height);
+  return image[0].data + scale * (image[image_number].elemSize() * width * height);
 }
 
-void ScaleSpaceImage::setOriginalImage(cv::Mat original_image)
+void ScaleSpaceImage::setOriginalImage(cv::Mat oimage)
 {
-  for (unsigned int i = 0; i < nr_images; ++i)
+  oimage.copyTo(original_image);
+  /*for (unsigned int i = 0; i < nr_images; ++i)
   {
     cv::Mat tmp;
     if (type == CV_32FC1)
@@ -63,7 +64,7 @@ void ScaleSpaceImage::setOriginalImage(cv::Mat original_image)
       throw ScaleSpaceImageException("Not supoorted output image type");
     }
     memcpy(image[i].data, tmp.data, image[i].elemSize1() * width * height);
-  }
+  }*/
 }
 
 void ScaleSpaceImage::show(std::string fn)//TODO: not only one image
@@ -86,7 +87,7 @@ void ScaleSpaceImage::show(std::string fn)//TODO: not only one image
   }
   cv::imwrite("original.bmp", tmp2);
 
-  for (unsigned int i = 1; i < nr_scales + 1; ++i)
+  for (unsigned int i = 0; i < nr_scales; ++i)
   {
     std::string s;
     s = fn + std::to_string(i) + ".jpg";
@@ -113,9 +114,10 @@ void ScaleSpaceImage::show(std::string fn)//TODO: not only one image
 
 void ScaleSpaceImage::show(cv::Mat & blobs, std::vector<float> & sigmas)
 {
-  cv::Mat tmp2(height, width, image[0].type()), tmp;
+  /*cv::Mat tmp2(height, width, image[0].type()), tmp;
   memcpy(tmp2.data, getDataForScale(0), image[0].elemSize() * width * height);
-  tmp2.convertTo(tmp, CV_8UC1, 256.0);
+  tmp2.convertTo(tmp, CV_8UC1, 256.0);*/
+  cv::Mat tmp(original_image.clone());
   for (unsigned int i=0; i < height; ++i)
   {
     for (unsigned int j=0; j < width; ++j)
@@ -131,7 +133,7 @@ void ScaleSpaceImage::show(cv::Mat & blobs, std::vector<float> & sigmas)
 
 unsigned int ScaleSpaceImage::getOneImageSize() const
 {
-  unsigned int size = image[0].size().height * image[0].size().width;
+  unsigned int size = original_image.size().height * original_image.size().width;
   if (type == CV_32FC1)
   {
     return size * sizeof(float);
