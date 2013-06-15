@@ -26,12 +26,7 @@ void ProgramController::processArgs(int argc, char*argv[])
     help = true;
     return;
   }
-  if (!(opt >> GetOpt::Option('i', "in", in_file))) //mandatory parameter
-  {
-    help = true;
-    error_message = "Input file is mandatory";
-    return;
-  }
+  opt >> GetOpt::Option('i', "in", in_file);
   getModeFromOptions();
   getScalesFromOptions();
 }
@@ -103,4 +98,9 @@ void ProgramController::getScalesFromOptions()
     scale_step = scale[0];
     nr_scales = scale[1];
   }
+}
+
+bool ProgramController::useCamera() const
+{
+  return in_file == "";
 }

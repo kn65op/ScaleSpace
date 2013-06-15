@@ -58,12 +58,16 @@
     <Import Project="..\OpenCLInterface.props" />
     <Import Project="..\..\PropertySheets\OpenCL.props" />
     <Import Project="..\..\PropertySheets\OpenCLD.props" />
+    <Import Project="JAICameraInterface.props" />
+    <Import Project="..\PropertySheets\JAISDK.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\PropertySheets\OpenCV.props" />
     <Import Project="..\OpenCLInterface.props" />
     <Import Project="..\..\PropertySheets\OpenCL.props" />
+    <Import Project="JAICameraInterface.props" />
+    <Import Project="..\PropertySheets\JAISDK.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -79,6 +83,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Jai_Factory.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ProjectReference />
     <Bscmake>

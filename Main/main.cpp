@@ -1,4 +1,5 @@
 #include <ScaleSpace.h>
+#include <Camera.h>
 #include "ProgramController.h"
 
 #include <opencv\cv.h>
@@ -25,6 +26,7 @@
 
 int main(int argc, char * argv[])
 {
+  JAI::Camera *camera = nullptr;
   ProgramController controller(argc, argv);
   if (!controller.areOptionsValid())
   {
@@ -39,26 +41,20 @@ int main(int argc, char * argv[])
     ScaleSpace ss/*;//*/(controller.getMode());
     ss.setScaleStep(controller.getScaleStep(), controller.getNrScales());
     ss.prepare();
-    /*ss.processImage(input, output);
-
-    output.show();
-    input = cv::imread("in2.bmp", CV_LOAD_IMAGE_GRAYSCALE);
-    ss.processImage(input, output);
-
-    output.show();
-    
-    input = cv::imread("in3.bmp", CV_LOAD_IMAGE_GRAYSCALE);
-    ss.processImage(input, output);
-
-    output.show();
-    */
-    input = cv::imread(controller.getInputFile().c_str(), CV_LOAD_IMAGE_GRAYSCALE);
-    if (!input.size().width)
+    if (controller.useCamera())
     {
-      std::cout << "File is not valid image\n";
-      return 0;
+      camera = JAI::Camera::getCameraList().front();
     }
-    ss.processImage(input, output);
+    else
+    {
+      input = cv::imread(controller.getInputFile().c_str(), CV_LOAD_IMAGE_GRAYSCALE);
+      if (!input.size().width)
+      {
+        std::cout << "File is not valid image\n";
+        return 0;
+      }
+      ss.processImage(input, output);
+    }
 
 //    output.show();
   }
@@ -77,7 +73,7 @@ int main(int argc, char * argv[])
   return 0;
 }
 
-#if 0
+#if 0 //old code can be useful for debugging
 
 
 #ifdef LIST_IMAGES

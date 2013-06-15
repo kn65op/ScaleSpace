@@ -33,6 +33,7 @@ public:
     return scale_step;
   }
 
+  bool useCamera() const;
   
 private:
   ProgramController(const ProgramController & ); //non copyable
