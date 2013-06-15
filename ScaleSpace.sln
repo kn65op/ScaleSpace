@@ -29,6 +29,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ScaleSpaceTest", "ScaleSpac
 		{CE2E28E3-0A39-427E-891B-0353B0AAF61D} = {CE2E28E3-0A39-427E-891B-0353B0AAF61D}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JAICameraInterface", "JAICameraInterface\JAICameraInterface.vcxproj", "{469B2197-6D1B-4123-9B90-B10D43C7CBF2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -72,6 +74,12 @@ Global
 		{597EF6D2-EF4C-4782-9B4C-7A9EB6CD025D}.DLL|Win32.Build.0 = Debug|Win32
 		{597EF6D2-EF4C-4782-9B4C-7A9EB6CD025D}.Release|Win32.ActiveCfg = Release|Win32
 		{597EF6D2-EF4C-4782-9B4C-7A9EB6CD025D}.Release|Win32.Build.0 = Release|Win32
+		{469B2197-6D1B-4123-9B90-B10D43C7CBF2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{469B2197-6D1B-4123-9B90-B10D43C7CBF2}.Debug|Win32.Build.0 = Debug|Win32
+		{469B2197-6D1B-4123-9B90-B10D43C7CBF2}.DLL|Win32.ActiveCfg = DLL|Win32
+		{469B2197-6D1B-4123-9B90-B10D43C7CBF2}.DLL|Win32.Build.0 = DLL|Win32
+		{469B2197-6D1B-4123-9B90-B10D43C7CBF2}.Release|Win32.ActiveCfg = Release|Win32
+		{469B2197-6D1B-4123-9B90-B10D43C7CBF2}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
