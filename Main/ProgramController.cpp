@@ -4,12 +4,13 @@
 #include <vector>
 
 ProgramController::ProgramController(int argc, char* argv []) :
-        mode(ScaleSpaceMode::Pure),
-        in_file(""),
-        help(false),
-        opt(GetOpt::GetOpt_pp(argc, argv)),
-        scale_step(10),
-        nr_scales(10)
+  type(ScaleSpaceSourceImageType::Gray),
+  mode(ScaleSpaceMode::Pure),
+  in_file(""),
+  help(false),
+  opt(GetOpt::GetOpt_pp(argc, argv)),
+  scale_step(10),
+  nr_scales(10)
 {
   processArgs(argc, argv);
 }
@@ -29,6 +30,7 @@ void ProgramController::processArgs(int argc, char*argv[])
   opt >> GetOpt::Option('i', "in", in_file);
   getModeFromOptions();
   getScalesFromOptions();
+  getTypeFromOptions();
 }
 
 void ProgramController::printHelp() const
@@ -74,6 +76,35 @@ void ProgramController::getModeFromOptions()
   }   
 }
 
+void ProgramController::getTypeFromOptions()
+{
+  std::string type_s;
+  if (opt >> GetOpt::Option('t', "type", type_s))
+  {
+    if (type_s == "gray")
+    {
+      type = ScaleSpaceSourceImageType::Gray;
+    }
+    else if (type_s == "bayer")
+    {
+      type = ScaleSpaceSourceImageType::Bayer;
+    }
+    else
+    {
+      help = true;
+      error_message = "For type supported values are: gray, bayer.";
+    }
+  }   
+  else
+  {
+    if (in_file == "")
+    {
+      type = ScaleSpaceSourceImageType::Bayer;
+    }
+  }
+}
+
+
 ScaleSpaceMode ProgramController::getMode() const
 {
   return mode;
@@ -103,4 +134,9 @@ void ProgramController::getScalesFromOptions()
 bool ProgramController::useCamera() const
 {
   return in_file == "";
+}
+
+ScaleSpaceSourceImageType ProgramController::getSourceImageType() const
+{
+  return type;
 }

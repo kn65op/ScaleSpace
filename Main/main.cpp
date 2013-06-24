@@ -1,3 +1,45 @@
+#if 0
+
+#include <opencv2\legacy\compat.hpp>
+#include <opencv2\highgui\highgui_c.h>
+#include <opencv2\imgproc\imgproc_c.h>
+int main(int argc, char** argv)
+{
+    const char* filename = argc > 1 ? argv[1] : "lena.jpg";
+    IplImage* img = cvLoadImage( filename, 0 ), *cimg;
+    CvMemStorage* storage = cvCreateMemStorage(0);
+    CvSeq* keypoints = 0;
+    int i;
+
+    if( !img )
+        return 0;
+    cvNamedWindow( "image", 1 );
+    cvShowImage( "image", img );
+    cvNamedWindow( "features", 1 );
+    cimg = cvCreateImage( cvGetSize(img), 8, 3 );
+    cvCvtColor( img, cimg, CV_GRAY2BGR );
+
+    keypoints = cvGetStarKeypoints( img, storage, cvStarDetectorParams(45) );
+
+    for( i = 0; i < (keypoints ? keypoints->total : 0); i++ )
+    {
+        CvStarKeypoint kpt = *(CvStarKeypoint*)cvGetSeqElem(keypoints, i);
+        int r = kpt.size/2;
+        cvCircle( cimg, kpt.pt, r, CV_RGB(0,255,0));
+        cvLine( cimg, cvPoint(kpt.pt.x + r, kpt.pt.y + r),
+            cvPoint(kpt.pt.x - r, kpt.pt.y - r), CV_RGB(0,255,0));
+        cvLine( cimg, cvPoint(kpt.pt.x - r, kpt.pt.y + r),
+            cvPoint(kpt.pt.x + r, kpt.pt.y - r), CV_RGB(0,255,0));
+    }
+    cvShowImage( "features", cimg );
+    cvWaitKey();
+
+}
+
+#endif
+
+#if 1
+
 #include <ScaleSpace.h>
 #include <Camera.h>
 #include "ProgramController.h"
@@ -24,8 +66,26 @@
 
 #include <fstream>
 
+//#define DEVICE_INFO
+#ifdef DEVICE_INFO
+
 int main(int argc, char * argv[])
 {
+  std::cout << "SADASD\n";
+  OpenCLDevice dev = OpenCLDevice::getDevices().front();
+  size_t maxw, maxh, maxd;
+  dev.getDeviceInfo(CL_DEVICE_IMAGE3D_MAX_DEPTH, &maxd);
+  dev.getDeviceInfo(CL_DEVICE_IMAGE2D_MAX_HEIGHT, &maxh);
+  dev.getDeviceInfo(CL_DEVICE_IMAGE2D_MAX_WIDTH, &maxw);
+
+  std::cout << maxw << " " << maxh << " " << maxd << "\n";
+}
+
+#else
+
+int main(int argc, char * argv[])
+{
+
   JAI::Camera *camera = nullptr;
   ProgramController controller(argc, argv);
   if (!controller.areOptionsValid())
@@ -40,7 +100,7 @@ int main(int argc, char * argv[])
   {
     ScaleSpace ss/*;//*/(controller.getMode());
     ss.setScaleStep(controller.getScaleStep(), controller.getNrScales());
-    ss.prepare();
+    ss.prepare(controller.getSourceImageType());
     if (controller.useCamera())
     {
       camera = JAI::Camera::getCameraList().front();
@@ -58,6 +118,11 @@ int main(int argc, char * argv[])
 
 //    output.show();
   }
+  catch (OpenCLDeviceException &ex)
+  {
+    std::cout << "OpenCLDeviceException: " << ex.getFullMessage() << "\n";
+    std::cout << "Source:\n" << ex.getSource() << "\n";
+  }
   catch(OpenCLException &ex)
   {
     std::cout << "OpenCLException: " << ex.getFullMessage() << "\n";
@@ -72,6 +137,8 @@ int main(int argc, char * argv[])
   }
   return 0;
 }
+
+#endif
 
 #if 0 //old code can be useful for debugging
 
@@ -181,3 +248,5 @@ int main(int argc, char * argv[])
 
 #endif
 
+
+#endif

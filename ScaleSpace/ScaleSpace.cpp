@@ -11,6 +11,8 @@
 #include <OpenCLBlobDetector.h>
 #include <OpenCLFindMaxin3DImage.h>
 #include <OpenCLFindEdgesIn3DImage.h>
+#include <OpenCLBayerFilter.h>
+#include <OpenCLRGBToGray.h>
 
 #define DEBUG_SS
 
@@ -104,7 +106,7 @@ void ScaleSpace::clearStreams()
   streams.clear();
 }
 
-void ScaleSpace::prepare()
+void ScaleSpace::prepare(ScaleSpaceSourceImageType si_type)
 {
   if (!streams.empty())
   {
@@ -117,7 +119,22 @@ void ScaleSpace::prepare()
  
   for (unsigned int i=0; i< nr_scales; ++i)
   {
+    auto s = new OpenCLAlgorithmsStream();
+    
     OpenCL2DTo2DImageAlgorithmForStream *itf = new OpenCLIntToFloat();
+    s->pushAlgorithm(itf);
+
+    if (si_type == ScaleSpaceSourceImageType::Bayer)
+    {
+      OpenCL2DTo2DImageAlgorithmForStream *bayer = new OpenCLBayerFilterForStream();
+      OpenCLBayerFilterParams bayer_params;
+      bayer->setParams(bayer_params);
+      s->pushAlgorithm(bayer);
+
+      OpenCL2DTo2DImageAlgorithmForStream *rgb2gray = new OpenCLRGBToGray();
+      s->pushAlgorithm(rgb2gray);
+    }
+
     OpenCL2DTo2DImageAlgorithmForStream *gaussian = new OpenCLGaussianImage();
     unsigned int scale = 1 + scale_step * (i + 1);
 
@@ -144,10 +161,6 @@ void ScaleSpace::prepare()
     OpenCLGaussianParams params;
     params.setMask(scale, gaussian_kernel_2d.data);
     gaussian->setParams(params);
-
-    auto s = new OpenCLAlgorithmsStream();
-
-    s->pushAlgorithm(itf);
     s->pushAlgorithm(gaussian);
 
     OpenCL2DTo2DImageAlgorithmForStream *recognizer = nullptr;
@@ -198,7 +211,10 @@ void ScaleSpace::prepare()
       break;
     }
     
-    post_processing->setDevice(device);
+    if(post_processing)
+    {
+      post_processing->setDevice(device);
+    }
     s->setDevice(device);
 
     streams.push_back(s);
@@ -211,7 +227,8 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
 {
   if (!prepared)
   {
-    prepare();
+    std::cout << "Algorithm preparation using grayscale input";
+    prepare(ScaleSpaceSourceImageType::Gray);
   }
 
   if (last_height != input.size().height || last_width != input.size().width || last_scale != nr_scales)
@@ -235,13 +252,16 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
     #ifdef DEBUG_SS
     std::cout << "NEW\n";
     #endif
-    post_processing->setDataSize(input.size().width, input.size().height, nr_scales);
-    post_processing->prepare();
-    if (calc_mode == ScaleSpaceMode::Edges)
+    if (post_processing)
     {
-      OpenCLFindEdgesIn3DImageParams p;
-      p.setData(output.getDataForScale(0,1));
-      post_processing->setParams(p);
+      post_processing->setDataSize(input.size().width, input.size().height, nr_scales);
+      post_processing->prepare();
+      if (calc_mode == ScaleSpaceMode::Edges)
+      {
+        OpenCLFindEdgesIn3DImageParams p;
+        p.setData(output.getDataForScale(0,1));
+        post_processing->setParams(p);
+      }
     }
   }
 

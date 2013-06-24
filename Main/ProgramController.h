@@ -22,6 +22,7 @@ public:
   void printHelp() const;
   bool areOptionsValid() const;
   ScaleSpaceMode getMode() const;
+  ScaleSpaceSourceImageType getSourceImageType() const;
   std::string getInputFile() const;
   unsigned int getNrScales() const
   {
@@ -42,6 +43,7 @@ private:
   
   void getModeFromOptions();
   void getScalesFromOptions();
+  void getTypeFromOptions();
 
   GetOpt::GetOpt_pp opt;
   
@@ -49,6 +51,7 @@ private:
   std::string error_message;
   //parameters
   ScaleSpaceMode mode;
+  ScaleSpaceSourceImageType type;
   std::string in_file;
 
   unsigned int scale_step;

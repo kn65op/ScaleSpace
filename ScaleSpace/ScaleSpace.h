@@ -42,8 +42,9 @@ public:
 
 /** Enum for selecting what processing will be done.
  * Supproted values:
- * - Pure - means that only SpaleSpace representation will be calculed
- * - Laplacian - means that after ScaleSpace representation Lapalacian will be calculted, which can detect blobs
+ * - Pure - means that only SpaleSpace representation will be calculed.
+ * - Laplacian - means that after ScaleSpace representation Lapalacian will be calculted, which can detect blobs.
+ * - Edges - find edges on image.
  */
 enum class ScaleSpaceMode
 {
@@ -52,6 +53,12 @@ enum class ScaleSpaceMode
   Edges,
   Blobs,
   Corners
+};
+
+enum class ScaleSpaceSourceImageType
+{
+  Gray,
+  Bayer
 };
 
 /** Scale Space process.
@@ -115,7 +122,7 @@ public:
   /**
    * Prepare stream for computing.
    */
-  void prepare();
+  void prepare(ScaleSpaceSourceImageType si_type);
   
   void findMax();
 
