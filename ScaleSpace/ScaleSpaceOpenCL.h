@@ -38,7 +38,7 @@ public:
    * @param output ScaleSpaceImage with computed representations in specified scales.
    */
   void processImage(cv::Mat & input, ScaleSpaceImage & output);
- 
+  
   /**
    * Prepare stream for computing.
    */
