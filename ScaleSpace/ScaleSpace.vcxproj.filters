@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ScaleSpace.h">
+    <ClInclude Include="ScaleSpaceImage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ScaleSpaceImage.h">
+    <ClInclude Include="ScaleSpaceOpenCL.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -26,7 +26,7 @@
     <ClCompile Include="ScaleSpaceImage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ScaleSpace.cpp">
+    <ClCompile Include="ScaleSpaceOpenCL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

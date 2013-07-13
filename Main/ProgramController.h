@@ -2,7 +2,7 @@
 
 #include "getoptpp\getopt_pp.h"
 
-#include "..\ScaleSpace\ScaleSpace.h"
+#include "..\ScaleSpace\ScaleSpaceOpenCL.h"
 #include <string>
 
 /**

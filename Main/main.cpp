@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 
 #if 1
 
-#include <ScaleSpace.h>
+#include <ScaleSpaceOpenCL.h>
 #include <Camera.h>
 #include "ProgramController.h"
 
@@ -98,7 +98,7 @@ int main(int argc, char * argv[])
   ScaleSpaceImage output;
   try
   {
-    ScaleSpace ss/*;//*/(controller.getMode());
+    ScaleSpaceOpenCL ss/*;//*/(controller.getMode());
     ss.setScaleStep(controller.getScaleStep(), controller.getNrScales());
     ss.prepare(controller.getSourceImageType());
     if (controller.useCamera())
@@ -156,7 +156,7 @@ int main(int argc, char * argv[])
   ScaleSpaceImage output;
   try
   {
-    ScaleSpace ss/*;//*/(ScaleSpaceMode::Laplacian);
+    ScaleSpaceOpenCL ss/*;//*/(ScaleSpaceMode::Laplacian);
     ss.setScaleStep(8, 20);
     ss.prepare();
     /*ss.processImage(input, output);

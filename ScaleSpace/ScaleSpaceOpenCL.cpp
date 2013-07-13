@@ -1,4 +1,4 @@
-#include "ScaleSpace.h"
+#include "ScaleSpaceOpenCL.h"
 
 #include <opencv\cv.h>
 
@@ -21,7 +21,7 @@
 #include <iostream>
 #endif
    
-ScaleSpace::ScaleSpace(ScaleSpaceMode mode /* = Pure */)
+ScaleSpaceOpenCL::ScaleSpaceOpenCL(ScaleSpaceMode mode /* = Pure */)
 {
   nr_scales = 0;
   scale_step = 0;
@@ -35,12 +35,12 @@ ScaleSpace::ScaleSpace(ScaleSpaceMode mode /* = Pure */)
   post_processing = nullptr;
 }
 
-ScaleSpace::~ScaleSpace(void)
+ScaleSpaceOpenCL::~ScaleSpaceOpenCL(void)
 {
   clearStreams();
 }
 
-void ScaleSpace::setMaxScale(unsigned int max, unsigned int nr)
+void ScaleSpaceOpenCL::setMaxScale(unsigned int max, unsigned int nr)
 {
   prepared = false;
   if (max == 0) throw ScaleSpaceZeroException("setMaxScale: max cannot be 0");
@@ -58,7 +58,7 @@ void ScaleSpace::setMaxScale(unsigned int max, unsigned int nr)
   nr_scales = nr;
 }
 
-void ScaleSpace::setScaleStep(unsigned int step, unsigned int nr)
+void ScaleSpaceOpenCL::setScaleStep(unsigned int step, unsigned int nr)
 {
   prepared = false;
   if (step == 0) throw ScaleSpaceZeroException("setScaleStep: step cannot be 0");
@@ -69,7 +69,7 @@ void ScaleSpace::setScaleStep(unsigned int step, unsigned int nr)
   nr_scales = nr;
 }
 
-bool ScaleSpace::setScalesRange(unsigned int max, unsigned int step)
+bool ScaleSpaceOpenCL::setScalesRange(unsigned int max, unsigned int step)
 {
   prepared = false;
   if (max == 0) throw ScaleSpaceZeroException("setScalesRange: max cannot be 0");
@@ -87,17 +87,17 @@ bool ScaleSpace::setScalesRange(unsigned int max, unsigned int step)
   return ret;
 }
 
-unsigned int ScaleSpace::getNrScales()
+unsigned int ScaleSpaceOpenCL::getNrScales()
 {
   return nr_scales;
 }
 
-unsigned int ScaleSpace::getScaleStep()
+unsigned int ScaleSpaceOpenCL::getScaleStep()
 {
   return scale_step;
 }
 
-void ScaleSpace::clearStreams()
+void ScaleSpaceOpenCL::clearStreams()
 {
   for (auto s : streams)
   {
@@ -106,7 +106,7 @@ void ScaleSpace::clearStreams()
   streams.clear();
 }
 
-void ScaleSpace::prepare(ScaleSpaceSourceImageType si_type)
+void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type)
 {
   if (!streams.empty())
   {
@@ -223,7 +223,7 @@ void ScaleSpace::prepare(ScaleSpaceSourceImageType si_type)
   prepared = true;
 }
 
-void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
+void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
 {
   if (!prepared)
   {
@@ -289,7 +289,7 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
   cv::Mat outp = cv::Mat::zeros(input.size(), input.type());
   if (post_processing)
   {
-    post_processing->processData(output.getDataForScale(0), outp.data); //TODO: remove from non laplacian
+    post_processing->processData(output.getDataForScale(0), outp.data);
   }
   switch (calc_mode)
   {
@@ -312,6 +312,6 @@ void ScaleSpace::processImage(cv::Mat& input, ScaleSpaceImage& output)
   //output.show("after");
 }
 
-void ScaleSpace::findMax()
+void ScaleSpaceOpenCL::findMax()
 {
 }

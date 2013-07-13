@@ -92,8 +92,15 @@ void ScaleSpaceImage::show(std::string fn)//TODO: not only one image
     std::string s;
     s = fn + std::to_string(i) + ".jpg";
     memcpy(tmp.data, getDataForScale(i), image[0].elemSize() * width * height);
-    /*std::ofstream out("data" + std::to_string(image_nr) +  std::to_string(i) + ".txt");
-    out << tmp;//*/ //very slow
+    std::ofstream out("data1" + std::to_string(image_nr) +  std::to_string(i) + ".txt");
+    out << tmp; //very slow
+    out.close();
+    //for some algorithms
+    cv::Mat tmp3(height, width, image[1].type());
+    memcpy(tmp3.data, getDataForScale(i, 1), image[1].elemSize() * width * height);
+    std::ofstream out2("data2" + std::to_string(image_nr) +  std::to_string(i) + ".txt");
+    out2 << tmp3;
+    out2.close();//*/ //very slow
     cv::Mat tmp2;
     if (type == CV_32FC1)
     {
