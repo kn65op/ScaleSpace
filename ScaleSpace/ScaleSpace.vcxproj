@@ -11,10 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ScaleSpace.h" />
     <ClInclude Include="ScaleSpaceImage.h" />
     <ClInclude Include="ScaleSpaceOpenCL.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ScaleSpace.cpp" />
     <ClCompile Include="ScaleSpaceImage.cpp" />
     <ClCompile Include="ScaleSpaceOpenCL.cpp" />
   </ItemGroup>
