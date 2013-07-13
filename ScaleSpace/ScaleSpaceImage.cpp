@@ -42,7 +42,7 @@ void * ScaleSpaceImage::getDataForScale(unsigned int scale, unsigned int image_n
     throw ScaleSpaceImageException("Wrong scale parameter: " + std::to_string(scale) + ". Can be 0 -" + std::to_string(nr_scales - 1));  
   }
   int tmp = scale * (image[image_number].elemSize() * width * height);
-  return image[1].data + scale * (image[image_number].elemSize() * width * height);
+  return image[image_number].data + scale * (image[image_number].elemSize() * width * height);
 }
 
 void ScaleSpaceImage::setOriginalImage(cv::Mat oimage)
