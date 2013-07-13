@@ -219,8 +219,14 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
     #endif
     s->processImage(input.data, output.getDataForScale(i)); //not copy original image data
     void * additional_output = s->getLastAlgorithmAdditionalOutput();
+    #ifdef DEBUG_SS
+    std::cout << "additional_output = " << additional_output << "\n";
+    #endif
     if (additional_output)
     {
+      #ifdef DEBUG_SS
+      std::cout << "storing additional output\n";
+      #endif
       memcpy(output.getDataForScale(i, 1), additional_output, output.getOneImageSize());
     }
     #ifdef DEBUG_SS
