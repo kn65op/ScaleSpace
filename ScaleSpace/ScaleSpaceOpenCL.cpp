@@ -14,11 +14,14 @@
 #include <OpenCLBayerFilter.h>
 #include <OpenCLRGBToGray.h>
 
+#define NOTICE_SS
 #define DEBUG_SS
+#define INFO_SS
 
 #ifdef DEBUG_SS
 #include <opencv\highgui.h>
 #include <iostream>
+#include <fstream>
 #endif
    
 ScaleSpaceOpenCL::ScaleSpaceOpenCL(ScaleSpaceMode mode /* = Pure */)
@@ -146,6 +149,7 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type)
       #ifdef DEBUG_SS
       std::cout << "Mode: corners\n";
       #endif
+      post_processing = new OpenCLFindMaxin3DImage();
       break;
     default: //and Pure
       //throw ScaleSpaceException("Pure not working for now");
@@ -214,7 +218,7 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
   int i = 0;
   for (auto s : streams)
   {
-    #ifdef DEBUG_SS
+    #ifdef INFO_SS
     std::cout << "processing: " << i << " - ";
     #endif
     s->processImage(input.data, output.getDataForScale(i)); //not copy original image data
@@ -229,7 +233,7 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
       #endif
       memcpy(output.getDataForScale(i, 1), additional_output, output.getOneImageSize());
     }
-    #ifdef DEBUG_SS
+    #ifdef NOTICE_SS
     std::cout << s->getTime() << "\n";
     //std::cout << (int)(*((unsigned char*)output.getDataForScale(i - 1))) << "\n";
     #endif
@@ -239,8 +243,12 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
   cv::Mat outp = cv::Mat::zeros(input.size(), input.type());
   if (post_processing)
   {
+    #ifdef DEBUG_SS
+    std::cout << "Post processing\n";
+    #endif
     post_processing->processData(output.getDataForScale(0), outp.data);
   }
+  std::ofstream ostr("outp.txt");
   switch (calc_mode)
   {
   case ScaleSpaceMode::Laplacian:
@@ -252,6 +260,9 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
   case ScaleSpaceMode::Blobs:
     break;
   case ScaleSpaceMode::Corners:
+    ostr << outp; //very slow
+    ostr.close();
+    outp = outp * 255 / nr_scales;
     break;
   default: //and Pure
     break;
