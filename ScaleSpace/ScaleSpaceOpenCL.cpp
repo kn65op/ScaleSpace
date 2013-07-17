@@ -15,12 +15,14 @@
 #include <OpenCLRGBToGray.h>
 
 #define NOTICE_SS
-#define DEBUG_SS
+//#define DEBUG_SS
 #define INFO_SS
 
-#ifdef DEBUG_SS
+#ifdef NOTICE_SS
 #include <opencv\highgui.h>
 #include <iostream>
+#endif
+#ifdef DEBUG_SS
 #include <fstream>
 #endif
    
@@ -248,7 +250,9 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
     #endif
     post_processing->processData(output.getDataForScale(0), outp.data);
   }
+#ifdef DEBUG_SS
   std::ofstream ostr("outp.txt");
+#endif
   switch (calc_mode)
   {
   case ScaleSpaceMode::Laplacian:

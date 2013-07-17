@@ -4,6 +4,9 @@
 
 #include <fstream>
 
+//#define DEBUG_SS
+//#define DEBUG_SS_TWO_OUTPUT
+
 ScaleSpaceImage::ScaleSpaceImage(void)
 {
   nr_scales = 0;
@@ -92,15 +95,19 @@ void ScaleSpaceImage::show(std::string fn)//TODO: not only one image
     std::string s;
     s = fn + std::to_string(i) + ".jpg";
     memcpy(tmp.data, getDataForScale(i), image[0].elemSize() * width * height);
-    /*std::ofstream out("data1" + std::to_string(image_nr) +  std::to_string(i) + ".txt");
+#ifdef DEBUG_SS
+    std::ofstream out("data1" + std::to_string(image_nr) +  std::to_string(i) + ".txt");
     out << tmp; //very slow
     out.close();
     //for some algorithms
+#ifdef DEBUG_SS_TWO_OUTPUT
     cv::Mat tmp3(height, width, image[1].type());
     memcpy(tmp3.data, getDataForScale(i, 1), image[1].elemSize() * width * height);
     std::ofstream out2("data2" + std::to_string(image_nr) +  std::to_string(i) + ".txt");
     out2 << tmp3;
     out2.close();//*/ //very slow
+#endif //DEBUG_SS_TWO_OUTPUT
+#endif //DEBUG_SS
     cv::Mat tmp2;
     if (type == CV_32FC1)
     {
