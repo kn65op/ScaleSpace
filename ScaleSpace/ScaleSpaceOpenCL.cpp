@@ -85,7 +85,7 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type)
     OpenCL2DTo2DImageAlgorithmForStream *gaussian = new OpenCLGaussianImage();
     unsigned int scale = 1 + scale_step * (i + 1);
 
-    #ifdef DEBUG_SS
+    #ifdef INFO_SS
     std::cout << "Scale step: " << scale << "\n";
     #endif
 
@@ -120,7 +120,7 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type)
       recognizer->setParams(laplacian_params);
       s->pushAlgorithm(recognizer);
       type = CV_32FC1;
-      #ifdef DEBUG_SS
+      #ifdef INFO_SS
       std::cout << "Mode: laplacian\n";
       #endif
       post_processing = new OpenCLFindMaxin3DImage();
@@ -129,7 +129,7 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type)
       recognizer = new OpenCLEdgeDetector();
       s->pushAlgorithm(recognizer);
       type = CV_32FC1;
-      #ifdef DEBUG_SS
+      #ifdef INFO_SS
       std::cout << "Mode: edges\n";
       #endif
       post_processing = new OpenCLFindEdgesIn3DImage();
@@ -138,7 +138,7 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type)
       recognizer = new OpenCLBlobDetector();
       s->pushAlgorithm(recognizer);
       type = CV_32FC1;
-      #ifdef DEBUG_SS
+      #ifdef INFO_SS
       std::cout << "Mode: blobs\n";
       #endif
       break;
@@ -146,7 +146,7 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type)
       recognizer = new OpenCLCornerDetector();
       s->pushAlgorithm(recognizer);
       type = CV_32FC1;
-      #ifdef DEBUG_SS
+      #ifdef INFO_SS
       std::cout << "Mode: corners\n";
       #endif
       post_processing = new OpenCLFindMaxin3DImage();
@@ -197,7 +197,7 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
     last_height = input.size().height;
     last_width = input.size().width;
     last_scale = nr_scales;
-    #ifdef DEBUG_SS
+    #ifdef INFO_SS
     std::cout << "NEW\n";
     #endif
     if (post_processing)
@@ -223,12 +223,12 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
     #endif
     s->processImage(input.data, output.getDataForScale(i)); //not copy original image data
     void * additional_output = s->getLastAlgorithmAdditionalOutput();
-    #ifdef DEBUG_SS
+    #ifdef INFO_SS
     std::cout << "additional_output = " << additional_output << "\n";
     #endif
     if (additional_output)
     {
-      #ifdef DEBUG_SS
+      #ifdef INFO_SS
       std::cout << "storing additional output\n";
       #endif
       memcpy(output.getDataForScale(i, 1), additional_output, output.getOneImageSize());
@@ -243,7 +243,7 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
   cv::Mat outp = cv::Mat::zeros(input.size(), input.type());
   if (post_processing)
   {
-    #ifdef DEBUG_SS
+    #ifdef INFO_SS
     std::cout << "Post processing\n";
     #endif
     post_processing->processData(output.getDataForScale(0), outp.data);
@@ -260,8 +260,10 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
   case ScaleSpaceMode::Blobs:
     break;
   case ScaleSpaceMode::Corners:
+#ifdef DEBUG_SS
     ostr << outp; //very slow
     ostr.close();
+#endif
     outp = outp * 255 / nr_scales;
     break;
   default: //and Pure
