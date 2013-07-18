@@ -138,7 +138,7 @@ void ScaleSpaceImage::show(cv::Mat & blobs, std::vector<float> & sigmas)
     {
       if (uchar scale = blobs.at<uchar>(i,j))
       {
-        cv::circle(tmp, cv::Point2i(j, i), static_cast<int>(sigmas[scale] * 1.412f + 0.5f), cv::Scalar(127), 1);
+        cv::circle(tmp, cv::Point2i(j, i), static_cast<int>(sigmas[scale - 1] * 1.412f + 0.5f), cv::Scalar(127), 1);
       }
     }
   }
