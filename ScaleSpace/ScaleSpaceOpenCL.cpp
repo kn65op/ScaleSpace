@@ -7,10 +7,12 @@
 #include <OpenCLFloatToInt.h>
 #include <OpenCLLaplacian.h>
 #include <OpenCLEdgeDetector.h>
+#include <OpenCLRidgeDetector.h>
 #include <OpenCLCornerDetector.h>
 #include <OpenCLBlobDetector.h>
 #include <OpenCLFindMaxin3DImage.h>
 #include <OpenCLFindEdgesIn3DImage.h>
+#include <OpenCLFindRidgesIn3DImage.h>
 #include <OpenCLBayerFilter.h>
 #include <OpenCLRGBToGray.h>
 
@@ -153,6 +155,15 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type)
       #endif
       post_processing = new OpenCLFindMaxin3DImage();
       break;
+    case ScaleSpaceMode::Ridges:
+      recognizer = new OpenCLRidgeDetector();
+      s->pushAlgorithm(recognizer);
+      type = CV_32FC1;
+      #ifdef INFO_SS
+      std::cout << "Mode: ridges\n";
+      #endif
+      post_processing = new OpenCLFindRidgesIn3DImage();
+      break;
     default: //and Pure
       //throw ScaleSpaceException("Pure not working for now");
       recognizer = new OpenCLFloatToInt();
@@ -189,6 +200,9 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
     case ScaleSpaceMode::Edges:
       images = 2;
       break;
+    case ScaleSpaceMode::Ridges:
+      images = 2;
+      break;
     }
     output.createImage(input.size().height, input.size().width, nr_scales, type, images);
     for (auto s : streams)
@@ -206,9 +220,15 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
     {
       post_processing->setDataSize(input.size().width, input.size().height, nr_scales);
       post_processing->prepare();
-      if (calc_mode == ScaleSpaceMode::Edges)
+      if (calc_mode == ScaleSpaceMode::Edges)  //TODO: fix 
       {
         OpenCLFindEdgesIn3DImageParams p;
+        p.setData(output.getDataForScale(0,1));
+        post_processing->setParams(p);
+      }
+      if (calc_mode == ScaleSpaceMode::Ridges) //TODO: fix
+      {
+        OpenCLFindRidgesIn3DImageParams p;
         p.setData(output.getDataForScale(0,1));
         post_processing->setParams(p);
       }
@@ -269,6 +289,8 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
     ostr.close();
 #endif
     outp = outp * 255 / nr_scales;
+    break;
+  case ScaleSpaceMode::Ridges:
     break;
   default: //and Pure
     break;

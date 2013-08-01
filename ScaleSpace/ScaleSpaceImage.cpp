@@ -4,8 +4,10 @@
 
 #include <fstream>
 
-//#define DEBUG_SS
-//#define DEBUG_SS_TWO_OUTPUT
+#define DEBUG_SS
+#ifdef DEBUG_SS
+#define DEBUG_SS_TWO_OUTPUT
+#endif
 
 ScaleSpaceImage::ScaleSpaceImage(void)
 {

@@ -41,7 +41,8 @@ enum class ScaleSpaceMode
   Laplacian,
   Edges,
   Blobs,
-  Corners
+  Corners,
+  Ridges
 };
 
 enum class ScaleSpaceSourceImageType

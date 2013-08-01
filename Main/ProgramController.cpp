@@ -68,10 +68,14 @@ void ProgramController::getModeFromOptions()
     {
       mode = ScaleSpaceMode::Corners;
     }
+    else if (mode_s == "ridge")
+    {
+      mode = ScaleSpaceMode::Ridges;
+    }
     else
     {
       help = true;
-      error_message = "For mode supported values are: blob, edge, blob2, corner.";
+      error_message = "For mode supported values are: blob, edge, blob2, corner, ridge.";
     }
   }   
 }
