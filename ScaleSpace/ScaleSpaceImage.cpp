@@ -4,7 +4,7 @@
 
 #include <fstream>
 
-#define DEBUG_SS
+//#define DEBUG_SS
 #ifdef DEBUG_SS
 #define DEBUG_SS_TWO_OUTPUT
 #endif
@@ -72,7 +72,7 @@ void ScaleSpaceImage::setOriginalImage(cv::Mat oimage)
   }*/
 }
 
-void ScaleSpaceImage::show(std::string fn)//TODO: not only one image
+void ScaleSpaceImage::show(std::string fn)
 {
   static int image_nr = 0;
   cv::Mat tmp(height, width, image[0].type());
@@ -90,7 +90,8 @@ void ScaleSpaceImage::show(std::string fn)//TODO: not only one image
   {
     throw ScaleSpaceImageException("Not supported output image type");
   }
-  cv::imwrite("original.bmp", tmp2);
+  cv::imwrite("original.bmp", original_image);
+  //cv::imwrite("original.bmp", tmp2);
 
   for (unsigned int i = 0; i < nr_scales; ++i)
   {

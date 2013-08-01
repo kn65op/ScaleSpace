@@ -145,6 +145,7 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type)
       #ifdef INFO_SS
       std::cout << "Mode: blobs\n";
       #endif
+      post_processing = new OpenCLFindMaxin3DImage();
       break;
     case ScaleSpaceMode::Corners:
       recognizer = new OpenCLCornerDetector();
@@ -245,13 +246,13 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
     #endif
     s->processImage(input.data, output.getDataForScale(i)); //not copy original image data
     void * additional_output = s->getLastAlgorithmAdditionalOutput();
-    #ifdef INFO_SS
+    #ifdef DEBUG_SS
     std::cout << "additional_output = " << additional_output << "\n";
     #endif
     if (additional_output)
     {
       #ifdef INFO_SS
-      std::cout << "storing additional output\n";
+      std::cout << "Storing additional output\n";
       #endif
       memcpy(output.getDataForScale(i, 1), additional_output, output.getOneImageSize());
     }
@@ -282,6 +283,8 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
   case ScaleSpaceMode::Edges:
     break;
   case ScaleSpaceMode::Blobs:
+    output.show(outp, sigmas); 
+    outp = outp * 255 / nr_scales;
     break;
   case ScaleSpaceMode::Corners:
 #ifdef DEBUG_SS
