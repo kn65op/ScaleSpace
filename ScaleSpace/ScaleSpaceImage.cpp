@@ -42,9 +42,13 @@ void * ScaleSpaceImage::getDataForScale(unsigned int scale, unsigned int image_n
   {
     throw ScaleSpaceImageException("Data is not continuous");
   }
+  if (image_number > nr_images)
+  {
+    throw ScaleSpaceImageException("Wrong image number parameter: " + std::to_string(image_number) + ". Can be 0 -" + std::to_string(nr_images - 1));  
+  }
   if (scale >= nr_scales)
   {
-    throw ScaleSpaceImageException("Wrong scale parameter: " + std::to_string(scale) + ". Can be 0 -" + std::to_string(nr_scales - 1));  
+    throw ScaleSpaceImageException("Wrong scale parameter: " + std::to_string(scale) + ". Can be 0 -" + std::to_string(nr_scales - 1));
   }
   int tmp = scale * (image[image_number].elemSize() * width * height);
   return image[image_number].data + scale * (image[image_number].elemSize() * width * height);
