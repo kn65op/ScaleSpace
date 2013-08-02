@@ -56,11 +56,15 @@ public:
 
   ScaleSpaceImage & operator/=(int d)
   {
-    image[0] /= d;
+    for (auto image : scale_space_images[0])
+    {
+      image /= d;
+    }
     return *this;
   }
 private:
-  std::vector<cv::Mat> image;
+  typedef std::vector<cv::Mat> vector_mat_t;
+  std::vector<vector_mat_t> scale_space_images;
   cv::Mat original_image;
   
   unsigned int nr_scales;

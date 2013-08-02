@@ -21,14 +21,18 @@ ScaleSpaceImage::~ScaleSpaceImage(void)
 
 void ScaleSpaceImage::createImage(unsigned int height, unsigned int width, unsigned int scales, int type, unsigned int images)//TODO: temp
 {
-  image.clear();
-  int *dims =  new int [3];
-  dims[0] = scales;
-  dims[1] = this->width = width;
-  dims[2] = this->height = height;
+  scale_space_images.clear();
+  int *dims =  new int [2];
+  dims[0] = this->width = width;
+  dims[1] = this->height = height;
   for (unsigned int i=0; i < images; ++i)
   {
-    image.push_back(cv::Mat(3, dims, type));
+    vector_mat_t scale_vec;
+    for (unsigned int j = 0; j < scales; ++j)
+    {
+      scale_vec.push_back(cv::Mat(2, dims, type));
+    }
+    scale_space_images.push_back(scale_vec);
   }
   this->type = type;
   nr_scales = scales;
@@ -38,10 +42,6 @@ void ScaleSpaceImage::createImage(unsigned int height, unsigned int width, unsig
 
 void * ScaleSpaceImage::getDataForScale(unsigned int scale, unsigned int image_number)
 {
-  if (!image[image_number].isContinuous())
-  {
-    throw ScaleSpaceImageException("Data is not continuous");
-  }
   if (image_number > nr_images)
   {
     throw ScaleSpaceImageException("Wrong image number parameter: " + std::to_string(image_number) + ". Can be 0 -" + std::to_string(nr_images - 1));  
@@ -50,8 +50,11 @@ void * ScaleSpaceImage::getDataForScale(unsigned int scale, unsigned int image_n
   {
     throw ScaleSpaceImageException("Wrong scale parameter: " + std::to_string(scale) + ". Can be 0 -" + std::to_string(nr_scales - 1));
   }
-  int tmp = scale * (image[image_number].elemSize() * width * height);
-  return image[image_number].data + scale * (image[image_number].elemSize() * width * height);
+  if (!scale_space_images[image_number][scale].isContinuous())
+  {
+    throw ScaleSpaceImageException("Data is not continuous");
+  }
+  return scale_space_images[image_number][scale].data;
 }
 
 void ScaleSpaceImage::setOriginalImage(cv::Mat oimage)
@@ -79,8 +82,8 @@ void ScaleSpaceImage::setOriginalImage(cv::Mat oimage)
 void ScaleSpaceImage::show(std::string fn)
 {
   static int image_nr = 0;
-  cv::Mat tmp(height, width, image[0].type());
-  memcpy(tmp.data, getDataForScale(0), image[0].elemSize() * width * height);
+  cv::Mat tmp(height, width, scale_space_images[0][0].type());
+  memcpy(tmp.data, getDataForScale(0), scale_space_images[0][0].elemSize() * width * height);
   cv::Mat tmp2;
   if (type == CV_32FC1)
   {
@@ -101,15 +104,15 @@ void ScaleSpaceImage::show(std::string fn)
   {
     std::string s;
     s = fn + std::to_string(i) + ".jpg";
-    memcpy(tmp.data, getDataForScale(i), image[0].elemSize() * width * height);
+    memcpy(tmp.data, getDataForScale(i), scale_space_images[0][0].elemSize() * width * height);
 #ifdef DEBUG_SS
     std::ofstream out("data1" + std::to_string(image_nr) +  std::to_string(i) + ".txt");
     out << tmp; //very slow
     out.close();
     //for some algorithms
 #ifdef DEBUG_SS_TWO_OUTPUT
-    cv::Mat tmp3(height, width, image[1].type());
-    memcpy(tmp3.data, getDataForScale(i, 1), image[1].elemSize() * width * height);
+    cv::Mat tmp3(height, width, scale_space_images[1].type());
+    memcpy(tmp3.data, getDataForScale(i, 1), scale_space_images[1][0].elemSize() * width * height);
     std::ofstream out2("data2" + std::to_string(image_nr) +  std::to_string(i) + ".txt");
     out2 << tmp3;
     out2.close();//*/ //very slow
