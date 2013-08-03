@@ -51,6 +51,12 @@ enum class ScaleSpaceSourceImageType
   Bayer
 };
 
+enum class ScaleSpaceOutputType
+{
+  ONE_IMAGE,
+  IMAGE_FOR_SCALE
+};
+
 /** Scale Space process.
  * It contains all data, which is need to process image with Scale Space algorithm.
  * Currently step can be only even.
@@ -112,7 +118,7 @@ public:
   /**
    * Prepare stream for computing.
    */
-  virtual void prepare(ScaleSpaceSourceImageType si_type) = 0;
+  virtual void prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutputType out_type = ScaleSpaceOutputType::ONE_IMAGE) = 0;
 
 protected:
   unsigned int nr_scales; //number of scales

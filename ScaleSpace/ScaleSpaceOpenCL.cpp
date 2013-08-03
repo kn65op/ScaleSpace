@@ -13,6 +13,9 @@
 #include <OpenCLFindMaxin3DImage.h>
 #include <OpenCLFindEdgesIn3DImage.h>
 #include <OpenCLFindRidgesIn3DImage.h>
+#include <OpenCLFindMaxin2DImage.h>
+#include <OpenCLFindEdgesIn2DImage.h>
+#include <OpenCLFindRidgesIn2DImage.h>
 #include <OpenCLBayerFilter.h>
 #include <OpenCLRGBToGray.h>
 
@@ -57,8 +60,9 @@ void ScaleSpaceOpenCL::clearStreams()
   streams.clear();
 }
 
-void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type)
+void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutputType out_type)
 {
+  output_type = out_type;
   if (!streams.empty())
   {
     clearStreams();
@@ -127,7 +131,15 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type)
       #ifdef INFO_SS
       std::cout << "Mode: laplacian\n";
       #endif
-      post_processing = new OpenCLFindMaxin3DImage();
+      switch (out_type)
+      {
+      case ScaleSpaceOutputType::ONE_IMAGE:
+        post_processing = new OpenCLFindMaxin3DImage();
+        break;
+      case ScaleSpaceOutputType::IMAGE_FOR_SCALE:
+        post_processing = new OpenCLFindMaxin2DImage();
+        break;
+      }
       break;
     case ScaleSpaceMode::Edges:
       recognizer = new OpenCLEdgeDetector();
@@ -136,7 +148,15 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type)
       #ifdef INFO_SS
       std::cout << "Mode: edges\n";
       #endif
-      post_processing = new OpenCLFindEdgesIn3DImage();
+      switch (out_type)
+      {
+      case ScaleSpaceOutputType::ONE_IMAGE:
+        post_processing = new OpenCLFindEdgesIn3DImage();
+        break;
+      case ScaleSpaceOutputType::IMAGE_FOR_SCALE:
+        post_processing = new OpenCLFindEdgesIn2DImage();
+        break;
+      }
       break;
     case ScaleSpaceMode::Blobs:
       recognizer = new OpenCLBlobDetector();
@@ -145,7 +165,15 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type)
       #ifdef INFO_SS
       std::cout << "Mode: blobs\n";
       #endif
-      post_processing = new OpenCLFindMaxin3DImage();
+      switch (out_type)
+      {
+      case ScaleSpaceOutputType::ONE_IMAGE:
+        post_processing = new OpenCLFindMaxin3DImage();
+        break;
+      case ScaleSpaceOutputType::IMAGE_FOR_SCALE:
+        post_processing = new OpenCLFindMaxin2DImage();
+        break;
+      }
       break;
     case ScaleSpaceMode::Corners:
       recognizer = new OpenCLCornerDetector();
@@ -154,7 +182,15 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type)
       #ifdef INFO_SS
       std::cout << "Mode: corners\n";
       #endif
-      post_processing = new OpenCLFindMaxin3DImage();
+      switch (out_type)
+      {
+      case ScaleSpaceOutputType::ONE_IMAGE:
+        post_processing = new OpenCLFindMaxin3DImage();
+        break;
+      case ScaleSpaceOutputType::IMAGE_FOR_SCALE:
+        post_processing = new OpenCLFindMaxin2DImage();
+        break;
+      }
       break;
     case ScaleSpaceMode::Ridges:
       recognizer = new OpenCLRidgeDetector();
@@ -163,7 +199,15 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type)
       #ifdef INFO_SS
       std::cout << "Mode: ridges\n";
       #endif
-      post_processing = new OpenCLFindRidgesIn3DImage();
+      switch (out_type)
+      {
+      case ScaleSpaceOutputType::ONE_IMAGE:
+        post_processing = new OpenCLFindRidgesIn3DImage();
+        break;
+      case ScaleSpaceOutputType::IMAGE_FOR_SCALE:
+        post_processing = new OpenCLFindRidgesIn2DImage();
+        break;
+      }
       break;
     default: //and Pure
       //throw ScaleSpaceException("Pure not working for now");
@@ -221,17 +265,20 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
     {
       post_processing->setDataSize(input.size().width, input.size().height, nr_scales);
       post_processing->prepare();
-      if (calc_mode == ScaleSpaceMode::Edges)  //TODO: fix 
+      if (output_type == ScaleSpaceOutputType::ONE_IMAGE)
       {
-        OpenCLFindEdgesIn3DImageParams p;
-        p.setData(output.getDataForScale(0,1));
-        post_processing->setParams(p);
-      }
-      if (calc_mode == ScaleSpaceMode::Ridges) //TODO: fix
-      {
-        OpenCLFindRidgesIn3DImageParams p;
-        p.setData(output.getDataForScale(0,1));
-        post_processing->setParams(p);
+        if (calc_mode == ScaleSpaceMode::Edges)  //TODO: fix 
+        {
+          OpenCLFindEdgesIn3DImageParams edges_params;
+          edges_params.setData(output.getDataForScale(0,1));
+          post_processing->setParams(edges_params);
+        }
+        if (calc_mode == ScaleSpaceMode::Ridges) //TODO: fix
+        {
+          OpenCLFindRidgesIn3DImageParams ridge_params;
+          ridge_params.setData(output.getDataForScale(0,1));
+          post_processing->setParams(ridge_params);
+        }
       }
     }
   }
@@ -269,7 +316,32 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
     #ifdef INFO_SS
     std::cout << "Post processing\n";
     #endif
-    post_processing->processData(output.getDataForScale(0), outp.data);
+    if (output_type == ScaleSpaceOutputType::ONE_IMAGE)
+    {
+      #ifdef INFO_SS
+      std::cout << "One image output\n";
+      #endif
+      post_processing->processData(output.getDataForScale(0), outp.data);
+    }
+    else if (output_type == ScaleSpaceOutputType::IMAGE_FOR_SCALE)
+    {
+      #ifdef INFO_SS
+      std::cout << "Image for scale output\n";
+      #endif
+      for (unsigned int i = 0; i < nr_scales ; ++i)
+      {
+        if (calc_mode == ScaleSpaceMode::Edges || calc_mode == ScaleSpaceMode::Ridges)
+        {
+          OpenCLFindEdgesIn2DImageParams params;
+          params.setData(output.getDataForScale(i,1));
+          post_processing->setParams(params);
+        }
+
+        post_processing->prepare();
+        post_processing->processData(output.getDataForScale(i), outp.data);
+        cv::imwrite("outp" + std::to_string(i) + ".bmp", outp);
+      }
+    }
   }
 #ifdef DEBUG_SS
   std::ofstream ostr("outp.txt");
@@ -277,13 +349,13 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
   switch (calc_mode)
   {
   case ScaleSpaceMode::Laplacian:
-    output.show(outp, sigmas); 
+   // output.show(outp, sigmas); 
     outp = outp * 255 / nr_scales;
     break;
   case ScaleSpaceMode::Edges:
     break;
   case ScaleSpaceMode::Blobs:
-    output.show(outp, sigmas); 
+  //  output.show(outp, sigmas); 
     outp = outp * 255 / nr_scales;
     break;
   case ScaleSpaceMode::Corners:

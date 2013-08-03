@@ -42,7 +42,7 @@ void ScaleSpaceImage::createImage(unsigned int height, unsigned int width, unsig
 
 void * ScaleSpaceImage::getDataForScale(unsigned int scale, unsigned int image_number)
 {
-  if (image_number > nr_images)
+  if (image_number >= nr_images)
   {
     throw ScaleSpaceImageException("Wrong image number parameter: " + std::to_string(image_number) + ". Can be 0 -" + std::to_string(nr_images - 1));  
   }

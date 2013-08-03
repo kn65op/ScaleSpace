@@ -100,7 +100,7 @@ int main(int argc, char * argv[])
   {
     ScaleSpaceOpenCL ss/*;//*/(controller.getMode());
     ss.setScaleStep(controller.getScaleStep(), controller.getNrScales());
-    ss.prepare(controller.getSourceImageType());
+    ss.prepare(controller.getSourceImageType(), ScaleSpaceOutputType::IMAGE_FOR_SCALE);
     if (controller.useCamera())
     {
       camera = JAI::Camera::getCameraList().front();

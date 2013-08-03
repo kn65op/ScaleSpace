@@ -42,13 +42,13 @@ public:
   /**
    * Prepare stream for computing.
    */
-  void prepare(ScaleSpaceSourceImageType si_type);
+  void prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutputType out_type = ScaleSpaceOutputType::ONE_IMAGE);
 
 private:
   typedef std::list<OpenCLAlgorithmsStream*> streams_t;
   streams_t streams; //streams - one for each scale
 
-  OpenCL3DTo2DImageAlgorithm* post_processing;
+  OpenCLImageCommon* post_processing;
   
   //clearing streams
   void clearStreams();
@@ -59,6 +59,7 @@ private:
   unsigned int last_scale;
 
   ScaleSpaceMode calc_mode;
+  ScaleSpaceOutputType output_type;
 
   //sigmas
   std::vector<float> sigmas;
