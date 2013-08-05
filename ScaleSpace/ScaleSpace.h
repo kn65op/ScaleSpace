@@ -81,14 +81,6 @@ public:
    */
   virtual ~ScaleSpace(void);
 
-  /**
-   * Get ScaleSpace implementation.
-   * @param processor Procesor used to calculate ScaleSpace.
-   * @param mode What objects to detect.
-   * @return Pointer to created ScaleSpace implementation.
-   */
-  static ScaleSpace * getScaleSpace(ScaleSpaceProcessor processor, ScaleSpaceMode mode);
-
   /** Set range of scales.
    * Scales will be set from 1 (original image) to max with step step.
    * @param max Max scale. Has to be more then 0, otherwise throws ScaleSpaceException.
