@@ -12,13 +12,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ScaleSpace.h" />
+    <ClInclude Include="ScaleSpaceFactory.h" />
     <ClInclude Include="ScaleSpaceImage.h" />
     <ClInclude Include="ScaleSpaceOpenCL.h" />
+    <ClInclude Include="ScaleSpaceOpenCV.h" />
+    <ClInclude Include="ScaleSpaceOpenCVGPU.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ScaleSpace.cpp" />
+    <ClCompile Include="ScaleSpaceFactory.cpp" />
     <ClCompile Include="ScaleSpaceImage.cpp" />
     <ClCompile Include="ScaleSpaceOpenCL.cpp" />
+    <ClCompile Include="ScaleSpaceOpenCV.cpp" />
+    <ClCompile Include="ScaleSpaceOpenCVGPU.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{CE2E28E3-0A39-427E-891B-0353B0AAF61D}</ProjectGuid>

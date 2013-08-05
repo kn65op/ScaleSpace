@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 
 #if 1
 
-#include <ScaleSpaceOpenCL.h>
+#include <ScaleSpaceFactory.h>
 #include <Camera.h>
 #include "ProgramController.h"
 
@@ -98,9 +98,9 @@ int main(int argc, char * argv[])
   ScaleSpaceImage output;
   try
   {
-    ScaleSpaceOpenCL ss/*;//*/(controller.getMode());
-    ss.setScaleStep(controller.getScaleStep(), controller.getNrScales());
-    ss.prepare(controller.getSourceImageType(), ScaleSpaceOutputType::IMAGE_FOR_SCALE);
+    ScaleSpace *ss = ScaleSpaceFactory::getScaleSpace(controller.getProcessor(), controller.getMode());
+    ss->setScaleStep(controller.getScaleStep(), controller.getNrScales());
+    ss->prepare(controller.getSourceImageType(), ScaleSpaceOutputType::IMAGE_FOR_SCALE);
     if (controller.useCamera())
     {
       camera = JAI::Camera::getCameraList().front();
@@ -113,7 +113,7 @@ int main(int argc, char * argv[])
         std::cout << "File is not valid image\n";
         return 0;
       }
-      ss.processImage(input, output);
+      ss->processImage(input, output);
     }
 
 //    output.show();

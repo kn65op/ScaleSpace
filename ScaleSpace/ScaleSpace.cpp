@@ -67,4 +67,3 @@ unsigned int ScaleSpace::getScaleStep()
 {
   return scale_step;
 }
-

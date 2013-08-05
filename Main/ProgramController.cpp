@@ -31,6 +31,7 @@ void ProgramController::processArgs(int argc, char*argv[])
   getModeFromOptions();
   getScalesFromOptions();
   getTypeFromOptions();
+  getProcessorFromOptions();
 }
 
 void ProgramController::printHelp() const
@@ -108,6 +109,35 @@ void ProgramController::getTypeFromOptions()
   }
 }
 
+void ProgramController::getProcessorFromOptions()
+{
+  std::string type_p;
+  if (opt >> GetOpt::Option('p', "processor", type_p))
+  {
+    if (type_p == "cl" || type_p == "opencl")
+    {
+      processor = ScaleSpaceProcessor::OPENCL;
+    }
+    else if (type_p == "cpu" || type_p == "opencv" || type_p == "cv")
+    {
+      processor = ScaleSpaceProcessor::OPENCV_CPU;
+    }
+    else if (type_p == "gpu" || type_p == "opencv_gpu" || type_p == "cv_gpu")
+    {
+      processor = ScaleSpaceProcessor::OPENCV_GPU;
+    }
+    else
+    {
+      help = true;
+      error_message = "For processor supported values are: opencv (cv), opencl (cpu, cl), opencl_gpu (cl_gpu, gpu)";
+    }
+  }
+  else
+  {
+    processor = ScaleSpaceProcessor::OPENCL;
+  }
+}
+
 
 ScaleSpaceMode ProgramController::getMode() const
 {
@@ -143,4 +173,9 @@ bool ProgramController::useCamera() const
 ScaleSpaceSourceImageType ProgramController::getSourceImageType() const
 {
   return type;
+}
+
+ScaleSpaceProcessor ProgramController::getProcessor() const
+{
+  return processor;
 }

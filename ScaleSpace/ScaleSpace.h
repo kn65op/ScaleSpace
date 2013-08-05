@@ -57,6 +57,13 @@ enum class ScaleSpaceOutputType
   IMAGE_FOR_SCALE
 };
 
+enum class ScaleSpaceProcessor
+{
+  OPENCL,
+  OPENCV_CPU,
+  OPENCV_GPU
+};
+
 /** Scale Space process.
  * It contains all data, which is need to process image with Scale Space algorithm.
  * Currently step can be only even.
@@ -65,7 +72,7 @@ class ScaleSpace
 {
 public:
   /**
-   * Contructor which setting mode (ScaleSpaceMode).
+   * Contructor which setting mode (ScaleSpaceMode). 
    */
   ScaleSpace(ScaleSpaceMode mode = ScaleSpaceMode::Pure);
   
@@ -73,6 +80,14 @@ public:
    * Destructor.
    */
   virtual ~ScaleSpace(void);
+
+  /**
+   * Get ScaleSpace implementation.
+   * @param processor Procesor used to calculate ScaleSpace.
+   * @param mode What objects to detect.
+   * @return Pointer to created ScaleSpace implementation.
+   */
+  static ScaleSpace * getScaleSpace(ScaleSpaceProcessor processor, ScaleSpaceMode mode);
 
   /** Set range of scales.
    * Scales will be set from 1 (original image) to max with step step.

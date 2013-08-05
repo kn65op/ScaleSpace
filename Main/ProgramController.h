@@ -23,6 +23,7 @@ public:
   bool areOptionsValid() const;
   ScaleSpaceMode getMode() const;
   ScaleSpaceSourceImageType getSourceImageType() const;
+  ScaleSpaceProcessor getProcessor() const;
   std::string getInputFile() const;
   unsigned int getNrScales() const
   {
@@ -44,6 +45,7 @@ private:
   void getModeFromOptions();
   void getScalesFromOptions();
   void getTypeFromOptions();
+  void getProcessorFromOptions();
 
   GetOpt::GetOpt_pp opt;
   
@@ -52,6 +54,7 @@ private:
   //parameters
   ScaleSpaceMode mode;
   ScaleSpaceSourceImageType type;
+  ScaleSpaceProcessor processor;
   std::string in_file;
 
   unsigned int scale_step;
