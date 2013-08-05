@@ -40,6 +40,8 @@ void ScaleSpaceImage::createImage(unsigned int height, unsigned int width, unsig
 
   //output 
   output.clear();
+  dims[0] = height;
+  dims[1] = width;
   for (unsigned int j = 0; j < scales; ++j)
   {
     output.push_back(cv::Mat(2, dims, CV_8UC1));
