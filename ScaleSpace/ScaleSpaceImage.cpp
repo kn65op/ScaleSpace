@@ -37,6 +37,14 @@ void ScaleSpaceImage::createImage(unsigned int height, unsigned int width, unsig
   this->type = type;
   nr_scales = scales;
   nr_images = images;
+
+  //output 
+  output.clear();
+  for (unsigned int j = 0; j < scales; ++j)
+  {
+    output.push_back(cv::Mat(2, dims, CV_8UC1));
+  }
+  
   delete [] dims;
 }
 
@@ -46,10 +54,7 @@ void * ScaleSpaceImage::getDataForScale(unsigned int scale, unsigned int image_n
   {
     throw ScaleSpaceImageException("Wrong image number parameter: " + std::to_string(image_number) + ". Can be 0 -" + std::to_string(nr_images - 1));  
   }
-  if (scale >= nr_scales)
-  {
-    throw ScaleSpaceImageException("Wrong scale parameter: " + std::to_string(scale) + ". Can be 0 -" + std::to_string(nr_scales - 1));
-  }
+  checkScale(scale);
   if (!scale_space_images[image_number][scale].isContinuous())
   {
     throw ScaleSpaceImageException("Data is not continuous");
@@ -57,9 +62,9 @@ void * ScaleSpaceImage::getDataForScale(unsigned int scale, unsigned int image_n
   return scale_space_images[image_number][scale].data;
 }
 
-void ScaleSpaceImage::setOriginalImage(cv::Mat oimage)
+void ScaleSpaceImage::setInput(cv::Mat image)
 {
-  oimage.copyTo(original_image);
+  image.copyTo(input);
   /*for (unsigned int i = 0; i < nr_images; ++i)
   {
     cv::Mat tmp;
@@ -87,7 +92,7 @@ void ScaleSpaceImage::show(std::string fn)
   cv::Mat tmp2;
   if (type == CV_32FC1)
   {
-    tmp.convertTo(tmp2, CV_8UC1, 256.0);
+    tmp.convertTo(tmp2, CV_8UC1, 255.0);
   }
   else if (type == CV_8UC1)
   {
@@ -97,13 +102,13 @@ void ScaleSpaceImage::show(std::string fn)
   {
     throw ScaleSpaceImageException("Not supported output image type");
   }
-  cv::imwrite("original.bmp", original_image);
+  cv::imwrite("original.bmp", input);
   //cv::imwrite("original.bmp", tmp2);
 
   for (unsigned int i = 0; i < nr_scales; ++i)
   {
     std::string s;
-    s = fn + std::to_string(i) + ".jpg";
+    s = fn + std::to_string(i) + ".bmp";
     memcpy(tmp.data, getDataForScale(i), scale_space_images[0][0].elemSize() * width * height);
 #ifdef DEBUG_SS
     std::ofstream out("data1" + std::to_string(image_nr) +  std::to_string(i) + ".txt");
@@ -121,7 +126,7 @@ void ScaleSpaceImage::show(std::string fn)
     cv::Mat tmp2;
     if (type == CV_32FC1)
     {
-      tmp.convertTo(tmp2, CV_8UC1, 256.0);
+      tmp.convertTo(tmp2, CV_8UC1, 255.0);
     }
     else if (type == CV_8UC1)
     {
@@ -131,7 +136,9 @@ void ScaleSpaceImage::show(std::string fn)
     {
       throw ScaleSpaceImageException("Not supported output image type");
     }
-    cv::imwrite(s.c_str(), tmp2);
+//    cv::imwrite(s.c_str(), tmp2);
+    cv::imwrite(s.c_str(), output[i]);
+    cv::imwrite((s+"2.bmp").c_str(), tmp2);
   }
   image_nr++;
 }
@@ -141,7 +148,7 @@ void ScaleSpaceImage::show(cv::Mat & blobs, std::vector<float> & sigmas)
   /*cv::Mat tmp2(height, width, image[0].type()), tmp;
   memcpy(tmp2.data, getDataForScale(0), image[0].elemSize() * width * height);
   tmp2.convertTo(tmp, CV_8UC1, 256.0);*/
-  cv::Mat tmp(original_image.clone());
+  cv::Mat tmp(input.clone());
   for (unsigned int i=0; i < height; ++i)
   {
     for (unsigned int j=0; j < width; ++j)
@@ -157,7 +164,7 @@ void ScaleSpaceImage::show(cv::Mat & blobs, std::vector<float> & sigmas)
 
 unsigned int ScaleSpaceImage::getOneImageSize() const
 {
-  unsigned int size = original_image.size().height * original_image.size().width;
+  unsigned int size = input.size().height * input.size().width;
   if (type == CV_32FC1)
   {
     return size * sizeof(float);
@@ -167,4 +174,24 @@ unsigned int ScaleSpaceImage::getOneImageSize() const
     return size * sizeof(unsigned char);
   }
   throw ScaleSpaceImageException("Not supported output image type");
+}
+
+void * ScaleSpaceImage::getDataForOutput(unsigned int scale)
+{
+  checkScale(scale);
+  return output[scale].data;
+}
+
+cv::Mat & ScaleSpaceImage::getOutput(unsigned int scale)
+{
+  checkScale(scale);
+  return output[scale];
+}
+
+void ScaleSpaceImage::checkScale(unsigned int scale)
+{
+  if (scale >= nr_scales)
+  {
+    throw ScaleSpaceImageException("Wrong scale parameter: " + std::to_string(scale) + ". Can be 0 -" + std::to_string(nr_scales - 1));
+  }
 }

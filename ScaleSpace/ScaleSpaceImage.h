@@ -37,10 +37,10 @@ public:
   void createImage(unsigned int width, unsigned int height, unsigned int scales, int type, unsigned int images = 1);//TODO: temp
   
   /**
-   * Set original image.
-   * @param image Original image.
+   * Set input image.
+   * @param image Input image.
    */
-  void setOriginalImage(cv::Mat oimage);
+  void setInput(cv::Mat image);
   
   /**
    * Get image data for image in specified scale.
@@ -49,6 +49,21 @@ public:
    * @return Image data.
    */
   void * getDataForScale(unsigned int scale, unsigned int image_number = 0);
+
+  /**
+   * Get pointer to data for output image.
+   * @param scale Image scale.
+   * @return Pointer to data.
+   */
+  void * getDataForOutput(unsigned int scale);
+  
+  /**
+   * Get output image for scale.
+   * @param scale Image scale.
+   * @return cv::Mat with image.
+   */
+  cv::Mat & getOutput(unsigned int scale);
+
   void show(std::string );
   void show(cv::Mat &blobs, std::vector<float> & sigmas);
 
@@ -65,7 +80,10 @@ public:
 private:
   typedef std::vector<cv::Mat> vector_mat_t;
   std::vector<vector_mat_t> scale_space_images;
-  cv::Mat original_image;
+  
+  vector_mat_t output;
+  
+  cv::Mat input;
   
   unsigned int nr_scales;
   unsigned int nr_images;
@@ -74,5 +92,7 @@ private:
   unsigned int height;
 
   int type;//TODO: remove
+  
+  void checkScale(unsigned int scale);
 };
 

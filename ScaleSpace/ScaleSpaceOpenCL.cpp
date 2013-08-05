@@ -94,7 +94,7 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
     unsigned int scale = 1 + scale_step * (i + 1);
 
     #ifdef INFO_SS
-    std::cout << "Scale step: " << scale << "\n";
+    std::cout << "Scale: " << scale << "\n";
     #endif
 
     // 0.3*((ksize-1)*0.5 - 1) + 0.8 .
@@ -283,15 +283,14 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
     }
   }
 
-  output.setOriginalImage(input);
-  cv::Mat tmp(input.size().height, input.size().width, CV_8UC1);
+  output.setInput(input);
   int i = 0;
   for (auto s : streams)
   {
     #ifdef INFO_SS
     std::cout << "processing: " << i << " - ";
     #endif
-    s->processImage(input.data, output.getDataForScale(i)); //not copy original image data
+    s->processImage(input.data, output.getDataForScale(i));
     void * additional_output = s->getLastAlgorithmAdditionalOutput();
     #ifdef DEBUG_SS
     std::cout << "additional_output = " << additional_output << "\n";
@@ -338,8 +337,8 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
         }
 
         post_processing->prepare();
-        post_processing->processData(output.getDataForScale(i), outp.data);
-        cv::imwrite("outp" + std::to_string(i) + ".bmp", outp);
+        post_processing->processData(output.getDataForScale(i), output.getDataForOutput(i));
+        cv::imwrite("outp" + std::to_string(i) + ".bmp", output.getOutput(i));
       }
     }
   }

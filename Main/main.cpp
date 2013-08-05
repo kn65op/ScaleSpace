@@ -116,7 +116,7 @@ int main(int argc, char * argv[])
       ss->processImage(input, output);
     }
 
-//    output.show();
+    output.show("result");
   }
   catch (OpenCLDeviceException &ex)
   {
@@ -175,7 +175,7 @@ int main(int argc, char * argv[])
     input = cv::imread("in4.bmp", CV_LOAD_IMAGE_GRAYSCALE);
     ss.processImage(input, output);
 
-//    output.show();
+    output.show();
   }
   catch(OpenCLException &ex)
   {
