@@ -61,8 +61,6 @@ void ScaleSpaceOpenCV::doGaussian(ScaleSpaceImage & image)
     std::ofstream of("pogau.txt");
     of << image.getImageForScale(i);
 #endif
-
-    //image.getImageForScale(i) *= sigmas[i];
   }
 
     
