@@ -60,9 +60,6 @@ private:
   ScaleSpaceMode calc_mode;
   ScaleSpaceOutputType output_type;
 
-  //sigmas
-  std::vector<float> sigmas;
-
   int type;//TODO: tmp
 
 };

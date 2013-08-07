@@ -41,6 +41,7 @@ void ScaleSpaceOpenCV::doGaussian(ScaleSpaceImage & image)
   
   for (unsigned int i = 0; i < nr_scales; ++i)
   {
+
   }
 
     

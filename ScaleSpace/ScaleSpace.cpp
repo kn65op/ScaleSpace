@@ -26,6 +26,8 @@ void ScaleSpace::setMaxScale(unsigned int max, unsigned int nr)
   }
   scale_step = step;
   nr_scales = nr;
+
+  makeSigmas();
 }
 
 void ScaleSpace::setScaleStep(unsigned int step, unsigned int nr)
@@ -37,6 +39,8 @@ void ScaleSpace::setScaleStep(unsigned int step, unsigned int nr)
 
   scale_step = step;
   nr_scales = nr;
+
+  makeSigmas();
 }
 
 bool ScaleSpace::setScalesRange(unsigned int max, unsigned int step)
@@ -54,6 +58,8 @@ bool ScaleSpace::setScalesRange(unsigned int max, unsigned int step)
 
   nr_scales = (max - 1) / step;
   scale_step = step;
+
+  makeSigmas();
   return ret;
 }
 
@@ -66,4 +72,18 @@ unsigned int ScaleSpace::getNrScales()
 unsigned int ScaleSpace::getScaleStep()
 {
   return scale_step;
+}
+
+void ScaleSpace::makeSigmas()
+{
+  sigmas.clear();
+  
+  unsigned int scale = 0;
+  for (unsigned int i = 0; i < nr_scales; ++i)
+  {
+    scale = 1 + scale_step * (i + 1);
+    // 0.3*((ksize-1)*0.5 - 1) + 0.8 .
+    float sigma = 0.3f * ((scale) * 0.5f - 1.0f) + 0.8f;
+    sigmas.push_back(sigma);
+  }
 }

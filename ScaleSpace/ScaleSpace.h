@@ -131,5 +131,11 @@ protected:
   unsigned int scale_step; //scale step
   
   bool prepared; //if streams is prepared
+  
+  //sigmas
+  std::vector<float> sigmas;
+  
+private:
+  void makeSigmas();
 };
 

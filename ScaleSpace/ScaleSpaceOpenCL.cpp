@@ -66,7 +66,6 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
   if (!streams.empty())
   {
     clearStreams();
-    sigmas.clear();
     //throw ScaleSpaceZeroException("prepare: There is no scales to prepare");
   }
 
@@ -97,11 +96,7 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
     std::cout << "Scale: " << scale << "\n";
     #endif
 
-    // 0.3*((ksize-1)*0.5 - 1) + 0.8 .
-    float sigma = 0.3f * ((scale) * 0.5f - 1.0f) + 0.8f;
-    sigmas.push_back(sigma);
-
-    cv::Mat gaussian_kernel = cv::getGaussianKernel(scale, sigma, CV_32F);
+    cv::Mat gaussian_kernel = cv::getGaussianKernel(scale, sigmas[i], CV_32F);
     cv::Mat gaussian_kernel_2d = gaussian_kernel * gaussian_kernel.t();
     #ifdef DEBUG_SS_GAUSSIAN
     for (unsigned int i = 0; i < scale; ++i)
@@ -120,7 +115,7 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
 
     OpenCL2DTo2DImageAlgorithmForStream *recognizer = nullptr;
     OpenCLLaplacianParams laplacian_params;
-    laplacian_params.setSigma(sigma*sigma);
+    laplacian_params.setSigma(sigmas[i]*sigmas[i]);
     switch (calc_mode)
     {
     case ScaleSpaceMode::Laplacian:
