@@ -1,10 +1,11 @@
 #include "ScaleSpaceOpenCV.h"
 
-
+#include <opencv2\imgproc\imgproc.hpp>
 
 ScaleSpaceOpenCV::ScaleSpaceOpenCV(ScaleSpaceMode mode)
 {
   changeToFloat = nullptr;
+  temp_image_type = CV_32FC1;
 }
 
 
@@ -41,7 +42,11 @@ void ScaleSpaceOpenCV::doGaussian(ScaleSpaceImage & image)
   
   for (unsigned int i = 0; i < nr_scales; ++i)
   {
+    cv::Mat gaussian = getGaussianForScale(i);
 
+    cv::filter2D(input, image.getImageForScale(i), -1, gaussian);
+
+    image.getImageForScale(i) *= sigmas[i];
   }
 
     
