@@ -2,6 +2,13 @@
 
 #include <opencv2\imgproc\imgproc.hpp>
 
+//#define SS_DEBUG
+
+#ifdef SS_DEBUG
+#include <iostream>
+#include <fstream>
+#endif
+
 ScaleSpaceOpenCV::ScaleSpaceOpenCV(ScaleSpaceMode mode)
 {
   changeToFloat = nullptr;
@@ -18,10 +25,10 @@ void ScaleSpaceOpenCV::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
   switch (si_type)
   {
   case ScaleSpaceSourceImageType::Gray:
-    changeToFloat = &ScaleSpaceOpenCV::changeBayerToFloat;
+    changeToFloat = &ScaleSpaceOpenCV::changeGrayToFloat;
     break;
   case ScaleSpaceSourceImageType::Bayer:
-    changeToFloat = &ScaleSpaceOpenCV::changeGrayToFloat;
+    changeToFloat = &ScaleSpaceOpenCV::changeBayerToFloat;
     break;
   }
 }
@@ -44,9 +51,18 @@ void ScaleSpaceOpenCV::doGaussian(ScaleSpaceImage & image)
   {
     cv::Mat gaussian = getGaussianForScale(i);
 
-    cv::filter2D(input, image.getImageForScale(i), -1, gaussian);
+#ifdef SS_DEBUG
+    std::cout << gaussian <<"\n";
+#endif
 
-    image.getImageForScale(i) *= sigmas[i];
+    cv::filter2D(input, image.getImageForScale(i), -1, gaussian);
+    
+#ifdef SS_DEBUG
+    std::ofstream of("pogau.txt");
+    of << image.getImageForScale(i);
+#endif
+
+    //image.getImageForScale(i) *= sigmas[i];
   }
 
     
@@ -54,11 +70,19 @@ void ScaleSpaceOpenCV::doGaussian(ScaleSpaceImage & image)
 
 void ScaleSpaceOpenCV::changeBayerToFloat(cv::Mat& input, cv::Mat& output) const
 {
-  
+  //TODO: dopisaæ i sprawdziæ mode
 }
 
 void ScaleSpaceOpenCV::changeGrayToFloat(cv::Mat& input, cv::Mat& output) const
 {
-  
+  //cv::cvtColor(input, output, CV_RGB2GRAY);
+//  input.copyTo(output);
+  input.convertTo(output, temp_image_type, 1.0/255.0);
+
+#ifdef SS_DEBUG
+  std::ofstream of("image.txt");
+  of << output;
+#endif
+
 }
   
