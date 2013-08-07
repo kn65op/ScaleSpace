@@ -14,6 +14,7 @@ void ScaleSpaceOpenCV::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
 {
 }
 
-void ScaleSpaceOpenCV::processImage(cv::Mat & input, ScaleSpaceImage & output)
+void ScaleSpaceOpenCV::processImage(ScaleSpaceImage & image)
 {
+
 }

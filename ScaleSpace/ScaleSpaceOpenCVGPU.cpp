@@ -14,6 +14,6 @@ void ScaleSpaceOpenCVGPU::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceO
 {
 }
 
-void ScaleSpaceOpenCVGPU::processImage(cv::Mat & input, ScaleSpaceImage & output)
+void ScaleSpaceOpenCVGPU::processImage(ScaleSpaceImage & image)
 {
 }

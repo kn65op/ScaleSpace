@@ -113,7 +113,9 @@ int main(int argc, char * argv[])
         std::cout << "File is not valid image\n";
         return 0;
       }
-      ss->processImage(input, output);
+      
+      output.setInput(input);
+      ss->processImage(output);
     }
 
     output.show("result");

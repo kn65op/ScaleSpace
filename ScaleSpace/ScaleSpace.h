@@ -105,10 +105,9 @@ public:
   
   /** Process cv::Mat image.
    * If ScaleSpace is not prepared it will be. If error occure during preparation will throw ScaleSpaceException.
-   * @param input cv::Mat image to process.
-   * @param output ScaleSpaceImage with computed representations in specified scales.
+   * @param output ScaleSpaceImage with input image and computed representations in specified scales.
    */
-  virtual void processImage(cv::Mat & input, ScaleSpaceImage & output) = 0;
+  virtual void processImage(ScaleSpaceImage & image) = 0;
   
   /**
    * Reutnrs unsigned int with number of scales.

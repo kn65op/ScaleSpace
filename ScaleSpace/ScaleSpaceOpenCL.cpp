@@ -229,7 +229,7 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
   prepared = true;
 }
 
-void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
+void ScaleSpaceOpenCL::processImage(ScaleSpaceImage & image)
 {
   if (!prepared)
   {
@@ -237,7 +237,7 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
     prepare(ScaleSpaceSourceImageType::Gray);
   }
 
-  if (last_height != input.size().height || last_width != input.size().width || last_scale != nr_scales)
+  if (last_height != image.size().height || last_width != image.size().width || last_scale != nr_scales)
   {
     unsigned int images = 1;
     switch (calc_mode)
@@ -249,48 +249,47 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
       images = 2;
       break;
     }
-    output.createImage(input.size().height, input.size().width, nr_scales, type, images);
+    image.createImage(nr_scales, type, images);
     for (auto s : streams)
     {
-      s->setDataSize(input.size().width, input.size().height); //not like OpenCV
+      s->setDataSize(image.size().width, image.size().height); //not like OpenCV
       s->prepare();
     }
-    last_height = input.size().height;
-    last_width = input.size().width;
+    last_height = image.size().height;
+    last_width = image.size().width;
     last_scale = nr_scales;
     #ifdef INFO_SS
     std::cout << "NEW\n";
     #endif
     if (post_processing)
     {
-      post_processing->setDataSize(input.size().width, input.size().height, nr_scales);
+      post_processing->setDataSize(image.size().width, image.size().height, nr_scales);
       post_processing->prepare();
       if (output_type == ScaleSpaceOutputType::ONE_IMAGE)
       {
         if (calc_mode == ScaleSpaceMode::Edges)  //TODO: fix 
         {
           OpenCLFindEdgesIn3DImageParams edges_params;
-          edges_params.setData(output.getDataForScale(0,1));
+          edges_params.setData(image.getDataForScale(0,1));
           post_processing->setParams(edges_params);
         }
         if (calc_mode == ScaleSpaceMode::Ridges) //TODO: fix
         {
           OpenCLFindRidgesIn3DImageParams ridge_params;
-          ridge_params.setData(output.getDataForScale(0,1));
+          ridge_params.setData(image.getDataForScale(0,1));
           post_processing->setParams(ridge_params);
         }
       }
     }
   }
 
-  output.setInput(input);
   int i = 0;
   for (auto s : streams)
   {
     #ifdef INFO_SS
     std::cout << "processing: " << i << " - ";
     #endif
-    s->processImage(input.data, output.getDataForScale(i));
+    s->processImage(image.getInputData(), image.getDataForScale(i));
     void * additional_output = s->getLastAlgorithmAdditionalOutput();
     #ifdef DEBUG_SS
     std::cout << "additional_output = " << additional_output << "\n";
@@ -300,7 +299,7 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
       #ifdef INFO_SS
       std::cout << "Storing additional output\n";
       #endif
-      memcpy(output.getDataForScale(i, 1), additional_output, output.getOneImageSize());
+      memcpy(image.getDataForScale(i, 1), additional_output, image.getOneImageSize());
     }
     #ifdef NOTICE_SS
     std::cout << s->getTime() << "\n";
@@ -308,8 +307,8 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
     #endif
     ++i;
   }
-  output.show("before"); 
-  cv::Mat outp = cv::Mat::zeros(input.size(), input.type());
+  image.show("before"); 
+  cv::Mat outp = cv::Mat::zeros(image.size(), image.type());
   if (post_processing)
   {
     #ifdef INFO_SS
@@ -320,7 +319,7 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
       #ifdef INFO_SS
       std::cout << "One image output\n";
       #endif
-      post_processing->processData(output.getDataForScale(0), outp.data);
+      post_processing->processData(image.getDataForScale(0), outp.data);
     }
     else if (output_type == ScaleSpaceOutputType::IMAGE_FOR_SCALE)
     {
@@ -332,13 +331,13 @@ void ScaleSpaceOpenCL::processImage(cv::Mat& input, ScaleSpaceImage& output)
         if (calc_mode == ScaleSpaceMode::Edges || calc_mode == ScaleSpaceMode::Ridges)
         {
           OpenCLFindEdgesIn2DImageParams params;
-          params.setData(output.getDataForScale(i,1));
+          params.setData(image.getDataForScale(i,1));
           post_processing->setParams(params);
         }
 
         post_processing->prepare();
-        post_processing->processData(output.getDataForScale(i), output.getDataForOutput(i));
-        cv::imwrite("outp" + std::to_string(i) + ".bmp", output.getOutput(i));
+        post_processing->processData(image.getDataForScale(i), image.getDataForOutput(i));
+        cv::imwrite("outp" + std::to_string(i) + ".bmp", image.getOutput(i));
       }
     }
   }

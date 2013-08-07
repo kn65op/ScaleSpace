@@ -29,12 +29,12 @@ public:
   ~ScaleSpaceImage(void);
 
   /**
-   * Set image dimensions and number of scales.
-   * @param width Image width.
-   * @param height Image height.
+   * Set image dimensions, number of scales, type and number of required temporary images.
    * @param scales Number of scales.
+   * @param type Type of image (in OpenCV way).
+   * @param images Number of required temporary images. Default is 1.
    */
-  void createImage(unsigned int width, unsigned int height, unsigned int scales, int type, unsigned int images = 1);//TODO: temp
+  void createImage(unsigned int scales, int type, unsigned int images = 1);//TODO: temp
   
   /**
    * Set input image.
@@ -63,6 +63,24 @@ public:
    * @return cv::Mat with image.
    */
   cv::Mat & getOutput(unsigned int scale);
+  
+  /**
+   * Returns input image size.
+   * @return cv::Size
+   */
+  cv::Size size() const;
+  
+  /**
+   * Returns input image data.
+   * @return void pointer to image data.
+   */
+  void * getInputData() const;
+  
+  /**
+   * Returns input image type.
+   * @return Input image type in terms of OpenCV.
+   */
+  int type() const;
 
   void show(std::string );
   void show(cv::Mat &blobs, std::vector<float> & sigmas);
@@ -88,10 +106,7 @@ private:
   unsigned int nr_scales;
   unsigned int nr_images;
 
-  unsigned int width;
-  unsigned int height;
-
-  int type;//TODO: remove
+  int temporary_image_type;//TODO: remove
   
   void checkScale(unsigned int scale);
 };
