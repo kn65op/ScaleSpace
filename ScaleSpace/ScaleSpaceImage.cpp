@@ -52,16 +52,7 @@ void ScaleSpaceImage::createImage(unsigned int scales, int type, unsigned int im
 
 void * ScaleSpaceImage::getDataForScale(unsigned int scale, unsigned int image_number)
 {
-  if (image_number >= nr_images)
-  {
-    throw ScaleSpaceImageException("Wrong image number parameter: " + std::to_string(image_number) + ". Can be 0 -" + std::to_string(nr_images - 1));  
-  }
-  checkScale(scale);
-  if (!scale_space_images[image_number][scale].isContinuous())
-  {
-    throw ScaleSpaceImageException("Data is not continuous");
-  }
-  return scale_space_images[image_number][scale].data;
+  return getImageForScale(scale, image_number).data;
 }
 
 void ScaleSpaceImage::setInput(cv::Mat image)
@@ -216,4 +207,18 @@ int ScaleSpaceImage::type() const
 cv::Mat & ScaleSpaceImage::getInput()
 {
   return input;
+}
+
+cv::Mat & ScaleSpaceImage::getImageForScale(unsigned int scale, unsigned int image_number)
+{
+  if (image_number >= nr_images)
+  {
+    throw ScaleSpaceImageException("Wrong image number parameter: " + std::to_string(image_number) + ". Can be 0 -" + std::to_string(nr_images - 1));  
+  }
+  checkScale(scale);
+  if (!scale_space_images[image_number][scale].isContinuous())
+  {
+    throw ScaleSpaceImageException("Data is not continuous");
+  }
+  return scale_space_images[image_number][scale];
 }

@@ -1,5 +1,6 @@
 #include "ScaleSpace.h"
 
+#include <opencv2\imgproc\imgproc.hpp>
 
 ScaleSpace::ScaleSpace(ScaleSpaceMode mode /*= ScaleSpaceMode::Pure*/)
 {
@@ -86,4 +87,15 @@ void ScaleSpace::makeSigmas()
     float sigma = 0.3f * ((scale) * 0.5f - 1.0f) + 0.8f;
     sigmas.push_back(sigma);
   }
+}
+
+cv::Mat ScaleSpace::getGaussianForScale(unsigned int scale)
+{
+  if (scale >= nr_scales)
+  {
+    throw ScaleSpaceException("Wrong scale parameter: " + std::to_string(scale) + ". Can be 0 -" + std::to_string(nr_scales - 1));
+  }
+  unsigned int gaussian_size = 1 + scale_step * (scale + 1);
+  cv::Mat gaussian_kernel = cv::getGaussianKernel(gaussian_size, sigmas[scale], CV_32F);
+  return gaussian_kernel * gaussian_kernel.t();
 }

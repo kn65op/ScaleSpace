@@ -46,9 +46,17 @@ public:
    * Get image data for image in specified scale.
    * @param scale Scale number.
    * @param image_number Image number for scale. Default is 0. Some algorithms has to provide two images durig processing.
-   * @return Image data.
+   * @return Pointer to image data.
    */
   void * getDataForScale(unsigned int scale, unsigned int image_number = 0);
+  
+  /**
+   * Get image for scale.
+   * @param scale Scale number.1
+   * @param image_number Image number for scale. Default is 0. Some algorithms has to provide two images durig processing.
+   * @return cv::Mat with proper image.
+   */
+  cv::Mat & getImageForScale(unsigned int scale, unsigned int image_number = 0);
 
   /**
    * Get pointer to data for output image.

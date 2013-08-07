@@ -96,8 +96,8 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
     std::cout << "Scale: " << scale << "\n";
     #endif
 
-    cv::Mat gaussian_kernel = cv::getGaussianKernel(scale, sigmas[i], CV_32F);
-    cv::Mat gaussian_kernel_2d = gaussian_kernel * gaussian_kernel.t();
+    
+    cv::Mat gaussian_kernel_2d = getGaussianForScale(i);
     #ifdef DEBUG_SS_GAUSSIAN
     for (unsigned int i = 0; i < scale; ++i)
     {

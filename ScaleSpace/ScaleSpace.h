@@ -125,6 +125,13 @@ public:
    * Prepare stream for computing.
    */
   virtual void prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutputType out_type = ScaleSpaceOutputType::ONE_IMAGE) = 0;
+  
+  /**
+   * Return gaussian for selected scale.
+   * @param scale Scale for which gaussian will be created.
+   * @return cv::Mat with gaussian.
+   */
+  cv::Mat getGaussianForScale(unsigned int scale);
 
 protected:
   unsigned int nr_scales; //number of scales
