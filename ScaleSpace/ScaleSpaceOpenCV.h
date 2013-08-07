@@ -22,5 +22,13 @@ public:
    * Prepare stream for computing.
    */
   void prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutputType out_type = ScaleSpaceOutputType::ONE_IMAGE);
-};
 
+private:
+  int temp_image_type;
+  
+  void doGaussian(ScaleSpaceImage & image);
+  void (ScaleSpaceOpenCV::* changeToFloat) (cv::Mat &, cv::Mat &) const;
+  
+  void changeGrayToFloat(cv::Mat & input, cv::Mat & output) const;
+  void changeBayerToFloat(cv::Mat & input, cv::Mat & output) const;
+};

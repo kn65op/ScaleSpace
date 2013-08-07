@@ -212,3 +212,8 @@ int ScaleSpaceImage::type() const
 {
   return input.type();
 }
+
+cv::Mat & ScaleSpaceImage::getInput()
+{
+  return input;
+}

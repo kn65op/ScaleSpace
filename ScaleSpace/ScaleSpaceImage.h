@@ -81,6 +81,12 @@ public:
    * @return Input image type in terms of OpenCV.
    */
   int type() const;
+  
+  /**
+   * Get Input image.
+   * @return cv::Mat with input image.
+   */
+  cv::Mat & getInput();
 
   void show(std::string );
   void show(cv::Mat &blobs, std::vector<float> & sigmas);
