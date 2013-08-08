@@ -46,15 +46,15 @@ private:
   void doRidge(cv::Mat &, ScaleSpaceImage & image) const;
   
   //helper functions
-  void calcDX(cv::Mat & in, cv:Mat & out);
-  void calcDY(cv::Mat & in, cv:Mat & out);
-  void calcDXX(cv::Mat & in, cv:Mat & out);
-  void calcDXY(cv::Mat & in, cv:Mat & out);
-  void calcDYY(cv::Mat & in, cv:Mat & out);
-  void calcDXXX(cv::Mat & in, cv:Mat & out);
-  void calcDXXY(cv::Mat & in, cv:Mat & out);
-  void calcDXYY(cv::Mat & in, cv:Mat & out);
-  void calcDYYY(cv::Mat & in, cv:Mat & out);
-  void calcK(cv::Mat & in, cv:Mat & out);
+  void calcDX(cv::Mat & in, cv::Mat & out);
+  void calcDY(cv::Mat & in, cv::Mat & out);
+  void calcDXX(cv::Mat & in, cv::Mat & out);
+  void calcDXY(cv::Mat & in, cv::Mat & out);
+  void calcDYY(cv::Mat & in, cv::Mat & out);
+  void calcDXXX(cv::Mat & in, cv::Mat & out);
+  void calcDXXY(cv::Mat & in, cv::Mat & out);
+  void calcDXYY(cv::Mat & in, cv::Mat & out);
+  void calcDYYY(cv::Mat & in, cv::Mat & out);
+  //void calcK(cv::Mat & in, cv:Mat & out);
 
 };

@@ -104,7 +104,7 @@ void ScaleSpaceOpenCV::changeGrayToFloat(cv::Mat& input, cv::Mat& output) const
 {
   //cv::cvtColor(input, output, CV_RGB2GRAY);
 //  input.copyTo(output);
-  input.convertTo(output, temp_image_type, 1.0/255.0);
+  input.convertTo(output, temp_image_type, 1.0f/255.0f);
 
 #ifdef SS_DEBUG
   std::ofstream of("image.txt");
@@ -136,4 +136,125 @@ void ScaleSpaceOpenCV::doRidge(cv::Mat&, ScaleSpaceImage& image) const
 void ScaleSpaceOpenCV::doPure(cv::Mat&, ScaleSpaceImage& image) const
 {
   
+}
+
+void ScaleSpaceOpenCV::calcDX(cv::Mat& in, cv::Mat& out)
+{
+  cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
+  kernel.at<float>(0, 0) = -0.5;
+  kernel.at<float>(0, 2) = 0.5;
+  kernel.at<float>(1, 0) = -1;
+  kernel.at<float>(1, 2) = 1;
+  kernel.at<float>(2, 0) = -0.5;
+  kernel.at<float>(2, 2) = 0.5;
+
+  cv::filter2D(in, out, -1, kernel);
+}
+
+void ScaleSpaceOpenCV::calcDY(cv::Mat& in, cv::Mat& out)
+{
+  cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
+  kernel.at<float>(0, 0) = -0.5;
+  kernel.at<float>(2, 0) = 0.5;
+  kernel.at<float>(0, 1) = -1;
+  kernel.at<float>(2, 1) = 1;
+  kernel.at<float>(0, 2) = -0.5;
+  kernel.at<float>(2, 2) = 0.5;
+
+  cv::filter2D(in, out, -1, kernel);
+}
+
+void ScaleSpaceOpenCV::calcDXX(cv::Mat& in, cv::Mat& out)
+{
+  cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
+  kernel.at<float>(0, 0) = 1.0f/12.0f;
+  kernel.at<float>(0, 1) = -5.0f/6.0f;
+  kernel.at<float>(0, 2) = 1.0f/12.0f;
+  kernel.at<float>(1, 0) = 5.0f/6.0f;
+  kernel.at<float>(1, 1) = -5.0f/3.0f;
+  kernel.at<float>(1, 2) = 5.0f/6.0f;
+  kernel.at<float>(2, 0) = 1.0f/12.0f;
+  kernel.at<float>(2, 1) = -5.0f/6.0f;
+  kernel.at<float>(2, 2) = 1.0f/12.0f;
+
+  cv::filter2D(in, out, -1, kernel);
+}
+
+void ScaleSpaceOpenCV::calcDYY(cv::Mat& in, cv::Mat& out)
+{
+  cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
+  kernel.at<float>(0, 0) = 1.0f/12.0f;
+  kernel.at<float>(0, 1) = 5.0f/6.0f;
+  kernel.at<float>(0, 2) = 1.0f/12.0f;
+  kernel.at<float>(1, 0) = -5.0f/6.0f;
+  kernel.at<float>(1, 1) = -5.0f/3.0f;
+  kernel.at<float>(1, 2) = -5.0f/6.0f;
+  kernel.at<float>(2, 0) = 1.0f/12.0f;
+  kernel.at<float>(2, 1) = 5.0f/6.0f;
+  kernel.at<float>(2, 2) = 1.0f/12.0f;
+
+  cv::filter2D(in, out, -1, kernel);
+}
+
+void ScaleSpaceOpenCV::calcDXY(cv::Mat& in, cv::Mat& out)
+{
+  cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
+  kernel.at<float>(0, 0) = 1.0f/4.0f;
+  kernel.at<float>(0, 2) = -1.0f/4.0f;
+  kernel.at<float>(2, 0) = -1.0f/4.0f;
+  kernel.at<float>(2, 2) = 1.0f/4.0f;
+
+  cv::filter2D(in, out, -1, kernel);
+}
+
+void ScaleSpaceOpenCV::calcDXXX(cv::Mat& in, cv::Mat& out)
+{
+  cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
+  kernel.at<float>(0, 0) = 1.0f/2.0f;
+  kernel.at<float>(0, 1) = 1.0;
+  kernel.at<float>(0, 2) = 1.0f/2.0f;
+  kernel.at<float>(2, 0) = -1.0f/2.0f;
+  kernel.at<float>(2, 1) = -1.0;
+  kernel.at<float>(2, 2) = -1.0f/2.0f;
+
+  cv::filter2D(in, out, -1, kernel);
+}
+
+void ScaleSpaceOpenCV::calcDXXY(cv::Mat& in, cv::Mat& out)
+{
+  cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
+  kernel.at<float>(0, 0) = -1.0f/8.0f;
+  kernel.at<float>(1, 0) = 1.0f/4.0f;
+  kernel.at<float>(2, 0) = -1.0f/8.0f;
+  kernel.at<float>(0, 2) = 1.0f/8.0f;
+  kernel.at<float>(1, 2) = -1.0f/4.0f;
+  kernel.at<float>(2, 2) = 1.0f/8.0f;
+
+  cv::filter2D(in, out, -1, kernel);
+}
+
+void ScaleSpaceOpenCV::calcDXYY(cv::Mat& in, cv::Mat& out)
+{
+  cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
+  kernel.at<float>(0, 0) = -1.0f/8.0f;
+  kernel.at<float>(0, 1) = 1.0f/4.0f;
+  kernel.at<float>(0, 2) = -1.0f/8.0f;
+  kernel.at<float>(2, 0) = 1.0f/8.0f;
+  kernel.at<float>(2, 1) = -1.0f/4.0f;
+  kernel.at<float>(2, 2) = 1.0f/8.0f;
+
+  cv::filter2D(in, out, -1, kernel);
+}
+
+void ScaleSpaceOpenCV::calcDYYY(cv::Mat& in, cv::Mat& out)
+{
+  cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
+  kernel.at<float>(0, 0) = 1.0f/2.0f;
+  kernel.at<float>(1, 0) = 1.0;
+  kernel.at<float>(2, 0) = 1.0f/2.0f;
+  kernel.at<float>(0, 2) = -1.0f/2.0f;
+  kernel.at<float>(1, 2) = -1.0;
+  kernel.at<float>(2, 2) = -1.0f/2.0f;
+
+  cv::filter2D(in, out, -1, kernel);
 }
