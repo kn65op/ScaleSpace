@@ -112,7 +112,7 @@ void ScaleSpaceOpenCV::changeGrayToFloat(cv::Mat& input, cv::Mat& output) const
 #endif
 
 }
-  
+
 void ScaleSpaceOpenCV::doBlob(cv::Mat&, ScaleSpaceImage& image) const
 {
   
