@@ -13,6 +13,28 @@ ScaleSpaceOpenCV::ScaleSpaceOpenCV(ScaleSpaceMode mode)
 {
   changeToFloat = nullptr;
   temp_image_type = CV_32FC1;
+
+  switch (mode)
+  {
+  case ScaleSpaceMode::Blobs:
+    doMode = &ScaleSpaceOpenCV::doBlob;
+    break;
+  case ScaleSpaceMode::Corners:
+    doMode = &ScaleSpaceOpenCV::doCorner;
+    break;
+  case ScaleSpaceMode::Edges:
+    doMode = &ScaleSpaceOpenCV::doEdge;
+    break;
+  case ScaleSpaceMode::Ridges:
+    doMode = &ScaleSpaceOpenCV::doRidge;
+    break;
+  case ScaleSpaceMode::Pure:
+    doMode = &ScaleSpaceOpenCV::doPure;
+    break;
+  default:
+    doMode = nullptr;
+    break;
+  }
 }
 
 
@@ -39,11 +61,18 @@ void ScaleSpaceOpenCV::processImage(ScaleSpaceImage & image)
   image.createImage(nr_scales, temp_image_type);
 
   doGaussian(image);
+
+
 }
 
 void ScaleSpaceOpenCV::doGaussian(ScaleSpaceImage & image)
 {
   cv::Mat input;
+
+  if (!doMode)
+  {
+    throw ScaleSpaceException("Mode is not set");
+  }
 
   (this->*changeToFloat)(image.getInput(), input);
   
@@ -68,7 +97,7 @@ void ScaleSpaceOpenCV::doGaussian(ScaleSpaceImage & image)
 
 void ScaleSpaceOpenCV::changeBayerToFloat(cv::Mat& input, cv::Mat& output) const
 {
-  //TODO: dopisaæ i sprawdziæ mode
+  //TODO: dopisaï¿½ i sprawdziï¿½ mode
 }
 
 void ScaleSpaceOpenCV::changeGrayToFloat(cv::Mat& input, cv::Mat& output) const
@@ -84,3 +113,27 @@ void ScaleSpaceOpenCV::changeGrayToFloat(cv::Mat& input, cv::Mat& output) const
 
 }
   
+void ScaleSpaceOpenCV::doBlob(cv::Mat&, ScaleSpaceImage& image) const
+{
+  
+}
+
+void ScaleSpaceOpenCV::doCorner(cv::Mat&, ScaleSpaceImage& image) const
+{
+  
+}
+
+void ScaleSpaceOpenCV::doEdge(cv::Mat&, ScaleSpaceImage& image) const
+{
+  
+}
+
+void ScaleSpaceOpenCV::doRidge(cv::Mat&, ScaleSpaceImage& image) const
+{
+  
+}
+
+void ScaleSpaceOpenCV::doPure(cv::Mat&, ScaleSpaceImage& image) const
+{
+  
+}

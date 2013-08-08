@@ -27,8 +27,21 @@ private:
   int temp_image_type;
   
   void doGaussian(ScaleSpaceImage & image);
+  
+  //pointer to function for different input image
   void (ScaleSpaceOpenCV::* changeToFloat) (cv::Mat &, cv::Mat &) const;
   
+  //functions for different input image
   void changeGrayToFloat(cv::Mat & input, cv::Mat & output) const;
   void changeBayerToFloat(cv::Mat & input, cv::Mat & output) const;
+
+  //pointer to function for mode
+  void (ScaleSpaceOpenCV::* doMode) (cv::Mat &, ScaleSpaceImage & image) const;
+
+  //functions for different modes
+  void doPure(cv::Mat &, ScaleSpaceImage & image) const;
+  void doBlob(cv::Mat &, ScaleSpaceImage & image) const;
+  void doEdge(cv::Mat &, ScaleSpaceImage & image) const;
+  void doCorner(cv::Mat &, ScaleSpaceImage & image) const;
+  void doRidge(cv::Mat &, ScaleSpaceImage & image) const;
 };
