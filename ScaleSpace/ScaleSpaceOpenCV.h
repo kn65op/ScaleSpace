@@ -36,14 +36,14 @@ private:
   void changeBayerToFloat(cv::Mat & input, cv::Mat & output) const;
 
   //pointer to function for mode
-  void (ScaleSpaceOpenCV::* doMode) (cv::Mat & input, ScaleSpaceImage & image) const;
+  void (ScaleSpaceOpenCV::* doMode) (ScaleSpaceImage & image) const;
 
   //functions for different modes
-  void doPure(cv::Mat & input, ScaleSpaceImage & image) const;
-  void doBlob(cv::Mat & input, ScaleSpaceImage & image) const;
-  void doEdge(cv::Mat & input, ScaleSpaceImage & image) const;
-  void doCorner(cv::Mat & input, ScaleSpaceImage & image) const;
-  void doRidge(cv::Mat & input, ScaleSpaceImage & image) const;
+  void doPure(ScaleSpaceImage & image) const;
+  void doBlob(ScaleSpaceImage & image) const;
+  void doEdge(ScaleSpaceImage & image) const;
+  void doCorner(ScaleSpaceImage & image) const;
+  void doRidge(ScaleSpaceImage & image) const;
   
   //helper functions
   void calcDX(cv::Mat & in, cv::Mat & out) const;

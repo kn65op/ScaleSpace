@@ -6,7 +6,7 @@
 
 //#define DEBUG_SS
 #ifdef DEBUG_SS
-#define DEBUG_SS_TWO_OUTPUT
+//#define DEBUG_SS_TWO_OUTPUT
 #endif
 
 ScaleSpaceImage::ScaleSpaceImage(void)
@@ -131,7 +131,7 @@ void ScaleSpaceImage::show(std::string fn)
     }
 //    cv::imwrite(s.c_str(), tmp2);
     cv::imwrite(s.c_str(), output[i]);
-    cv::imwrite((s+"2.bmp").c_str(), tmp2);
+    cv::imwrite((s+"_tmp.bmp").c_str(), tmp2);
   }
   image_nr++;
 }
