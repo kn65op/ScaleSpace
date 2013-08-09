@@ -29,21 +29,21 @@ private:
   void doGaussian(ScaleSpaceImage & image);
   
   //pointer to function for different input image
-  void (ScaleSpaceOpenCV::* changeToFloat) (cv::Mat &, cv::Mat &) const;
+  void (ScaleSpaceOpenCV::* changeToFloat) (cv::Mat & input, cv::Mat &) const;
   
   //functions for different input image
   void changeGrayToFloat(cv::Mat & input, cv::Mat & output) const;
   void changeBayerToFloat(cv::Mat & input, cv::Mat & output) const;
 
   //pointer to function for mode
-  void (ScaleSpaceOpenCV::* doMode) (cv::Mat &, ScaleSpaceImage & image) const;
+  void (ScaleSpaceOpenCV::* doMode) (cv::Mat & input, ScaleSpaceImage & image) const;
 
   //functions for different modes
-  void doPure(cv::Mat &, ScaleSpaceImage & image) const;
-  void doBlob(cv::Mat &, ScaleSpaceImage & image) const;
-  void doEdge(cv::Mat &, ScaleSpaceImage & image) const;
-  void doCorner(cv::Mat &, ScaleSpaceImage & image) const;
-  void doRidge(cv::Mat &, ScaleSpaceImage & image) const;
+  void doPure(cv::Mat & input, ScaleSpaceImage & image) const;
+  void doBlob(cv::Mat & input, ScaleSpaceImage & image) const;
+  void doEdge(cv::Mat & input, ScaleSpaceImage & image) const;
+  void doCorner(cv::Mat & input, ScaleSpaceImage & image) const;
+  void doRidge(cv::Mat & input, ScaleSpaceImage & image) const;
   
   //helper functions
   void calcDX(cv::Mat & in, cv::Mat & out);
@@ -56,5 +56,9 @@ private:
   void calcDXYY(cv::Mat & in, cv::Mat & out);
   void calcDYYY(cv::Mat & in, cv::Mat & out);
   //void calcK(cv::Mat & in, cv:Mat & out);
+
+  void calcFirstDeriteratives(cv::Mat & in, cv::Mat &Lx, cv::Mat & Ly);
+  void calcSecondDeriteratives(cv::Mat & in, cv::Mat &Lxx, cv::Mat & Lxy, cv::Mat & Lyy);
+  void calcThirdDeriteratives(cv::Mat & in, cv::Mat &Lxxx, cv::Mat & Lxxy, cv::Mat & Lxyy, cv::Mat & Lyyy);
 
 };

@@ -113,27 +113,27 @@ void ScaleSpaceOpenCV::changeGrayToFloat(cv::Mat& input, cv::Mat& output) const
 
 }
 
-void ScaleSpaceOpenCV::doBlob(cv::Mat&, ScaleSpaceImage& image) const
+void ScaleSpaceOpenCV::doBlob(cv::Mat & input, ScaleSpaceImage& image) const
 {
   
 }
 
-void ScaleSpaceOpenCV::doCorner(cv::Mat&, ScaleSpaceImage& image) const
+void ScaleSpaceOpenCV::doCorner(cv::Mat & input, ScaleSpaceImage& image) const
 {
   
 }
 
-void ScaleSpaceOpenCV::doEdge(cv::Mat&, ScaleSpaceImage& image) const
+void ScaleSpaceOpenCV::doEdge(cv::Mat & input, ScaleSpaceImage& image) const
 {
   
 }
 
-void ScaleSpaceOpenCV::doRidge(cv::Mat&, ScaleSpaceImage& image) const
+void ScaleSpaceOpenCV::doRidge(cv::Mat & input, ScaleSpaceImage& image) const
 {
   
 }
 
-void ScaleSpaceOpenCV::doPure(cv::Mat&, ScaleSpaceImage& image) const
+void ScaleSpaceOpenCV::doPure(cv::Mat & input, ScaleSpaceImage& image) const
 {
   
 }
@@ -257,4 +257,25 @@ void ScaleSpaceOpenCV::calcDYYY(cv::Mat& in, cv::Mat& out)
   kernel.at<float>(2, 2) = -1.0f/2.0f;
 
   cv::filter2D(in, out, -1, kernel);
+}
+
+void ScaleSpaceOpenCV::calcFirstDeriteratives(cv::Mat& in, cv::Mat& Lx, cv::Mat& Ly)
+{
+  calcDX(in, Lx);
+  calcDY(in, Ly);
+}
+
+void ScaleSpaceOpenCV::calcSecondDeriteratives(cv::Mat& in, cv::Mat& Lxx, cv::Mat& Lxy, cv::Mat& Lyy)
+{
+  calcDXX(in, Lxx);
+  calcDXY(in, Lxy);
+  calcDYY(in, Lyy);
+}
+
+void ScaleSpaceOpenCV::calcThirdDeriteratives(cv::Mat& in, cv::Mat& Lxxx, cv::Mat& Lxxy, cv::Mat& Lxyy, cv::Mat& Lyyy)
+{
+  calcDXXX(in, Lxxx);
+  calcDXXY(in, Lxxy);
+  calcDXYY(in, Lxxy);
+  calcDYYY(in, Lyyy);
 }
