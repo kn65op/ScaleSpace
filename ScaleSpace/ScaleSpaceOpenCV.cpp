@@ -115,7 +115,9 @@ void ScaleSpaceOpenCV::changeGrayToFloat(cv::Mat& input, cv::Mat& output) const
 
 void ScaleSpaceOpenCV::doBlob(cv::Mat & input, ScaleSpaceImage& image) const
 {
-  
+  cv::Mat Lx, Ly, Lxx, Lxy, Lyy, L1, L2;
+  calcFirstDeriteratives(input, Lx, Ly);
+  calcSecondDeriteratives(input, Lxx, Lxy, Lyy);
 }
 
 void ScaleSpaceOpenCV::doCorner(cv::Mat & input, ScaleSpaceImage& image) const
@@ -138,7 +140,7 @@ void ScaleSpaceOpenCV::doPure(cv::Mat & input, ScaleSpaceImage& image) const
   
 }
 
-void ScaleSpaceOpenCV::calcDX(cv::Mat& in, cv::Mat& out)
+void ScaleSpaceOpenCV::calcDX(cv::Mat& in, cv::Mat& out) const
 {
   cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
   kernel.at<float>(0, 0) = -0.5;
@@ -151,7 +153,7 @@ void ScaleSpaceOpenCV::calcDX(cv::Mat& in, cv::Mat& out)
   cv::filter2D(in, out, -1, kernel);
 }
 
-void ScaleSpaceOpenCV::calcDY(cv::Mat& in, cv::Mat& out)
+void ScaleSpaceOpenCV::calcDY(cv::Mat& in, cv::Mat& out) const
 {
   cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
   kernel.at<float>(0, 0) = -0.5;
@@ -164,7 +166,7 @@ void ScaleSpaceOpenCV::calcDY(cv::Mat& in, cv::Mat& out)
   cv::filter2D(in, out, -1, kernel);
 }
 
-void ScaleSpaceOpenCV::calcDXX(cv::Mat& in, cv::Mat& out)
+void ScaleSpaceOpenCV::calcDXX(cv::Mat& in, cv::Mat& out) const
 {
   cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
   kernel.at<float>(0, 0) = 1.0f/12.0f;
@@ -180,7 +182,7 @@ void ScaleSpaceOpenCV::calcDXX(cv::Mat& in, cv::Mat& out)
   cv::filter2D(in, out, -1, kernel);
 }
 
-void ScaleSpaceOpenCV::calcDYY(cv::Mat& in, cv::Mat& out)
+void ScaleSpaceOpenCV::calcDYY(cv::Mat& in, cv::Mat& out) const
 {
   cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
   kernel.at<float>(0, 0) = 1.0f/12.0f;
@@ -196,7 +198,7 @@ void ScaleSpaceOpenCV::calcDYY(cv::Mat& in, cv::Mat& out)
   cv::filter2D(in, out, -1, kernel);
 }
 
-void ScaleSpaceOpenCV::calcDXY(cv::Mat& in, cv::Mat& out)
+void ScaleSpaceOpenCV::calcDXY(cv::Mat& in, cv::Mat& out) const
 {
   cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
   kernel.at<float>(0, 0) = 1.0f/4.0f;
@@ -207,7 +209,7 @@ void ScaleSpaceOpenCV::calcDXY(cv::Mat& in, cv::Mat& out)
   cv::filter2D(in, out, -1, kernel);
 }
 
-void ScaleSpaceOpenCV::calcDXXX(cv::Mat& in, cv::Mat& out)
+void ScaleSpaceOpenCV::calcDXXX(cv::Mat& in, cv::Mat& out) const
 {
   cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
   kernel.at<float>(0, 0) = 1.0f/2.0f;
@@ -220,7 +222,7 @@ void ScaleSpaceOpenCV::calcDXXX(cv::Mat& in, cv::Mat& out)
   cv::filter2D(in, out, -1, kernel);
 }
 
-void ScaleSpaceOpenCV::calcDXXY(cv::Mat& in, cv::Mat& out)
+void ScaleSpaceOpenCV::calcDXXY(cv::Mat& in, cv::Mat& out) const
 {
   cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
   kernel.at<float>(0, 0) = -1.0f/8.0f;
@@ -233,7 +235,7 @@ void ScaleSpaceOpenCV::calcDXXY(cv::Mat& in, cv::Mat& out)
   cv::filter2D(in, out, -1, kernel);
 }
 
-void ScaleSpaceOpenCV::calcDXYY(cv::Mat& in, cv::Mat& out)
+void ScaleSpaceOpenCV::calcDXYY(cv::Mat& in, cv::Mat& out) const
 {
   cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
   kernel.at<float>(0, 0) = -1.0f/8.0f;
@@ -246,7 +248,7 @@ void ScaleSpaceOpenCV::calcDXYY(cv::Mat& in, cv::Mat& out)
   cv::filter2D(in, out, -1, kernel);
 }
 
-void ScaleSpaceOpenCV::calcDYYY(cv::Mat& in, cv::Mat& out)
+void ScaleSpaceOpenCV::calcDYYY(cv::Mat& in, cv::Mat& out) const
 {
   cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
   kernel.at<float>(0, 0) = 1.0f/2.0f;
@@ -259,20 +261,20 @@ void ScaleSpaceOpenCV::calcDYYY(cv::Mat& in, cv::Mat& out)
   cv::filter2D(in, out, -1, kernel);
 }
 
-void ScaleSpaceOpenCV::calcFirstDeriteratives(cv::Mat& in, cv::Mat& Lx, cv::Mat& Ly)
+void ScaleSpaceOpenCV::calcFirstDeriteratives(cv::Mat& in, cv::Mat& Lx, cv::Mat& Ly) const
 {
   calcDX(in, Lx);
   calcDY(in, Ly);
 }
 
-void ScaleSpaceOpenCV::calcSecondDeriteratives(cv::Mat& in, cv::Mat& Lxx, cv::Mat& Lxy, cv::Mat& Lyy)
+void ScaleSpaceOpenCV::calcSecondDeriteratives(cv::Mat& in, cv::Mat& Lxx, cv::Mat& Lxy, cv::Mat& Lyy) const
 {
   calcDXX(in, Lxx);
   calcDXY(in, Lxy);
   calcDYY(in, Lyy);
 }
 
-void ScaleSpaceOpenCV::calcThirdDeriteratives(cv::Mat& in, cv::Mat& Lxxx, cv::Mat& Lxxy, cv::Mat& Lxyy, cv::Mat& Lyyy)
+void ScaleSpaceOpenCV::calcThirdDeriteratives(cv::Mat& in, cv::Mat& Lxxx, cv::Mat& Lxxy, cv::Mat& Lxyy, cv::Mat& Lyyy) const
 {
   calcDXXX(in, Lxxx);
   calcDXXY(in, Lxxy);

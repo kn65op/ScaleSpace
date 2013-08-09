@@ -46,19 +46,19 @@ private:
   void doRidge(cv::Mat & input, ScaleSpaceImage & image) const;
   
   //helper functions
-  void calcDX(cv::Mat & in, cv::Mat & out);
-  void calcDY(cv::Mat & in, cv::Mat & out);
-  void calcDXX(cv::Mat & in, cv::Mat & out);
-  void calcDXY(cv::Mat & in, cv::Mat & out);
-  void calcDYY(cv::Mat & in, cv::Mat & out);
-  void calcDXXX(cv::Mat & in, cv::Mat & out);
-  void calcDXXY(cv::Mat & in, cv::Mat & out);
-  void calcDXYY(cv::Mat & in, cv::Mat & out);
-  void calcDYYY(cv::Mat & in, cv::Mat & out);
+  void calcDX(cv::Mat & in, cv::Mat & out) const;
+  void calcDY(cv::Mat & in, cv::Mat & out) const;
+  void calcDXX(cv::Mat & in, cv::Mat & out) const;
+  void calcDXY(cv::Mat & in, cv::Mat & out) const;
+  void calcDYY(cv::Mat & in, cv::Mat & out) const;
+  void calcDXXX(cv::Mat & in, cv::Mat & out) const;
+  void calcDXXY(cv::Mat & in, cv::Mat & out) const;
+  void calcDXYY(cv::Mat & in, cv::Mat & out) const;
+  void calcDYYY(cv::Mat & in, cv::Mat & out) const;
   //void calcK(cv::Mat & in, cv:Mat & out);
 
-  void calcFirstDeriteratives(cv::Mat & in, cv::Mat &Lx, cv::Mat & Ly);
-  void calcSecondDeriteratives(cv::Mat & in, cv::Mat &Lxx, cv::Mat & Lxy, cv::Mat & Lyy);
-  void calcThirdDeriteratives(cv::Mat & in, cv::Mat &Lxxx, cv::Mat & Lxxy, cv::Mat & Lxyy, cv::Mat & Lyyy);
+  void calcFirstDeriteratives(cv::Mat & in, cv::Mat &Lx, cv::Mat & Ly) const;
+  void calcSecondDeriteratives(cv::Mat & in, cv::Mat &Lxx, cv::Mat & Lxy, cv::Mat & Lyy) const;
+  void calcThirdDeriteratives(cv::Mat & in, cv::Mat &Lxxx, cv::Mat & Lxxy, cv::Mat & Lxyy, cv::Mat & Lyyy) const;
 
 };
