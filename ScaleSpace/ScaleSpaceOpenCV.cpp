@@ -400,3 +400,19 @@ void ScaleSpaceOpenCV::findRidgeMax(ScaleSpaceImage& image) const
 {
   
 }
+
+void ScaleSpaceOpenCV::processImage(cv::Mat in, cv::Mat out, std::function<void (cv::Mat&,int,int,float)> fun)
+{
+  //process non border pixels
+  cv::Size size = in.size();
+  --size.width;
+  --size.height;
+
+  for (int i=1; i<size.width; ++i)
+  {
+    for (int j=1; j<size.height; ++j)
+    {
+      fun(in, i, j, out.at<float>(i,j));
+    }
+  }
+}
