@@ -150,13 +150,13 @@ void ScaleSpaceOpenCV::doBlob(ScaleSpaceImage& image) const
     cv::Mat L;
 
     calcSecondDeriteratives(image.getImageForScale(i), Lxx, Lxy, Lyy);
+  
+    L = abs(Lxx + Lyy) * sigmas[i];
 
 #ifdef SS_DEBUG
-    std::ofstream of("pochodnaLxx.txt");
-    of << Lxx;
+    std::ofstream of("pochodnaL.txt");
+    of << L;
 #endif
-  
-    L = abs(Lxx + Lyy);
 
     image.getImageForScale(i) = L;
   }
@@ -393,7 +393,28 @@ void ScaleSpaceOpenCV::findEdgeMax(ScaleSpaceImage& image) const
 
 void ScaleSpaceOpenCV::findMaxInScale(ScaleSpaceImage& image) const
 {
-  
+  for (unsigned int i=0; i < nr_scales; ++i)
+  {
+    processImageNonBorder(image.getImageForScale(i), image.getOutput(i), [] (cv::Mat & in, int x, int y)->unsigned char
+    {
+      float centre = in.at<float>(x,y);
+      for (int i = -1; i < 2; ++i)
+      {
+        for (int j = -1; j < 2; ++j)
+        {
+          if (centre < 1e-5)
+          {
+            return 0;
+          }
+          if (in.at<float>(x + i, y + j) >= centre && i && j)
+          {
+            return 0;
+          }
+        }
+      }
+      return 255;
+    });
+  }
 }
 
 void ScaleSpaceOpenCV::findRidgeMax(ScaleSpaceImage& image) const
@@ -414,18 +435,18 @@ void ScaleSpaceOpenCV::processImage(cv::Mat in, cv::Mat out, std::function<float
   }
 }
 
-void ScaleSpaceOpenCV::processImageNonBorder(cv::Mat in, cv::Mat out, std::function<float (cv::Mat&,int,int)> fun) const
+void ScaleSpaceOpenCV::processImageNonBorder(cv::Mat in, cv::Mat out, std::function<unsigned char (cv::Mat&,int,int)> fun) const
 {
   //process non border pixels
   cv::Size size = in.size();
   --size.width;
   --size.height;
 
-  for (int i=1; i<size.width; ++i)
+  for (int i=1; i<size.height; ++i)
   {
-    for (int j=1; j<size.height; ++j)
+    for (int j=1; j<size.width; ++j)
     {
-      out.at<float>(i,j) = fun(in, i, j);
+      out.at<unsigned char>(i,j) = fun(in, i, j);
     }
   }
 }
