@@ -192,10 +192,19 @@ void ScaleSpaceOpenCV::doEdge(ScaleSpaceImage& image) const
     calcFirstDeriteratives(image.getImageForScale(i), Lx, Ly);
     calcSecondDeriteratives(image.getImageForScale(i), Lxx, Lxy, Lyy);
     calcThirdDeriteratives(image.getImageForScale(i), Lxxx, Lxxy, Lxyy, Lyyy);
-  
+
     L1 = Lx.mul(Lx.mul(Lxx)) + 2 * Lx.mul(Ly.mul(Lxy)) + Ly.mul(Ly.mul(Lyy));
     setLowValuesToZero(L1);
     L2 = Lx.mul(Lx).mul(Lx).mul(Lxxx) + 3 * Lx.mul(Lx).mul(Ly).mul(Lxxy) + 3 * Lx.mul(Ly).mul(Ly).mul(Lxyy) + Ly.mul(Ly).mul(Ly).mul(Lyyy);
+#ifdef SS_DEBUG
+    std::ofstream of("L1.txt");
+    of << L1;
+#endif
+
+#ifdef SS_DEBUG
+    std::ofstream of2("L2.txt");
+    of2 << L2;
+#endif
 
     image.getImageForScale(i, 0) = L1;
     image.getImageForScale(i, 1) = L2;
@@ -235,6 +244,11 @@ void ScaleSpaceOpenCV::calcDX(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(1, 2) = 1;
   kernel.at<float>(2, 0) = -0.5;
   kernel.at<float>(2, 2) = 0.5;
+  
+    { 
+    std::ofstream of("kernelX.txt");
+    of << kernel;
+}
 
   cv::filter2D(in, out, -1, kernel);
 }
@@ -248,7 +262,11 @@ void ScaleSpaceOpenCV::calcDY(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(2, 1) = 1;
   kernel.at<float>(0, 2) = -0.5;
   kernel.at<float>(2, 2) = 0.5;
-
+  
+    { 
+    std::ofstream of("kernelY.txt");
+    of << kernel;
+}
   cv::filter2D(in, out, -1, kernel);
 }
 
@@ -266,19 +284,10 @@ void ScaleSpaceOpenCV::calcDXX(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(2, 2) = 1.0f/12.0f;
 
   cv::filter2D(in, out, -1, kernel);
-#ifdef SS_DEBUG
   { 
-    std::ofstream of("kernel.txt");
+    std::ofstream of("kernelXX.txt");
     of << kernel;
 }
-
-  { 
-    std::ofstream of("pochodna in.txt");
-    of << in;
-}
-  std::ofstream of("pochodnaLxx out.txt");
-  of << out;
-#endif //SS_DEBUG
 }
 
 void ScaleSpaceOpenCV::calcDYY(cv::Mat& in, cv::Mat& out) const
@@ -293,7 +302,11 @@ void ScaleSpaceOpenCV::calcDYY(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(2, 0) = 1.0f/12.0f;
   kernel.at<float>(2, 1) = 5.0f/6.0f;
   kernel.at<float>(2, 2) = 1.0f/12.0f;
-
+  
+    { 
+    std::ofstream of("kernelYY.txt");
+    of << kernel;
+}
   cv::filter2D(in, out, -1, kernel);
 }
 
@@ -304,11 +317,15 @@ void ScaleSpaceOpenCV::calcDXY(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(0, 2) = -1.0f/4.0f;
   kernel.at<float>(2, 0) = -1.0f/4.0f;
   kernel.at<float>(2, 2) = 1.0f/4.0f;
-
+  
+    { 
+    std::ofstream of("kernelXY.txt");
+    of << kernel;
+}
   cv::filter2D(in, out, -1, kernel);
 }
 
-void ScaleSpaceOpenCV::calcDXXX(cv::Mat& in, cv::Mat& out) const
+void ScaleSpaceOpenCV::calcDYYY(cv::Mat& in, cv::Mat& out) const
 {
   cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
   kernel.at<float>(0, 0) = 1.0f/2.0f;
@@ -317,19 +334,11 @@ void ScaleSpaceOpenCV::calcDXXX(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(2, 0) = -1.0f/2.0f;
   kernel.at<float>(2, 1) = -1.0;
   kernel.at<float>(2, 2) = -1.0f/2.0f;
-
-  cv::filter2D(in, out, -1, kernel);
+  
+    { 
+    std::ofstream of("kernelYYY.txt");
+    of << kernel;
 }
-
-void ScaleSpaceOpenCV::calcDXXY(cv::Mat& in, cv::Mat& out) const
-{
-  cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
-  kernel.at<float>(0, 0) = -1.0f/8.0f;
-  kernel.at<float>(1, 0) = 1.0f/4.0f;
-  kernel.at<float>(2, 0) = -1.0f/8.0f;
-  kernel.at<float>(0, 2) = 1.0f/8.0f;
-  kernel.at<float>(1, 2) = -1.0f/4.0f;
-  kernel.at<float>(2, 2) = 1.0f/8.0f;
 
   cv::filter2D(in, out, -1, kernel);
 }
@@ -338,16 +347,35 @@ void ScaleSpaceOpenCV::calcDXYY(cv::Mat& in, cv::Mat& out) const
 {
   cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
   kernel.at<float>(0, 0) = -1.0f/8.0f;
+  kernel.at<float>(1, 0) = 1.0f/4.0f;
+  kernel.at<float>(2, 0) = -1.0f/8.0f;
+  kernel.at<float>(0, 2) = 1.0f/8.0f;
+  kernel.at<float>(1, 2) = -1.0f/4.0f;
+  kernel.at<float>(2, 2) = 1.0f/8.0f;
+  { 
+    std::ofstream of("kernelXYY.txt");
+    of << kernel;
+}
+  cv::filter2D(in, out, -1, kernel);
+}
+
+void ScaleSpaceOpenCV::calcDXXY(cv::Mat& in, cv::Mat& out) const
+{
+  cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
+  kernel.at<float>(0, 0) = -1.0f/8.0f;
   kernel.at<float>(0, 1) = 1.0f/4.0f;
   kernel.at<float>(0, 2) = -1.0f/8.0f;
   kernel.at<float>(2, 0) = 1.0f/8.0f;
   kernel.at<float>(2, 1) = -1.0f/4.0f;
   kernel.at<float>(2, 2) = 1.0f/8.0f;
-
+    { 
+    std::ofstream of("kernelXXY.txt");
+    of << kernel;
+}
   cv::filter2D(in, out, -1, kernel);
 }
 
-void ScaleSpaceOpenCV::calcDYYY(cv::Mat& in, cv::Mat& out) const
+void ScaleSpaceOpenCV::calcDXXX(cv::Mat& in, cv::Mat& out) const
 {
   cv::Mat kernel(3,3, CV_32FC1, cv::Scalar(0.0));
   kernel.at<float>(0, 0) = 1.0f/2.0f;
@@ -356,7 +384,11 @@ void ScaleSpaceOpenCV::calcDYYY(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(0, 2) = -1.0f/2.0f;
   kernel.at<float>(1, 2) = -1.0;
   kernel.at<float>(2, 2) = -1.0f/2.0f;
-
+  
+    { 
+    std::ofstream of("kernelXXX.txt");
+    of << kernel;
+}
   cv::filter2D(in, out, -1, kernel);
 }
 
@@ -388,7 +420,25 @@ void ScaleSpaceOpenCV::calcThirdDeriteratives(cv::Mat& in, cv::Mat& Lxxx, cv::Ma
 
 void ScaleSpaceOpenCV::findEdgeMax(ScaleSpaceImage& image) const
 {
-  
+  for (unsigned int i=0; i < nr_scales; ++i)
+  {
+    processTwoImagesNonBorder(image.getImageForScale(i, 0), image.getImageForScale(i, 1), image.getOutput(i), [] (cv::Mat & in, cv::Mat & in_sec, int x, int y)->unsigned char
+    {
+      float centre = in.at<float>(x,y);
+      for (int i = -1; i < 2; ++i)
+      {
+        for (int j = -1; j < 2; ++j)
+        {
+          if (i && j) continue;
+          if (in.at<float>(x + i, y + j) * centre < 0 && in_sec.at<float>(x, y) < 0)
+          {
+            return 255;
+          }
+        }
+      }
+      return 0;
+    });
+  }
 }
 
 void ScaleSpaceOpenCV::findMaxInScale(ScaleSpaceImage& image) const
@@ -422,20 +472,20 @@ void ScaleSpaceOpenCV::findRidgeMax(ScaleSpaceImage& image) const
   
 }
 
-void ScaleSpaceOpenCV::processImage(cv::Mat in, cv::Mat out, std::function<float (float)> fun) const
+void ScaleSpaceOpenCV::processImage(cv::Mat & in, cv::Mat & out, std::function<float (float)> fun) const
 {
   cv::Size size = in.size();
  
-  for (int i=0; i<size.width; ++i)
+  for (int i=0; i<size.height; ++i)
   {
-    for (int j=0; j<size.height; ++j)
+    for (int j=0; j<size.width; ++j)
     {
       out.at<float>(i,j) = fun(in.at<float>(i,j));
     }
   }
 }
 
-void ScaleSpaceOpenCV::processImageNonBorder(cv::Mat in, cv::Mat out, std::function<unsigned char (cv::Mat&,int,int)> fun) const
+void ScaleSpaceOpenCV::processImageNonBorder(cv::Mat & in, cv::Mat & out, std::function<unsigned char (cv::Mat&,int,int)> fun) const
 {
   //process non border pixels
   cv::Size size = in.size();
@@ -447,6 +497,22 @@ void ScaleSpaceOpenCV::processImageNonBorder(cv::Mat in, cv::Mat out, std::funct
     for (int j=1; j<size.width; ++j)
     {
       out.at<unsigned char>(i,j) = fun(in, i, j);
+    }
+  }
+}
+
+void ScaleSpaceOpenCV::processTwoImagesNonBorder(cv::Mat & in, cv::Mat & in_sec, cv::Mat & out, std::function<unsigned char (cv::Mat &, cv::Mat &, int, int)> fun) const
+{
+  //process non border pixels
+  cv::Size size = in.size();
+  --size.width;
+  --size.height;
+
+  for (int i=1; i<size.height; ++i)
+  {
+    for (int j=1; j<size.width; ++j)
+    {
+      out.at<unsigned char>(i,j) = fun(in, in_sec, i, j);
     }
   }
 }

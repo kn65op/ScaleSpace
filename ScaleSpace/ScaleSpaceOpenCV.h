@@ -72,8 +72,9 @@ private:
   void calcThirdDeriteratives(cv::Mat & in, cv::Mat &Lxxx, cv::Mat & Lxxy, cv::Mat & Lxyy, cv::Mat & Lyyy) const;
 
   //foreach for image
-  void processImage(cv::Mat in, cv::Mat out, std::function<float (float)> fun) const;
-  void processImageNonBorder(cv::Mat in, cv::Mat out, std::function<unsigned char (cv::Mat &, int, int)> fun) const;
+  void processImage(cv::Mat & in, cv::Mat & out, std::function<float (float)> fun) const;
+  void processImageNonBorder(cv::Mat & in, cv::Mat & out, std::function<unsigned char (cv::Mat &, int, int)> fun) const;
+  void processTwoImagesNonBorder(cv::Mat & in, cv::Mat & in_sec, cv::Mat & out, std::function<unsigned char (cv::Mat &, cv::Mat &, int, int)> fun) const;
   
   //functions processing images pixel by pixel
   void setLowValuesToZero(cv::Mat & mat) const;
