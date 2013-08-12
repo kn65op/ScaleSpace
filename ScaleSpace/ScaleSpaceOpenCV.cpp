@@ -200,10 +200,12 @@ void ScaleSpaceOpenCV::doRidge(ScaleSpaceImage& image) const
     calcFirstDeriteratives(image.getImageForScale(i), Lx, Ly);
     calcSecondDeriteratives(image.getImageForScale(i), Lxx, Lxy, Lyy);
   
-    L1 = Lx * Ly * (Lxx - Lyy) - (Lx * Lx - Ly * Ly) * Lxy; //TODO: fix to mul
+    L1 = Lx.mul(Ly).mul(Lxx - Lyy) - (Lx.mul(Lx) - Ly.mul(Ly)).mul(Lxy);
     //TODO: clear for zeros
-    //tODO: continue
-    L2 = L1;
+    L2 = (Ly.mul(Ly) - Lx.mul(Lx)).mul(Lxx - Lyy) - 4 * Lx.mul(Ly).mul(Lxy);
+
+    image.getImageForScale(i, 0) = L1;
+    image.getImageForScale(i, 1) = L2;
   }
   
 }
