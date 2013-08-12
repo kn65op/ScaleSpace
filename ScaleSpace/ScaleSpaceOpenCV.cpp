@@ -4,9 +4,11 @@
 
 //#define SS_DEBUG
 #define SS_INFO
+#ifdef SS_INFO
+#include <iostream>
+#endif
 
 #ifdef SS_DEBUG
-#include <iostream>
 #include <fstream>
 #endif
 #include <fstream>
@@ -65,13 +67,13 @@ void ScaleSpaceOpenCV::processImage(ScaleSpaceImage & image)
   doGaussian(image);
 
 #ifdef SS_INFO
-  image.show("gaussian");
+  std::cout << "gaussian\n";
 #endif
 
   (this->*doMode)(image);
 
 #ifdef SS_INFO
-  image.show("mode");
+  std::cout << "mode\n":
 #endif
 
 }
