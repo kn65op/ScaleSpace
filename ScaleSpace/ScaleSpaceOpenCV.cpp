@@ -194,7 +194,7 @@ void ScaleSpaceOpenCV::doEdge(ScaleSpaceImage& image) const
     calcThirdDeriteratives(image.getImageForScale(i), Lxxx, Lxxy, Lxyy, Lyyy);
   
     L1 = Lx.mul(Lx.mul(Lxx)) + 2 * Lx.mul(Ly.mul(Lxy)) + Ly.mul(Ly.mul(Lyy));
-    //TODO: clean for zeros
+    setLowValuesToZero(L1);
     L2 = Lx.mul(Lx).mul(Lx).mul(Lxxx) + 3 * Lx.mul(Lx).mul(Ly).mul(Lxxy) + 3 * Lx.mul(Ly).mul(Ly).mul(Lxyy) + Ly.mul(Ly).mul(Ly).mul(Lyyy);
 
     image.getImageForScale(i, 0) = L1;
@@ -212,7 +212,7 @@ void ScaleSpaceOpenCV::doRidge(ScaleSpaceImage& image) const
     calcSecondDeriteratives(image.getImageForScale(i), Lxx, Lxy, Lyy);
   
     L1 = Lx.mul(Ly).mul(Lxx - Lyy) - (Lx.mul(Lx) - Ly.mul(Ly)).mul(Lxy);
-    //TODO: clear for zeros
+    setLowValuesToZero(L1);
     L2 = (Ly.mul(Ly) - Lx.mul(Lx)).mul(Lxx - Lyy) - 4 * Lx.mul(Ly).mul(Lxy);
 
     image.getImageForScale(i, 0) = L1;
@@ -401,7 +401,7 @@ void ScaleSpaceOpenCV::findRidgeMax(ScaleSpaceImage& image) const
   
 }
 
-void ScaleSpaceOpenCV::processImage(cv::Mat in, cv::Mat out, std::function<float (float)> fun)
+void ScaleSpaceOpenCV::processImage(cv::Mat in, cv::Mat out, std::function<float (float)> fun) const
 {
   cv::Size size = in.size();
  
@@ -414,7 +414,7 @@ void ScaleSpaceOpenCV::processImage(cv::Mat in, cv::Mat out, std::function<float
   }
 }
 
-void ScaleSpaceOpenCV::processImageNonBorder(cv::Mat in, cv::Mat out, std::function<float (cv::Mat&,int,int)> fun)
+void ScaleSpaceOpenCV::processImageNonBorder(cv::Mat in, cv::Mat out, std::function<float (cv::Mat&,int,int)> fun) const
 {
   //process non border pixels
   cv::Size size = in.size();
@@ -430,7 +430,7 @@ void ScaleSpaceOpenCV::processImageNonBorder(cv::Mat in, cv::Mat out, std::funct
   }
 }
 
-void ScaleSpaceOpenCV::setLowValuesToZero(cv::Mat& mat)
+void ScaleSpaceOpenCV::setLowValuesToZero(cv::Mat& mat) const
 {
   processImage(mat, mat, [] (float in)->float
   {
