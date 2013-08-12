@@ -401,7 +401,20 @@ void ScaleSpaceOpenCV::findRidgeMax(ScaleSpaceImage& image) const
   
 }
 
-void ScaleSpaceOpenCV::processImage(cv::Mat in, cv::Mat out, std::function<void (cv::Mat&,int,int,float)> fun)
+void ScaleSpaceOpenCV::processImage(cv::Mat in, cv::Mat out, std::function<float (float)> fun)
+{
+  cv::Size size = in.size();
+ 
+  for (int i=0; i<size.width; ++i)
+  {
+    for (int j=0; j<size.height; ++j)
+    {
+      out.at<float>(i,j) = fun(in.at<float>(i,j));
+    }
+  }
+}
+
+void ScaleSpaceOpenCV::processImageNonBorder(cv::Mat in, cv::Mat out, std::function<float (cv::Mat&,int,int)> fun)
 {
   //process non border pixels
   cv::Size size = in.size();
@@ -412,7 +425,19 @@ void ScaleSpaceOpenCV::processImage(cv::Mat in, cv::Mat out, std::function<void 
   {
     for (int j=1; j<size.height; ++j)
     {
-      fun(in, i, j, out.at<float>(i,j));
+      out.at<float>(i,j) = fun(in, i, j);
     }
   }
+}
+
+void ScaleSpaceOpenCV::setLowValuesToZero(cv::Mat& mat)
+{
+  processImage(mat, mat, [] (float in)->float
+  {
+    if (fabs(in) < 1e-5)
+    {
+      return 0;
+    }
+    return in;
+  });
 }
