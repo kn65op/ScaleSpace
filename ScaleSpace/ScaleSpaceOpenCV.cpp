@@ -4,6 +4,7 @@
 
 //#define SS_DEBUG
 #define SS_INFO
+
 #ifdef SS_INFO
 #include <iostream>
 #endif
@@ -11,12 +12,13 @@
 #ifdef SS_DEBUG
 #include <fstream>
 #endif
-#include <fstream>
+#include <fstream> //tmp
 
 ScaleSpaceOpenCV::ScaleSpaceOpenCV(ScaleSpaceMode mode)
 {
   changeToFloat = nullptr;
   temp_image_type = CV_32FC1;
+  nr_images = 1;
 
   switch (mode)
   {
@@ -28,9 +30,11 @@ ScaleSpaceOpenCV::ScaleSpaceOpenCV(ScaleSpaceMode mode)
     break;
   case ScaleSpaceMode::Edges:
     doMode = &ScaleSpaceOpenCV::doEdge;
+    nr_images = 2;
     break;
   case ScaleSpaceMode::Ridges:
     doMode = &ScaleSpaceOpenCV::doRidge;
+    nr_images = 2;
     break;
   case ScaleSpaceMode::Pure:
     doMode = &ScaleSpaceOpenCV::doPure;
@@ -62,7 +66,7 @@ void ScaleSpaceOpenCV::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
 void ScaleSpaceOpenCV::processImage(ScaleSpaceImage & image)
 {
   //create output
-  image.createImage(nr_scales, temp_image_type);
+  image.createImage(nr_scales, temp_image_type, nr_images);
 
   doGaussian(image);
 
@@ -73,7 +77,7 @@ void ScaleSpaceOpenCV::processImage(ScaleSpaceImage & image)
   (this->*doMode)(image);
 
 #ifdef SS_INFO
-  std::cout << "mode\n":
+  std::cout << "mode\n";
 #endif
 
 }
@@ -136,8 +140,10 @@ void ScaleSpaceOpenCV::doBlob(ScaleSpaceImage& image) const
 
     calcSecondDeriteratives(image.getImageForScale(i), Lxx, Lxy, Lyy);
 
+#ifdef SS_DEBUG
     std::ofstream of("pochodnaLxx.txt");
     of << Lxx;
+#endif
   
     L = abs(Lxx + Lyy);
 
@@ -157,14 +163,32 @@ void ScaleSpaceOpenCV::doCorner(ScaleSpaceImage& image) const
     calcSecondDeriteratives(image.getImageForScale(i), Lxx, Lxy, Lyy);
 
     k = abs(Lx.mul(Lx).mul(Lyy) +  Ly.mul(Ly).mul(Lxx) - Lx.mul(Ly.mul(Lxy)) * 2.0);
-
+#ifdef SS_DEBUG
+    std::ofstream of("k.txt");
+    of << k;
+#endif
     image.getImageForScale(i) = k;
   }
 }
 
 void ScaleSpaceOpenCV::doEdge(ScaleSpaceImage& image) const
 {
+  cv::Mat Lx, Ly, Lxx, Lxy, Lyy, L1, L2;
+  cv::Mat Lxxx, Lxxy, Lxyy, Lyyy;
+
+  for (unsigned int i = 0; i < nr_scales; ++i)
+  {
+    calcFirstDeriteratives(image.getImageForScale(i), Lx, Ly);
+    calcSecondDeriteratives(image.getImageForScale(i), Lxx, Lxy, Lyy);
+    calcThirdDeriteratives(image.getImageForScale(i), Lxxx, Lxxy, Lxyy, Lyyy);
   
+    L1 = Lx.mul(Lx.mul(Lxx)) + 2 * Lx.mul(Ly.mul(Lxy)) + Ly.mul(Ly.mul(Lyy));
+    //TODO: clean for zeros
+    L2 = Lx.mul(Lx).mul(Lx).mul(Lxxx) + 3 * Lx.mul(Lx).mul(Ly).mul(Lxxy) + 3 * Lx.mul(Ly).mul(Ly).mul(Lxyy) + Ly.mul(Ly).mul(Ly).mul(Lyyy);
+
+    image.getImageForScale(i, 0) = L1;
+    image.getImageForScale(i, 1) = L2;
+  }
 }
 
 void ScaleSpaceOpenCV::doRidge(ScaleSpaceImage& image) const
@@ -345,6 +369,6 @@ void ScaleSpaceOpenCV::calcThirdDeriteratives(cv::Mat& in, cv::Mat& Lxxx, cv::Ma
 {
   calcDXXX(in, Lxxx);
   calcDXXY(in, Lxxy);
-  calcDXYY(in, Lxxy);
+  calcDXYY(in, Lxyy);
   calcDYYY(in, Lyyy);
 }

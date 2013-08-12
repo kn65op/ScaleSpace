@@ -25,6 +25,7 @@ public:
 
 private:
   int temp_image_type;
+  unsigned int nr_images;
   
   void doGaussian(ScaleSpaceImage & image);
   
