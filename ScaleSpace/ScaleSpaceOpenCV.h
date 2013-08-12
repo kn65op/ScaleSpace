@@ -45,6 +45,14 @@ private:
   void doEdge(ScaleSpaceImage & image) const;
   void doCorner(ScaleSpaceImage & image) const;
   void doRidge(ScaleSpaceImage & image) const;
+
+  //pointer to postprocessing function
+  void (ScaleSpaceOpenCV::* doPostProcessing) (ScaleSpaceImage & image) const;
+
+  //postprocessing functions
+  void findMaxInScale(ScaleSpaceImage & image) const;
+  void findEdgeMax(ScaleSpaceImage & image) const;
+  void findRidgeMax(ScaleSpaceImage & image) const;
   
   //helper functions
   void calcDX(cv::Mat & in, cv::Mat & out) const;

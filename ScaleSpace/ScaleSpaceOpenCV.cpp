@@ -24,23 +24,29 @@ ScaleSpaceOpenCV::ScaleSpaceOpenCV(ScaleSpaceMode mode)
   {
   case ScaleSpaceMode::Blobs:
     doMode = &ScaleSpaceOpenCV::doBlob;
+    doPostProcessing = &ScaleSpaceOpenCV::findMaxInScale;
     break;
   case ScaleSpaceMode::Corners:
     doMode = &ScaleSpaceOpenCV::doCorner;
+    doPostProcessing = &ScaleSpaceOpenCV::findMaxInScale;
     break;
   case ScaleSpaceMode::Edges:
     doMode = &ScaleSpaceOpenCV::doEdge;
+    doPostProcessing = &ScaleSpaceOpenCV::findEdgeMax;
     nr_images = 2;
     break;
   case ScaleSpaceMode::Ridges:
     doMode = &ScaleSpaceOpenCV::doRidge;
+    doPostProcessing = &ScaleSpaceOpenCV::findRidgeMax;
     nr_images = 2;
     break;
   case ScaleSpaceMode::Pure:
     doMode = &ScaleSpaceOpenCV::doPure;
+    doPostProcessing = nullptr;
     break;
   default:
     doMode = nullptr;
+    doPostProcessing = nullptr;
     break;
   }
 }
@@ -78,6 +84,11 @@ void ScaleSpaceOpenCV::processImage(ScaleSpaceImage & image)
 
 #ifdef SS_INFO
   std::cout << "mode\n";
+#endif
+
+  (this->*doPostProcessing)(image);
+#ifdef SS_INFO
+  std::cout << "post ptocessing\n";
 #endif
 
 }
@@ -373,4 +384,19 @@ void ScaleSpaceOpenCV::calcThirdDeriteratives(cv::Mat& in, cv::Mat& Lxxx, cv::Ma
   calcDXXY(in, Lxxy);
   calcDXYY(in, Lxyy);
   calcDYYY(in, Lyyy);
+}
+
+void ScaleSpaceOpenCV::findEdgeMax(ScaleSpaceImage& image) const
+{
+  
+}
+
+void ScaleSpaceOpenCV::findMaxInScale(ScaleSpaceImage& image) const
+{
+  
+}
+
+void ScaleSpaceOpenCV::findRidgeMax(ScaleSpaceImage& image) const
+{
+  
 }
