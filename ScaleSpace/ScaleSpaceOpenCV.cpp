@@ -223,6 +223,15 @@ void ScaleSpaceOpenCV::doRidge(ScaleSpaceImage& image) const
     L1 = Lx.mul(Ly).mul(Lxx - Lyy) - (Lx.mul(Lx) - Ly.mul(Ly)).mul(Lxy);
     setLowValuesToZero(L1);
     L2 = (Ly.mul(Ly) - Lx.mul(Lx)).mul(Lxx - Lyy) - 4 * Lx.mul(Ly).mul(Lxy);
+#ifdef SS_DEBUG
+    std::ofstream of("L1.txt");
+    of << L1;
+#endif
+
+#ifdef SS_DEBUG
+    std::ofstream of2("L2.txt");
+    of2 << L2;
+#endif
 
     image.getImageForScale(i, 0) = L1;
     image.getImageForScale(i, 1) = L2;
@@ -469,7 +478,18 @@ void ScaleSpaceOpenCV::findMaxInScale(ScaleSpaceImage& image) const
 
 void ScaleSpaceOpenCV::findRidgeMax(ScaleSpaceImage& image) const
 {
-  
+  for (unsigned int i=0; i < nr_scales; ++i)
+  {
+    processTwoImagesNonBorder(image.getImageForScale(i, 0), image.getImageForScale(i, 1), image.getOutput(i), [] (cv::Mat & in, cv::Mat & in_sec, int x, int y)->unsigned char
+    {
+      float centre = in.at<float>(x,y);
+      if (centre == 0 && in_sec.at<float>(x, y) > 0)
+      {
+        return 255;
+      }
+      return 0;
+    });
+  }
 }
 
 void ScaleSpaceOpenCV::processImage(cv::Mat & in, cv::Mat & out, std::function<float (float)> fun) const
