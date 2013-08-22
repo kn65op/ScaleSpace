@@ -259,7 +259,7 @@ void ScaleSpaceOpenCV::calcDX(cv::Mat& in, cv::Mat& out) const
     of << kernel;
 }
 
-  cv::filter2D(in, out, -1, kernel);
+  filter2D(in, out, kernel);
 }
 
 void ScaleSpaceOpenCV::calcDY(cv::Mat& in, cv::Mat& out) const
@@ -276,7 +276,7 @@ void ScaleSpaceOpenCV::calcDY(cv::Mat& in, cv::Mat& out) const
     std::ofstream of("kernelY.txt");
     of << kernel;
 }
-  cv::filter2D(in, out, -1, kernel);
+  filter2D(in, out, kernel);
 }
 
 void ScaleSpaceOpenCV::calcDXX(cv::Mat& in, cv::Mat& out) const
@@ -292,7 +292,7 @@ void ScaleSpaceOpenCV::calcDXX(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(2, 1) = -1.0f/6.0f;
   kernel.at<float>(2, 2) = 1.0f/12.0f;
 
-  cv::filter2D(in, out, -1, kernel);
+  filter2D(in, out, kernel);
   { 
     std::ofstream of("kernelXX.txt");
     of << kernel;
@@ -316,7 +316,7 @@ void ScaleSpaceOpenCV::calcDYY(cv::Mat& in, cv::Mat& out) const
     std::ofstream of("kernelYY.txt");
     of << kernel;
 }
-  cv::filter2D(in, out, -1, kernel);
+  filter2D(in, out, kernel);
 }
 
 void ScaleSpaceOpenCV::calcDXY(cv::Mat& in, cv::Mat& out) const
@@ -331,7 +331,7 @@ void ScaleSpaceOpenCV::calcDXY(cv::Mat& in, cv::Mat& out) const
     std::ofstream of("kernelXY.txt");
     of << kernel;
 }
-  cv::filter2D(in, out, -1, kernel);
+  filter2D(in, out, kernel);
 }
 
 void ScaleSpaceOpenCV::calcDYYY(cv::Mat& in, cv::Mat& out) const
@@ -349,7 +349,7 @@ void ScaleSpaceOpenCV::calcDYYY(cv::Mat& in, cv::Mat& out) const
     of << kernel;
 }
 
-  cv::filter2D(in, out, -1, kernel);
+  filter2D(in, out, kernel);
 }
 
 void ScaleSpaceOpenCV::calcDXYY(cv::Mat& in, cv::Mat& out) const
@@ -365,7 +365,7 @@ void ScaleSpaceOpenCV::calcDXYY(cv::Mat& in, cv::Mat& out) const
     std::ofstream of("kernelXYY.txt");
     of << kernel;
 }
-  cv::filter2D(in, out, -1, kernel);
+  filter2D(in, out, kernel);
 }
 
 void ScaleSpaceOpenCV::calcDXXY(cv::Mat& in, cv::Mat& out) const
@@ -381,7 +381,7 @@ void ScaleSpaceOpenCV::calcDXXY(cv::Mat& in, cv::Mat& out) const
     std::ofstream of("kernelXXY.txt");
     of << kernel;
 }
-  cv::filter2D(in, out, -1, kernel);
+  filter2D(in, out, kernel);
 }
 
 void ScaleSpaceOpenCV::calcDXXX(cv::Mat& in, cv::Mat& out) const
@@ -398,7 +398,7 @@ void ScaleSpaceOpenCV::calcDXXX(cv::Mat& in, cv::Mat& out) const
     std::ofstream of("kernelXXX.txt");
     of << kernel;
 }
-  cv::filter2D(in, out, -1, kernel);
+  filter2D(in, out, kernel);
 }
 
 void ScaleSpaceOpenCV::calcFirstDeriteratives(cv::Mat& in, cv::Mat& Lx, cv::Mat& Ly) const

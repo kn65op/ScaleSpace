@@ -11,5 +11,8 @@ public:
 
   ~ScaleSpaceOpenCVGPU(void);
 
+private:
+  void filter2D(cv::Mat & src, cv::Mat &dst, cv::Mat & kernel) const;
+
 };
 

@@ -80,6 +80,6 @@ private:
   void setLowValuesToZero(cv::Mat & mat) const;
 
 protected:
-
+  virtual void filter2D(cv::Mat & src, cv::Mat &dst, cv::Mat & kernel) const = 0;
 
 };

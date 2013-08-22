@@ -16,3 +16,8 @@ ScaleSpaceOpenCVGPU::ScaleSpaceOpenCVGPU(ScaleSpaceMode mode)
 ScaleSpaceOpenCVGPU::~ScaleSpaceOpenCVGPU(void)
 {
 }
+
+void ScaleSpaceOpenCVGPU::filter2D(cv::Mat& src, cv::Mat& dst, cv::Mat& kernel) const
+{
+  
+}
