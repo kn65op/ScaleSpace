@@ -42,3 +42,19 @@ void ScaleSpaceOpenCVGPU::calcRidge(cv::Mat& Lx, cv::Mat& Ly, cv::Mat& Lxx, cv::
 {
   
 }
+
+
+void ScaleSpaceOpenCVGPU::calcRidgeMax(cv::Mat& L1, cv::Mat& L2, cv::Mat& out) const
+{
+  
+}
+
+void ScaleSpaceOpenCVGPU::calcEdgeMax(cv::Mat& L1, cv::Mat& L2, cv::Mat& out) const
+{
+  
+}
+
+void ScaleSpaceOpenCVGPU::calcMaxInScale(cv::Mat& L, cv::Mat& out) const
+{
+  
+}

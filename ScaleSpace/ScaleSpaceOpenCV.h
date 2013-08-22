@@ -71,13 +71,6 @@ private:
   void calcSecondDeriteratives(cv::Mat & in, cv::Mat &Lxx, cv::Mat & Lxy, cv::Mat & Lyy) const;
   void calcThirdDeriteratives(cv::Mat & in, cv::Mat &Lxxx, cv::Mat & Lxxy, cv::Mat & Lxyy, cv::Mat & Lyyy) const;
 
-  //foreach for image
-  void processImage(cv::Mat & in, cv::Mat & out, std::function<float (float)> fun) const;
-  void processImageNonBorder(cv::Mat & in, cv::Mat & out, std::function<unsigned char (cv::Mat &, int, int)> fun) const;
-  void processTwoImagesNonBorder(cv::Mat & in, cv::Mat & in_sec, cv::Mat & out, std::function<unsigned char (cv::Mat &, cv::Mat &, int, int)> fun) const;
-  
-  //functions processing images pixel by pixel
-  void setLowValuesToZero(cv::Mat & mat) const;
 
 protected:
   virtual void filter2D(cv::Mat & src, cv::Mat &dst, cv::Mat & kernel) const = 0;
@@ -86,5 +79,9 @@ protected:
   virtual void calcCorner(cv::Mat & Lx, cv::Mat & Ly, cv::Mat & Lxx, cv::Mat & Lxy, cv::Mat & Lyy, cv::Mat & k) const = 0;
   virtual void calcEdge(cv::Mat & Lx, cv::Mat & Ly, cv::Mat & Lxx, cv::Mat & Lxy, cv::Mat & Lyy, cv::Mat & Lxxx, cv::Mat & Lxxy, cv::Mat & Lxyy, cv::Mat & Lyyy, cv::Mat & L1, cv::Mat & L2) const = 0;
   virtual void calcRidge(cv::Mat &  Lx, cv::Mat & Ly, cv::Mat & Lxx, cv::Mat & Lxy, cv::Mat & Lyy, cv::Mat & L1, cv::Mat & L2) const = 0;
+
+  virtual void calcEdgeMax(cv::Mat & L1, cv::Mat & L2, cv::Mat & out) const = 0;
+  virtual void calcRidgeMax(cv::Mat & L1, cv::Mat & L2, cv::Mat & out) const = 0;
+  virtual void calcMaxInScale(cv::Mat & L, cv::Mat & out) const = 0;
 
 };
