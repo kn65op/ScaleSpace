@@ -151,7 +151,7 @@ void ScaleSpaceOpenCV::doBlob(ScaleSpaceImage& image) const
 
     calcSecondDeriteratives(image.getImageForScale(i), Lxx, Lxy, Lyy);
   
-    L = abs(Lxx + Lyy) * sigmas[i];
+    calcBlob(Lxx, Lyy, sigmas[i], L);
 
 #ifdef SS_DEBUG
     std::ofstream of("pochodnaL.txt");
@@ -173,7 +173,8 @@ void ScaleSpaceOpenCV::doCorner(ScaleSpaceImage& image) const
     calcFirstDeriteratives(image.getImageForScale(i), Lx, Ly);
     calcSecondDeriteratives(image.getImageForScale(i), Lxx, Lxy, Lyy);
 
-    k = abs(Lx.mul(Lx).mul(Lyy) +  Ly.mul(Ly).mul(Lxx) - Lx.mul(Ly.mul(Lxy)) * 2.0);
+    calcCorner(Lx, Ly, Lxx, Lxy, Lyy, k);
+    
 #ifdef SS_DEBUG
     std::ofstream of("k.txt");
     of << k;
@@ -193,9 +194,10 @@ void ScaleSpaceOpenCV::doEdge(ScaleSpaceImage& image) const
     calcSecondDeriteratives(image.getImageForScale(i), Lxx, Lxy, Lyy);
     calcThirdDeriteratives(image.getImageForScale(i), Lxxx, Lxxy, Lxyy, Lyyy);
 
-    L1 = Lx.mul(Lx.mul(Lxx)) + 2 * Lx.mul(Ly.mul(Lxy)) + Ly.mul(Ly.mul(Lyy));
+    calcEdge(Lx, Ly, Lxx, Lxy, Lyy, Lxxx, Lxxy, Lxyy, Lyyy, L1, L2);
+    
     setLowValuesToZero(L1);
-    L2 = Lx.mul(Lx).mul(Lx).mul(Lxxx) + 3 * Lx.mul(Lx).mul(Ly).mul(Lxxy) + 3 * Lx.mul(Ly).mul(Ly).mul(Lxyy) + Ly.mul(Ly).mul(Ly).mul(Lyyy);
+    
 #ifdef SS_DEBUG
     std::ofstream of("L1.txt");
     of << L1;
@@ -219,10 +221,11 @@ void ScaleSpaceOpenCV::doRidge(ScaleSpaceImage& image) const
   {
     calcFirstDeriteratives(image.getImageForScale(i), Lx, Ly);
     calcSecondDeriteratives(image.getImageForScale(i), Lxx, Lxy, Lyy);
+
+    calcRidge(Lx, Ly, Lxx, Lxy, Lyy, L1, L2);
   
-    L1 = Lx.mul(Ly).mul(Lxx - Lyy) - (Lx.mul(Lx) - Ly.mul(Ly)).mul(Lxy);
     setLowValuesToZero(L1);
-    L2 = (Ly.mul(Ly) - Lx.mul(Lx)).mul(Lxx - Lyy) - 4 * Lx.mul(Ly).mul(Lxy);
+
 #ifdef SS_DEBUG
     std::ofstream of("L1.txt");
     of << L1;
