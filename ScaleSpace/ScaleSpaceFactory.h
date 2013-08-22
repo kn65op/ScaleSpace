@@ -2,7 +2,7 @@
 
 #include "ScaleSpace.h"
 #include "ScaleSpaceOpenCL.h"
-#include "ScaleSpaceOpenCV.h"
+#include "ScaleSpaceOpenCVCPU.h"
 #include "ScaleSpaceOpenCVGPU.h"
 
 class ScaleSpaceFactory

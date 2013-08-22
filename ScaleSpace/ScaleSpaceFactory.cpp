@@ -7,7 +7,7 @@ ScaleSpace * ScaleSpaceFactory::getScaleSpace(ScaleSpaceProcessor processor, Sca
   case ScaleSpaceProcessor::OPENCL:
     return new ScaleSpaceOpenCL(mode);
   case ScaleSpaceProcessor::OPENCV_CPU:
-    return new ScaleSpaceOpenCV(mode);
+    return new ScaleSpaceOpenCVCPU(mode);
   case ScaleSpaceProcessor::OPENCV_GPU:
     return new ScaleSpaceOpenCVGPU(mode);
   default:

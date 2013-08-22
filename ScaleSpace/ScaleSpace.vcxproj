@@ -16,6 +16,7 @@
     <ClInclude Include="ScaleSpaceImage.h" />
     <ClInclude Include="ScaleSpaceOpenCL.h" />
     <ClInclude Include="ScaleSpaceOpenCV.h" />
+    <ClInclude Include="ScaleSpaceOpenCVCPU.h" />
     <ClInclude Include="ScaleSpaceOpenCVGPU.h" />
   </ItemGroup>
   <ItemGroup>
@@ -24,6 +25,7 @@
     <ClCompile Include="ScaleSpaceImage.cpp" />
     <ClCompile Include="ScaleSpaceOpenCL.cpp" />
     <ClCompile Include="ScaleSpaceOpenCV.cpp" />
+    <ClCompile Include="ScaleSpaceOpenCVCPU.cpp" />
     <ClCompile Include="ScaleSpaceOpenCVGPU.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

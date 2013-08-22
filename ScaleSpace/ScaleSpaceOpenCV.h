@@ -79,4 +79,7 @@ private:
   //functions processing images pixel by pixel
   void setLowValuesToZero(cv::Mat & mat) const;
 
+protected:
+
+
 };

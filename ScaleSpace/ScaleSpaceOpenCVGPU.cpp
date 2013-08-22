@@ -7,19 +7,12 @@
 using namespace cv::gpu;
 
 ScaleSpaceOpenCVGPU::ScaleSpaceOpenCVGPU(ScaleSpaceMode mode)
+  : ScaleSpaceOpenCV(mode)
 {
   std::cout << getCudaEnabledDeviceCount() << "\n";
 }
 
 
 ScaleSpaceOpenCVGPU::~ScaleSpaceOpenCVGPU(void)
-{
-}
-
-void ScaleSpaceOpenCVGPU::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutputType out_type)
-{
-}
-
-void ScaleSpaceOpenCVGPU::processImage(ScaleSpaceImage & image)
 {
 }
