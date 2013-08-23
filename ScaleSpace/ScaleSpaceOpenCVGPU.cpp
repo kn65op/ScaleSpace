@@ -1,4 +1,5 @@
 #include "ScaleSpaceOpenCVGPU.h"
+#include "ScaleSpaceCUDAKernels.h"
 
 #include <opencv2\gpu\gpu.hpp>
 #include <opencv2\core\mat.hpp>
@@ -84,7 +85,7 @@ void ScaleSpaceOpenCVGPU::calcEdge(cv::Mat& cpu_Lx, cv::Mat& cpu_Ly, cv::Mat& cp
   Lxyy.upload(cpu_Lxyy);
   Lyyy.upload(cpu_Lyyy);
 
-  GpuMat Lx_sqr, Lx_sqrLxx, LxLy, LxLyLxy, LxLyLxy2, Ly_sqr, Ly_sqrLyy, sumL1;
+  GpuMat Lx_sqr, Lx_sqrLxx, LxLy, LxLyLxy, LxLyLxy2, Ly_sqr, Ly_sqrLyy, sumL1, L1_non_zero;
   
   //L1 = Lx.mul(Lx.mul(Lxx)) + 2 * Lx.mul(Ly.mul(Lxy)) + Ly.mul(Ly.mul(Lyy));
   multiply(Lx, Lx, Lx_sqr);
@@ -95,9 +96,9 @@ void ScaleSpaceOpenCVGPU::calcEdge(cv::Mat& cpu_Lx, cv::Mat& cpu_Ly, cv::Mat& cp
   multiply(Ly, Ly, Ly_sqr);
   multiply(Ly_sqr, Lyy, Ly_sqrLyy);
   add(Lx_sqrLxx, LxLyLxy2, sumL1);
-  add(sumL1, Lx_sqrLxx, L1);
+  add(sumL1, Lx_sqrLxx, L1_non_zero);
 
-  //setLowValuesToZero(L1);
+  setLowValuesToZero(L1_non_zero, L1);
   L1.download(cpu_L1);
 
   GpuMat Lx_cube, Lx_cubeLxxx, Lx_sqrLy, Lx_sqrLyLxxy, Lx_sqrLyLxxy3, Ly_sqrLx, Ly_sqrtLxLxyy, Ly_sqrtLxLxyy3, Ly_cube, Ly_cubeLyyy, sumL21, sumL22;
@@ -142,4 +143,10 @@ void ScaleSpaceOpenCVGPU::calcEdgeMax(cv::Mat& L1, cv::Mat& L2, cv::Mat& out) co
 void ScaleSpaceOpenCVGPU::calcMaxInScale(cv::Mat& L, cv::Mat& out) const
 {
   
+}
+
+void ScaleSpaceOpenCVGPU::setLowValuesToZero(cv::gpu::GpuMat& in, cv::gpu::GpuMat & out) const
+{
+  out.create(in.size(), temp_image_type);
+  setMatToZero(in, out);
 }

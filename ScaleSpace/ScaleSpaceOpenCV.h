@@ -25,8 +25,10 @@ public:
    */
   void prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutputType out_type = ScaleSpaceOutputType::ONE_IMAGE);
 
-private:
+protected:
   int temp_image_type;
+
+private:
   unsigned int nr_images;
   
   void doGaussian(ScaleSpaceImage & image);

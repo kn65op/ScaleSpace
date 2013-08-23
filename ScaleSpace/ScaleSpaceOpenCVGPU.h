@@ -1,6 +1,8 @@
 #pragma once
 #include "ScaleSpaceOpenCV.h"
 
+class cv::gpu::GpuMat;
+
 class ScaleSpaceOpenCVGPU : public ScaleSpaceOpenCV
 {
 public:
@@ -23,5 +25,6 @@ private:
   virtual void calcRidgeMax(cv::Mat & L1, cv::Mat & L2, cv::Mat & out) const;
   virtual void calcMaxInScale(cv::Mat & L, cv::Mat & out) const;
 
+  void setLowValuesToZero(cv::gpu::GpuMat & in, cv::gpu::GpuMat & out) const;
 };
 
