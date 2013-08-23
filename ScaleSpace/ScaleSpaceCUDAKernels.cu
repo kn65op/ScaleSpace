@@ -2,7 +2,7 @@
 
 #include <opencv2\core\core.hpp>
 
-__global__ void setLowToZero(cv::gpu::DevMem2Df in, cv::gpu::DevMem2Df out)
+__global__ void setLowToZero(cv::gpu::PtrStepSzf in, cv::gpu::PtrStepSzf out)
 {
   int row = threadIdx.y;
   int col = threadIdx.x;
