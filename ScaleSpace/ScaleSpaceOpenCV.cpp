@@ -555,7 +555,6 @@ void ScaleSpaceOpenCV::processTwoImagesNonBorder(cv::Mat & in, cv::Mat & in_sec,
 
 void ScaleSpaceOpenCV::setLowValuesToZero(cv::Mat& mat) const
 {
-  return;
   processImage(mat, mat, [] (float in)->float
   {
     if (fabs(in) < 1e-5)

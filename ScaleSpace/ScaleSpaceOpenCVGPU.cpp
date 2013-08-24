@@ -96,7 +96,7 @@ void ScaleSpaceOpenCVGPU::calcEdge(cv::Mat& cpu_Lx, cv::Mat& cpu_Ly, cv::Mat& cp
   multiply(Ly, Ly, Ly_sqr);
   multiply(Ly_sqr, Lyy, Ly_sqrLyy);
   add(Lx_sqrLxx, LxLyLxy2, sumL1);
-  add(sumL1, Lx_sqrLxx, L1_non_zero);
+  add(sumL1, Ly_sqrLyy, L1_non_zero);
   
   L1_non_zero.download(cpu_L1);
   setLowValuesToZero(cpu_L1);
