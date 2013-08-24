@@ -200,11 +200,11 @@ void ScaleSpaceOpenCV::doEdge(ScaleSpaceImage& image) const
     std::ofstream of("L1.txt");
     of << L1;
 #endif
-#undef SS_DEBUG
 #ifdef SS_DEBUG
     std::ofstream of2("L2.txt");
     of2 << L2;
 #endif
+#undef SS_DEBUG
 
     image.getImageForScale(i, 0) = L1;
     image.getImageForScale(i, 1) = L2;
@@ -448,4 +448,120 @@ void ScaleSpaceOpenCV::findRidgeMax(ScaleSpaceImage& image) const
   {
     calcRidgeMax(image.getImageForScale(i, 0), image.getImageForScale(i, 1), image.getOutput(i));
   }
+}
+
+
+void ScaleSpaceOpenCV::calcRidgeMax(cv::Mat& L1, cv::Mat& L2, cv::Mat& out) const
+{
+  processTwoImagesNonBorder(L1 , L2, out, [] (cv::Mat & in, cv::Mat & in_sec, int x, int y)->unsigned char
+  {
+    float centre = in.at<float>(x,y);
+    if (centre == 0 && in_sec.at<float>(x, y) > 0)
+    {
+      return 255;
+    }
+    return 0;
+  });
+}
+
+void ScaleSpaceOpenCV::calcEdgeMax(cv::Mat& L1, cv::Mat& L2, cv::Mat& out) const
+{
+  processTwoImagesNonBorder(L1, L2, out, [] (cv::Mat & in, cv::Mat & in_sec, int x, int y)->unsigned char
+  {
+    float centre = in.at<float>(x,y);
+    for (int i = -1; i < 2; ++i)
+    {
+      for (int j = -1; j < 2; ++j)
+      {
+        if (i && j) continue;
+        if (in.at<float>(x + i, y + j) * centre < 0 && in_sec.at<float>(x, y) < 0)
+        {
+          return 255;
+        }
+      }
+    }
+    return 0;
+  });
+}
+
+void ScaleSpaceOpenCV::calcMaxInScale(cv::Mat& L, cv::Mat& out) const
+{
+  processImageNonBorder(L, out, [] (cv::Mat & in, int x, int y)->unsigned char
+  {
+    float centre = in.at<float>(x,y);
+    for (int i = -1; i < 2; ++i)
+    {
+      for (int j = -1; j < 2; ++j)
+      {
+        if (centre < 1e-5)
+        {
+          return 0;
+        }
+        if (in.at<float>(x + i, y + j) >= centre && i && j)
+        {
+          return 0;
+        }
+      }
+    }
+    return 255;
+  });
+}
+
+
+void ScaleSpaceOpenCV::processImage(cv::Mat & in, cv::Mat & out, std::function<float (float)> fun) const
+{
+  cv::Size size = in.size();
+ 
+  for (int i=0; i<size.height; ++i)
+  {
+    for (int j=0; j<size.width; ++j)
+    {
+      out.at<float>(i,j) = fun(in.at<float>(i,j));
+    }
+  }
+}
+
+void ScaleSpaceOpenCV::processImageNonBorder(cv::Mat & in, cv::Mat & out, std::function<unsigned char (cv::Mat&,int,int)> fun) const
+{
+  //process non border pixels
+  cv::Size size = in.size();
+  --size.width;
+  --size.height;
+
+  for (int i=1; i<size.height; ++i)
+  {
+    for (int j=1; j<size.width; ++j)
+    {
+      out.at<unsigned char>(i,j) = fun(in, i, j);
+    }
+  }
+}
+
+void ScaleSpaceOpenCV::processTwoImagesNonBorder(cv::Mat & in, cv::Mat & in_sec, cv::Mat & out, std::function<unsigned char (cv::Mat &, cv::Mat &, int, int)> fun) const
+{
+  //process non border pixels
+  cv::Size size = in.size();
+  --size.width;
+  --size.height;
+
+  for (int i=1; i<size.height; ++i)
+  {
+    for (int j=1; j<size.width; ++j)
+    {
+      out.at<unsigned char>(i,j) = fun(in, in_sec, i, j);
+    }
+  }
+}
+
+void ScaleSpaceOpenCV::setLowValuesToZero(cv::Mat& mat) const
+{
+  return;
+  processImage(mat, mat, [] (float in)->float
+  {
+    if (fabs(in) < 1e-5)
+    {
+      return 0;
+    }
+    return in;
+  });
 }

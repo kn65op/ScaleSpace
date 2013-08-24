@@ -43,7 +43,7 @@ void ScaleSpaceOpenCVCPU::calcRidge(cv::Mat& Lx, cv::Mat& Ly, cv::Mat& Lxx, cv::
 
   L2 = (Ly.mul(Ly) - Lx.mul(Lx)).mul(Lxx - Lyy) - 4 * Lx.mul(Ly).mul(Lxy);
 }
-
+/*
 void ScaleSpaceOpenCVCPU::calcRidgeMax(cv::Mat& L1, cv::Mat& L2, cv::Mat& out) const
 {
   processTwoImagesNonBorder(L1 , L2, out, [] (cv::Mat & in, cv::Mat & in_sec, int x, int y)->unsigned char
@@ -157,3 +157,4 @@ void ScaleSpaceOpenCVCPU::setLowValuesToZero(cv::Mat& mat) const
     return in;
   });
 }
+*/

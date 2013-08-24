@@ -97,9 +97,11 @@ void ScaleSpaceOpenCVGPU::calcEdge(cv::Mat& cpu_Lx, cv::Mat& cpu_Ly, cv::Mat& cp
   multiply(Ly_sqr, Lyy, Ly_sqrLyy);
   add(Lx_sqrLxx, LxLyLxy2, sumL1);
   add(sumL1, Lx_sqrLxx, L1_non_zero);
-
-  setLowValuesToZero(L1_non_zero, L1);
-  L1.download(cpu_L1);
+  
+  L1_non_zero.download(cpu_L1);
+  setLowValuesToZero(cpu_L1);
+  /*setLowValuesToZero(L1_non_zero, L1);
+  L1.download(cpu_L1);*/
 
   GpuMat Lx_cube, Lx_cubeLxxx, Lx_sqrLy, Lx_sqrLyLxxy, Lx_sqrLyLxxy3, Ly_sqrLx, Ly_sqrtLxLxyy, Ly_sqrtLxLxyy3, Ly_cube, Ly_cubeLyyy, sumL21, sumL22;
   //L2 = Lx.mul(Lx).mul(Lx).mul(Lxxx) + 
@@ -129,7 +131,7 @@ void ScaleSpaceOpenCVGPU::calcRidge(cv::Mat& Lx, cv::Mat& Ly, cv::Mat& Lxx, cv::
   
 }
 
-
+/*
 void ScaleSpaceOpenCVGPU::calcRidgeMax(cv::Mat& L1, cv::Mat& L2, cv::Mat& out) const
 {
   
@@ -149,4 +151,4 @@ void ScaleSpaceOpenCVGPU::setLowValuesToZero(cv::gpu::GpuMat& in, cv::gpu::GpuMa
 {
   out.create(in.size(), temp_image_type);
   setMatToZero(in, out);
-}
+}*/
