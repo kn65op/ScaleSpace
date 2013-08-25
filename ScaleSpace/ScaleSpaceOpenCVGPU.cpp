@@ -126,9 +126,36 @@ void ScaleSpaceOpenCVGPU::calcEdge(cv::Mat& cpu_Lx, cv::Mat& cpu_Ly, cv::Mat& cp
   L2.download(cpu_L2);
 }
 
-void ScaleSpaceOpenCVGPU::calcRidge(cv::Mat& Lx, cv::Mat& Ly, cv::Mat& Lxx, cv::Mat& Lxy, cv::Mat& Lyy, cv::Mat& L1, cv::Mat& L2) const
+void ScaleSpaceOpenCVGPU::calcRidge(cv::Mat& cpu_Lx, cv::Mat& cpu_Ly, cv::Mat& cpu_Lxx, cv::Mat& cpu_Lxy, cv::Mat& cpu_Lyy, cv::Mat& cpu_L1, cv::Mat& cpu_L2) const
 {
+  GpuMat Lx, Ly, Lxx, Lxy, Lyy, L1, L2;
+  Lx.upload(cpu_Lx);
+  Ly.upload(cpu_Ly);
+  Lxx.upload(cpu_Lxx);
+  Lxy.upload(cpu_Lxy);
+  Lyy.upload(cpu_Lyy);
   
+  GpuMat LxLy, LxxdLyy, LxLyLxxdLyy, LxLx, LyLy, LxLxdLyLy, LxLxdLyLyLxy;
+  //L1 = Lx.mul(Ly).mul(Lxx - Lyy) - (Lx.mul(Lx) - Ly.mul(Ly)).mul(Lxy);
+  multiply(Lx, Ly, LxLy);
+  subtract(Lxx, Lyy, LxxdLyy);
+  multiply(LxLy, LxxdLyy, LxLyLxxdLyy);
+  multiply(Lx, Lx, LxLx);
+  multiply(Ly, Ly, LyLy);
+  subtract(LxLx, LyLy, LxLxdLyLy);
+  multiply(LxLxdLyLy, Lxy, LxLxdLyLyLxy);
+  subtract(LxLyLxxdLyy, LxLxdLyLyLxy, L1);
+  L1.download(cpu_L1);
+  setLowValuesToZero(cpu_L1);
+
+  GpuMat LyLydLxLx, LyLydLxLxLxxdLyy, LxLyLxy, LxLyLxy4;
+  //L2 = (Ly.mul(Ly) - Lx.mul(Lx)).mul(Lxx - Lyy) - 4 * Lx.mul(Ly).mul(Lxy);
+  subtract(LyLy, LxLx, LyLydLxLx);
+  multiply(LyLydLxLx, LxxdLyy, LyLydLxLxLxxdLyy);
+  multiply(LxLy, Lxy, LxLyLxy);
+  multiply(LxLyLxy, 4, LxLyLxy4);
+  subtract(LyLydLxLx, LxLyLxy4, L2);
+  L2.download(cpu_L2);
 }
 
 /*
