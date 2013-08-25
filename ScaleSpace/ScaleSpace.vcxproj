@@ -31,14 +31,6 @@
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="ScaleSpaceCUDAKernels.cu">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-cd $(MSBuildProjectDirectory)
-if %errorlevel% neq 0 goto :cmEnd
-C:
-if %errorlevel% neq 0 goto :cmEnd
-C:\Programy\cmake\cmake-2.8.10.2-win32-x86\bin\cmake.exe -E make_directory C:/Programy/opencv246/vs2012/modules/gpu/CMakeFiles/cuda_compile.dir/src/nvidia/$(Configuration)
-if %errorlevel% neq 0 goto :cmEnd
-</Command>
       <FileType>Document</FileType>
     </CudaCompile>
   </ItemGroup>

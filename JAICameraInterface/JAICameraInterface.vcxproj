@@ -58,11 +58,9 @@
     <Import Project="..\PropertySheets\JAISDK.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>C:\Programy\opencv\build\vs2012\lib;$(LibraryPath)</LibraryPath>
-  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL|Win32'">
-    <LibraryPath>$(JAI_SDK_LIB);C:\Programy\opencv\build\vs2012\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(JAI_SDK_LIB);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
