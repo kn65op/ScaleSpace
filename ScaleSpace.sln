@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Main", "Main\Main.vcxproj", "{B21B91B1-314A-4669-BB6A-60331A6147BE}"
 	ProjectSection(ProjectDependencies) = postProject
+		{2889B041-DA47-4E5E-BA42-DA596D8785EC} = {2889B041-DA47-4E5E-BA42-DA596D8785EC}
+		{469B2197-6D1B-4123-9B90-B10D43C7CBF2} = {469B2197-6D1B-4123-9B90-B10D43C7CBF2}
 		{CE2E28E3-0A39-427E-891B-0353B0AAF61D} = {CE2E28E3-0A39-427E-891B-0353B0AAF61D}
 		{C81A83E4-5FC2-48E9-A9CD-BF5835601892} = {C81A83E4-5FC2-48E9-A9CD-BF5835601892}
 	EndProjectSection
@@ -30,6 +32,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ScaleSpaceTest", "ScaleSpac
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JAICameraInterface", "JAICameraInterface\JAICameraInterface.vcxproj", "{469B2197-6D1B-4123-9B90-B10D43C7CBF2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TTime", "TTime\TTime\TTime.vcxproj", "{2889B041-DA47-4E5E-BA42-DA596D8785EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -80,6 +84,12 @@ Global
 		{469B2197-6D1B-4123-9B90-B10D43C7CBF2}.DLL|Win32.Build.0 = DLL|Win32
 		{469B2197-6D1B-4123-9B90-B10D43C7CBF2}.Release|Win32.ActiveCfg = Release|Win32
 		{469B2197-6D1B-4123-9B90-B10D43C7CBF2}.Release|Win32.Build.0 = Release|Win32
+		{2889B041-DA47-4E5E-BA42-DA596D8785EC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2889B041-DA47-4E5E-BA42-DA596D8785EC}.Debug|Win32.Build.0 = Debug|Win32
+		{2889B041-DA47-4E5E-BA42-DA596D8785EC}.DLL|Win32.ActiveCfg = Debug|Win32
+		{2889B041-DA47-4E5E-BA42-DA596D8785EC}.DLL|Win32.Build.0 = Debug|Win32
+		{2889B041-DA47-4E5E-BA42-DA596D8785EC}.Release|Win32.ActiveCfg = Release|Win32
+		{2889B041-DA47-4E5E-BA42-DA596D8785EC}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,3 +1,6 @@
 [submodule "OpenCLpp"]
 	path = OpenCLpp
 	url = git@github.com:kn65op/OpenCLpp.git
+[submodule "TTime"]
+	path = TTime
+	url = git@github.com:kn65op/TTime.git
