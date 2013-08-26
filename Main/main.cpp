@@ -104,19 +104,20 @@ int main(int argc, char * argv[])
     if (controller.useCamera())
     {
       camera = JAI::Camera::getCameraList().front();
+      input = camera->getNextFrame();
     }
     else
     {
       input = cv::imread(controller.getInputFile().c_str(), CV_LOAD_IMAGE_GRAYSCALE);
-      if (!input.size().width)
-      {
-        std::cout << "File is not valid image\n";
-        return 0;
-      }
-      
-      output.setInput(input);
-      ss->processImage(output);
     }
+    if (!input.size().width)
+    {
+      std::cout << "Input file is not valid image - not processing.\n";
+      return 0;
+    }
+      
+    output.setInput(input);
+    ss->processImage(output);
 
     output.show("result");
   }
