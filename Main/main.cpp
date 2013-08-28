@@ -42,6 +42,7 @@ int main(int argc, char** argv)
 
 #include <ScaleSpaceFactory.h>
 #include <Camera.h>
+#include <CameraException.h>
 #include "ProgramController.h"
 
 #include <opencv\cv.h>
@@ -137,6 +138,11 @@ int main(int argc, char * argv[])
   catch (ScaleSpaceImageException &ex)
   {
     std::cout << "ScaleSpaceImageException: " << (std::string)ex << "\n";
+  }
+  catch (JAI::CameraException &ex)
+  {
+    std::cout << (std::string)ex << "\n";
+    std::cout << "JAI camera is not connected\n";
   }
   return 0;
 }
