@@ -32,6 +32,7 @@ void ProgramController::processArgs(int argc, char*argv[])
   getScalesFromOptions();
   getTypeFromOptions();
   getProcessorFromOptions();
+  opt >> GetOpt::Option("device_info", device_info);
 }
 
 void ProgramController::printHelp() const
@@ -178,4 +179,9 @@ ScaleSpaceSourceImageType ProgramController::getSourceImageType() const
 ScaleSpaceProcessor ProgramController::getProcessor() const
 {
   return processor;
+}
+
+bool ProgramController::isDeviceInfo() const
+{
+  return device_info;
 }

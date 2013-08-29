@@ -24,12 +24,18 @@
     <ClCompile Include="ProgramController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HelperFunctions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="getoptpp\getopt_pp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ProgramController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HelperFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

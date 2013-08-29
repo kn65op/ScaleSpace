@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="getoptpp\getopt_pp.cpp" />
+    <ClCompile Include="HelperFunctions.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ProgramController.cpp" />
   </ItemGroup>
@@ -27,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="getoptpp\getopt_pp.h" />
+    <ClInclude Include="HelperFunctions.h" />
     <ClInclude Include="ProgramController.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

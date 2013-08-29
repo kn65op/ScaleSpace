@@ -36,6 +36,7 @@ public:
   }
 
   bool useCamera() const;
+  bool isDeviceInfo() const;
   
 private:
   ProgramController(const ProgramController & ); //non copyable
@@ -50,6 +51,7 @@ private:
   GetOpt::GetOpt_pp opt;
   
   bool help;
+  bool device_info;
   std::string error_message;
   //parameters
   ScaleSpaceMode mode;
