@@ -1,4 +1,5 @@
 #include "ScaleSpaceOpenCV.h"
+#include <Stoper.h>
 
 #include <opencv2\imgproc\imgproc.hpp>
 
@@ -13,6 +14,8 @@
 #include <fstream>
 #endif
 #include <fstream> //tmp
+
+using namespace TTime;
 
 ScaleSpaceOpenCV::ScaleSpaceOpenCV(ScaleSpaceMode mode)
 {
@@ -74,7 +77,9 @@ void ScaleSpaceOpenCV::processImage(ScaleSpaceImage & image)
   //create output
   image.createImage(nr_scales, temp_image_type, nr_images);
 
+  Stoper::start("gaussian", false);
   doGaussian(image);
+  Stoper::stop("gaussian");
 
 #ifdef SS_INFO
   std::cout << "gaussian\n";

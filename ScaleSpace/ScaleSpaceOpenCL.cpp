@@ -19,6 +19,8 @@
 #include <OpenCLBayerFilter.h>
 #include <OpenCLRGBToGray.h>
 
+#include <Stoper.h>
+
 #define NOTICE_SS
 //#define DEBUG_SS
 #define INFO_SS
@@ -30,6 +32,8 @@
 #ifdef DEBUG_SS
 #include <fstream>
 #endif
+
+using namespace TTime;
    
 ScaleSpaceOpenCL::ScaleSpaceOpenCL(ScaleSpaceMode mode /* = Pure */)
 {
@@ -284,7 +288,9 @@ void ScaleSpaceOpenCL::processImage(ScaleSpaceImage & image)
     #ifdef INFO_SS
     std::cout << "processing: " << i << " - ";
     #endif
+    Stoper::start("gaussian", false);
     s->processImage(image.getInputData(), image.getDataForScale(i));
+    Stoper::stop("gaussian");
     void * additional_output = s->getLastAlgorithmAdditionalOutput();
     #ifdef DEBUG_SS
     std::cout << "additional_output = " << additional_output << "\n";
