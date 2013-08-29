@@ -87,5 +87,6 @@ int main(int argc, char * argv[])
   std::cout << "Program took: " << all.stop() << " " << all.getUnitName() << "\n";
   std::cout << "Prepare took: " << prepare.getTime() << " " << all.getUnitName() << "\n";
   std::cout << "Process took: " << process.getTime() << " " << all.getUnitName() << "\n";
+  std::cout << "Gaussians took: " << Stoper::getTime("gaussian") << " " << Stoper::getUnitName() << "\n";
   return 0;
 }

@@ -33,6 +33,11 @@ void ProgramController::processArgs(int argc, char*argv[])
   getTypeFromOptions();
   getProcessorFromOptions();
   device_info = opt >> GetOpt::OptionPresent("device_info");
+  if (opt.options_remain())
+  {
+    std::cout << "Unexpected options.\n";
+    printHelp();
+  }
   //TODO: check if some unparsed options left
 }
 
