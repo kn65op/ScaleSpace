@@ -30,6 +30,7 @@ int main(int argc, char * argv[])
     printCLDeviceInfo();
     return 0;
   }
+  controller.printProgramInfo();
 
   cv::Mat input;
   ScaleSpaceImage output;

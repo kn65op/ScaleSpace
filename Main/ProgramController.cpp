@@ -191,3 +191,22 @@ bool ProgramController::isDeviceInfo() const
 {
   return device_info;
 }
+
+void ProgramController::printProgramInfo() const
+{
+  std::cout << "Program parameters:\n";
+  std::cout << "\tProcessor: " << processor << "\n";
+  std::cout << "\tMode: " << mode << "\n";
+  std::cout << "\tInput: ";
+  if (in_file == "")
+  {
+    std::cout << "camera";
+  }
+  else
+  {
+    std::cout << in_file;
+  }
+  std::cout << "\n";
+  std::cout << "\tInput image type: " << type << "\n";
+  std::cout << "\tScales: " << nr_scales << "\n\tStep: " << scale_step << "\n";
+}

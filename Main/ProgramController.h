@@ -37,6 +37,8 @@ public:
 
   bool useCamera() const;
   bool isDeviceInfo() const;
+
+  void printProgramInfo() const;
   
 private:
   ProgramController(const ProgramController & ); //non copyable

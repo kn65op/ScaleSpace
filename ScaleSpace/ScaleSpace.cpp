@@ -99,3 +99,63 @@ cv::Mat ScaleSpace::getGaussianForScale(unsigned int scale)
   cv::Mat gaussian_kernel = cv::getGaussianKernel(gaussian_size, sigmas[scale], CV_32F);
   return gaussian_kernel * gaussian_kernel.t();
 }
+
+std::ostream & operator<<(std::ostream& out, ScaleSpaceProcessor processor)
+{
+  switch(processor)
+  {
+  case ScaleSpaceProcessor::OPENCL:
+    out << "OpenCL";
+    break;
+  case ScaleSpaceProcessor::OPENCV_CPU:
+    out << "OpenCV CPU";
+    break;
+  case ScaleSpaceProcessor::OPENCV_GPU:
+    out << "OpenCV GPU";
+    break;
+  }
+
+  return out;
+}
+
+std::ostream & operator<<(std::ostream& out, ScaleSpaceMode mode)
+{
+  switch(mode)
+  {
+  case ScaleSpaceMode::Blobs:
+    out << "Blobs second version";
+    break;
+  case ScaleSpaceMode::Corners:
+    out << "Corners";
+    break;
+  case ScaleSpaceMode::Edges:
+    out << "Edges";
+    break;
+  case ScaleSpaceMode::Laplacian:
+    out << "Blobs first version";
+    break;
+  case ScaleSpaceMode::Pure:
+    out << "Only gaussian";
+    break;
+  case ScaleSpaceMode::Ridges:
+    out << "Ridges";
+    break;
+  }
+
+  return out;
+}
+
+std::ostream & operator<<(std::ostream& out, ScaleSpaceSourceImageType type)
+{
+  switch(type)
+  {
+  case ScaleSpaceSourceImageType::Bayer:
+    out << "Bayer";
+    break;
+  case ScaleSpaceSourceImageType::Gray:
+    out << "Grayscale";
+    break;
+  }
+
+  return out;
+}
