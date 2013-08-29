@@ -86,7 +86,10 @@ void ScaleSpaceOpenCV::processImage(ScaleSpaceImage & image)
   std::cout << "mode\n";
 #endif
 
-  (this->*doPostProcessing)(image);
+  if (doPostProcessing)
+  {
+    (this->*doPostProcessing)(image);
+  }
 #ifdef SS_INFO
   std::cout << "post ptocessing\n";
 #endif
