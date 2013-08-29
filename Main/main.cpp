@@ -1,6 +1,8 @@
 #include <ScaleSpaceFactory.h>
 #include <Camera.h>
 #include <CameraException.h>
+#include <Stoper.h>
+
 #include "ProgramController.h"
 #include "HelperFunctions.h"
 
@@ -10,9 +12,12 @@
 #include <iostream>
 #include <fstream>
 
+using namespace TTime;
+
 int main(int argc, char * argv[])
 {
- // Stoper prepare, 
+  Stoper prepare, process, all;
+  all.start();
   JAI::Camera *camera = nullptr;
   ProgramController controller(argc, argv);
   if (!controller.areOptionsValid())
@@ -30,9 +35,11 @@ int main(int argc, char * argv[])
   ScaleSpaceImage output;
   try
   {
+    prepare.start();
     ScaleSpace *ss = ScaleSpaceFactory::getScaleSpace(controller.getProcessor(), controller.getMode());
     ss->setScaleStep(controller.getScaleStep(), controller.getNrScales());
     ss->prepare(controller.getSourceImageType(), ScaleSpaceOutputType::IMAGE_FOR_SCALE);
+    prepare.stop();
     if (controller.useCamera())
     {
       camera = JAI::Camera::getCameraList().front();
@@ -49,7 +56,9 @@ int main(int argc, char * argv[])
     }
       
     output.setInput(input);
+    process.start();
     ss->processImage(output);
+    process.stop();
 
     output.show("result");
   }
@@ -75,5 +84,8 @@ int main(int argc, char * argv[])
     std::cout << (std::string)ex << "\n";
     std::cout << "JAI camera is not connected\n";
   }
+  std::cout << "Program took: " << all.stop() << " " << all.getUnitName() << "\n";
+  std::cout << "Prepare took: " << prepare.getTime() << " " << all.getUnitName() << "\n";
+  std::cout << "Process took: " << process.getTime() << " " << all.getUnitName() << "\n";
   return 0;
 }

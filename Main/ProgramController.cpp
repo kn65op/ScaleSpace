@@ -32,7 +32,7 @@ void ProgramController::processArgs(int argc, char*argv[])
   getScalesFromOptions();
   getTypeFromOptions();
   getProcessorFromOptions();
-  opt >> GetOpt::Option("device_info", device_info);
+  device_info = opt >> GetOpt::OptionPresent("device_info");
   //TODO: check if some unparsed options left
 }
 
