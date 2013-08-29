@@ -33,6 +33,7 @@ void ProgramController::processArgs(int argc, char*argv[])
   getTypeFromOptions();
   getProcessorFromOptions();
   opt >> GetOpt::Option("device_info", device_info);
+  //TODO: check if some unparsed options left
 }
 
 void ProgramController::printHelp() const

@@ -5,7 +5,6 @@
 
 void printCLDeviceInfo()
 {
-  std::cout << "SADASD\n";
   OpenCLDevice dev = OpenCLDevice::getDevices().front();
   size_t maxw, maxh, maxd;
   dev.getDeviceInfo(CL_DEVICE_IMAGE3D_MAX_DEPTH, &maxd);
