@@ -93,8 +93,8 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
       s->pushAlgorithm(rgb2gray);
     }
 
-    OpenCL2DTo2DImageAlgorithmForStream *gaussian = new OpenCLGaussianImage();
     unsigned int scale = 1 + scale_step * (i + 1);
+    OpenCL2DTo2DImageAlgorithmForStream *gaussian = new OpenCLGaussianImage(scale/2);
 
     #ifdef INFO_SS
     std::cout << "Scale: " << scale << "\n";
