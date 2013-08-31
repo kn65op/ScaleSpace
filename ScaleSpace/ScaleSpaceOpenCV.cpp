@@ -119,8 +119,9 @@ void ScaleSpaceOpenCV::doGaussian(ScaleSpaceImage & image)
 #ifdef SS_DEBUG
     std::cout << gaussian <<"\n";
 #endif
-
+    Stoper::start("gaussian" + std::to_string(i));
     cv::filter2D(input, image.getImageForScale(i), -1, gaussian);
+    Stoper::stop("gaussian" + std::to_string(i));
     
 #ifdef SS_DEBUG
     std::ofstream of("pogau.txt");

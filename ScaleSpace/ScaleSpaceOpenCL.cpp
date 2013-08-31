@@ -288,9 +288,11 @@ void ScaleSpaceOpenCL::processImage(ScaleSpaceImage & image)
     #ifdef INFO_SS
     std::cout << "processing: " << i << " - ";
     #endif
+    Stoper::start("gaussian" + std::to_string(i));
     Stoper::start("gaussian", false);
     s->processImage(image.getInputData(), image.getDataForScale(i));
     Stoper::stop("gaussian");
+    Stoper::stop("gaussian" + std::to_string(i));
     void * additional_output = s->getLastAlgorithmAdditionalOutput();
     #ifdef DEBUG_SS
     std::cout << "additional_output = " << additional_output << "\n";

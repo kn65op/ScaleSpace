@@ -88,6 +88,18 @@ int main(int argc, char * argv[])
   std::cout << "Program took: " << all.stop() << " " << all.getUnitName() << "\n";
   std::cout << "Prepare took: " << prepare.getTime() << " " << all.getUnitName() << "\n";
   std::cout << "Process took: " << process.getTime() << " " << all.getUnitName() << "\n";
-  std::cout << "Gaussians took: " << Stoper::getTime("gaussian") << " " << Stoper::getUnitName() << "\n";
+  try
+  {
+    std::cout << "Gaussians took: " << Stoper::getTime("gaussian") << " " << Stoper::getUnitName() << "\n";
+    for (unsigned int i=0; i < controller.getNrScales(); ++i)
+    {
+      std::cout << "Gaussian " << i << " took: " << Stoper::getTime("gaussian" + std::to_string(i)) << " " << Stoper::getUnitName() << "\n";
+    }
+  }
+  catch(StoperException & ex)
+  {
+    std::cout << (std::string)ex << "\n";
+  }
+
   return 0;
 }
