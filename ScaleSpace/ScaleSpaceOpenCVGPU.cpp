@@ -11,7 +11,10 @@ using namespace cv::gpu;
 ScaleSpaceOpenCVGPU::ScaleSpaceOpenCVGPU(ScaleSpaceMode mode)
   : ScaleSpaceOpenCV(mode)
 {
-  std::cout << getCudaEnabledDeviceCount() << "\n";
+  if(getCudaEnabledDeviceCount() <= 0)
+  {
+    throw NoPlatformScaleSpaceException("CUDA for OpenCV GPU is not available");
+  }
   //TODO: dummy function for initialize cuda
 }
 

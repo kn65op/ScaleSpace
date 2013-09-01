@@ -20,12 +20,21 @@ public:
   }
 };
 
-class ScaleSpaceZeroException : ScaleSpaceException
+class ScaleSpaceZeroException : public ScaleSpaceException
 {
 public:
   ScaleSpaceZeroException(std::string m) : ScaleSpaceException(m)
   {
     
+  }
+};
+
+
+class NoPlatformScaleSpaceException : public ScaleSpaceException
+{
+public:
+  NoPlatformScaleSpaceException(std::string m) : ScaleSpaceException(m)
+  {
   }
 };
 

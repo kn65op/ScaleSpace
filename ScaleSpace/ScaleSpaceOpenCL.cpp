@@ -37,6 +37,10 @@ using namespace TTime;
    
 ScaleSpaceOpenCL::ScaleSpaceOpenCL(ScaleSpaceMode mode /* = Pure */)
 {
+  if (OpenCLDevice::getDevices().empty())
+  {
+    throw NoPlatformScaleSpaceException("OpenCL platform not found on system");
+  }
   nr_scales = 0;
   scale_step = 0;
   streams =  streams_t();

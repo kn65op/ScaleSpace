@@ -6,7 +6,7 @@ class ScaleSpaceOpenCVCPU : public ScaleSpaceOpenCV
 {
 public:
   /**
-   * Contructor which setting mode (ScaleSpaceMode). 
+   * Contructor which setting mode (ScaleSpaceMode). If OpenCVGPU doesn't availbe (eg. CUDA is not available) it throws NoPlatformScaleSpaceException.
    */
   ScaleSpaceOpenCVCPU(ScaleSpaceMode mode = ScaleSpaceMode::Pure);
 

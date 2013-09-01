@@ -72,6 +72,10 @@ int main(int argc, char * argv[])
   {
     std::cout << "OpenCLException: " << ex.getFullMessage() << "\n";
   }
+  catch (NoPlatformScaleSpaceException &ex)
+  {
+    std::cout << "Platform for this processor is no available:\n\t" << (std::string)ex << "\n";
+  }
   catch (ScaleSpaceException &ex)
   {
     std::cout << "ScaleSpaceExcetpion: " << (std::string)ex << "\n";
