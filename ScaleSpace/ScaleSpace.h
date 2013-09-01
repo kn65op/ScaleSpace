@@ -77,6 +77,8 @@ std::ostream & operator<<(std::ostream& out, ScaleSpaceProcessor processor);
 std::ostream & operator<<(std::ostream& out, ScaleSpaceMode mode);
 std::ostream & operator<<(std::ostream& out, ScaleSpaceSourceImageType type);
 
+std::string getStringFromScaleSpaceProcessor(const ScaleSpaceProcessor & processor);
+
 /** Scale Space process.
  * It contains all data, which is need to process image with Scale Space algorithm.
  * Currently step can be only even.

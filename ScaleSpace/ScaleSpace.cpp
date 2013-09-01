@@ -2,6 +2,8 @@
 
 #include <opencv2\imgproc\imgproc.hpp>
 
+#include <sstream>
+
 ScaleSpace::ScaleSpace(ScaleSpaceMode mode /*= ScaleSpaceMode::Pure*/)
 {
 }
@@ -108,10 +110,10 @@ std::ostream & operator<<(std::ostream& out, ScaleSpaceProcessor processor)
     out << "OpenCL";
     break;
   case ScaleSpaceProcessor::OPENCV_CPU:
-    out << "OpenCV CPU";
+    out << "OpenCVCPU";
     break;
   case ScaleSpaceProcessor::OPENCV_GPU:
-    out << "OpenCV GPU";
+    out << "OpenCVGPU";
     break;
   }
 
@@ -158,4 +160,11 @@ std::ostream & operator<<(std::ostream& out, ScaleSpaceSourceImageType type)
   }
 
   return out;
+}
+
+std::string getStringFromScaleSpaceProcessor(const ScaleSpaceProcessor & processor)
+{
+  std::stringstream ss;
+  ss << processor;
+  return ss.str();
 }

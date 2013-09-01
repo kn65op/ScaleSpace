@@ -10,7 +10,8 @@ ProgramController::ProgramController(int argc, char* argv []) :
   help(false),
   opt(GetOpt::GetOpt_pp(argc, argv)),
   scale_step(10),
-  nr_scales(10)
+  nr_scales(10),
+  out_prefix("result")
 {
   processArgs(argc, argv);
 }
@@ -28,6 +29,7 @@ void ProgramController::processArgs(int argc, char*argv[])
     return;
   }
   opt >> GetOpt::Option('i', "in", in_file);
+  opt >> GetOpt::Option('o', "out", out_prefix);
   getModeFromOptions();
   getScalesFromOptions();
   getTypeFromOptions();
@@ -53,6 +55,7 @@ void ProgramController::printHelp() const
 
   std::cout << "Options:\n";
   std::cout << "\t-i,--in\t\tinput file instead of use camera. Default input file type is gray.\n";
+  std::cout << "\t-o,--out\toutput files prefix. Output file will be PREFIX_PROCESSOR_IMAGENUMBER_SCALENUMBER.bmp\n";
   std::cout << "\t-m,--mode\tScale Space mode. One of: blob, corner, edge, ridge.\n";
   std::cout << "\t-t,--type\tInput file type. Can be bayer or gray. It works only with file.\n";
   std::cout << "\t-p,--processor\tSelect implementation. It can be:\n";
@@ -170,6 +173,11 @@ std::string ProgramController::getInputFile() const
   return in_file;
 }
 
+std::string ProgramController::getOutputPrefix() const
+{
+  return out_prefix;
+}
+
 void ProgramController::getScalesFromOptions()
 {
   std::vector<unsigned int> scale;
@@ -221,6 +229,7 @@ void ProgramController::printProgramInfo() const
     std::cout << in_file;
   }
   std::cout << "\n";
+  std::cout << "\tOptut: " << out_prefix << "\n";
   std::cout << "\tInput image type: " << type << "\n";
   std::cout << "\tScales: " << nr_scales << "\n\tStep: " << scale_step << "\n";
 }

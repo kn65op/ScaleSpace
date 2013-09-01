@@ -96,7 +96,7 @@ public:
    */
   cv::Mat & getInput();
 
-  void show(std::string );
+  void show(std::string prefix, std::string processor);
   void show(cv::Mat &blobs, std::vector<float> & sigmas);
 
   unsigned int getOneImageSize() const;

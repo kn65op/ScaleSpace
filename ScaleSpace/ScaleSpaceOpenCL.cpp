@@ -314,7 +314,7 @@ void ScaleSpaceOpenCL::processImage(ScaleSpaceImage & image)
     #endif
     ++i;
   }
-  image.show("before"); 
+  //image.show("before"); 
   cv::Mat outp = cv::Mat::zeros(image.size(), image.type());
   if (post_processing)
   {

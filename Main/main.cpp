@@ -61,7 +61,8 @@ int main(int argc, char * argv[])
     ss->processImage(output);
     process.stop();
 
-    output.show("result");
+
+    output.show(controller.getOutputPrefix(), getStringFromScaleSpaceProcessor(controller.getProcessor()));
   }
   catch (OpenCLDeviceException &ex)
   {

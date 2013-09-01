@@ -25,6 +25,7 @@ public:
   ScaleSpaceSourceImageType getSourceImageType() const;
   ScaleSpaceProcessor getProcessor() const;
   std::string getInputFile() const;
+  std::string getOutputPrefix() const;
   unsigned int getNrScales() const
   {
     return nr_scales;
@@ -60,6 +61,7 @@ private:
   ScaleSpaceSourceImageType type;
   ScaleSpaceProcessor processor;
   std::string in_file;
+  std::string out_prefix;
 
   unsigned int scale_step;
   unsigned int nr_scales;

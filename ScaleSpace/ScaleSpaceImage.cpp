@@ -77,7 +77,7 @@ void ScaleSpaceImage::setInput(cv::Mat image)
   }*/
 }
 
-void ScaleSpaceImage::show(std::string fn)
+void ScaleSpaceImage::show(std::string prefix, std::string processor)
 {
   static int image_nr = 0;
   cv::Mat tmp(input.size().height, input.size().width, scale_space_images[0][0].type());
@@ -101,7 +101,14 @@ void ScaleSpaceImage::show(std::string fn)
   for (unsigned int i = 0; i < nr_scales; ++i)
   {
     std::string s;
-    s = fn + std::to_string(i) + ".bmp";
+    if (i < 10)
+    {
+      s = prefix + "_" + processor + "_0" + std::to_string(i) + ".bmp";
+    }
+    else
+    {
+      s = prefix + "_" + processor + "_" + std::to_string(i) + ".bmp";
+    }
     memcpy(tmp.data, getDataForScale(i), scale_space_images[0][0].elemSize() * input.size().width * input.size().height);
 #ifdef DEBUG_SS
     std::ofstream out("data1" + std::to_string(image_nr) +  std::to_string(i) + ".txt");
