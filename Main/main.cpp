@@ -90,14 +90,19 @@ int main(int argc, char * argv[])
     std::cout << (std::string)ex << "\n";
     std::cout << "JAI camera is not connected\n";
   }
-  std::cout << "Program took: " << all.stop() << " " << all.getUnitName() << "\n";
+  all.stop();
+  std::ofstream out(controller.getOutputPrefix() + "_" + getStringFromScaleSpaceProcessor(controller.getProcessor()) + ".txt");
+  out << all.getTime() << ";" << prepare.getTime() << ";" << process.getTime();
+  std::cout << "Program took: " << all.getTime() << " " << all.getUnitName() << "\n";
   std::cout << "Prepare took: " << prepare.getTime() << " " << all.getUnitName() << "\n";
   std::cout << "Process took: " << process.getTime() << " " << all.getUnitName() << "\n";
   try
   {
+    out << ";" << Stoper::getTime("gaussian");
     std::cout << "Gaussians took: " << Stoper::getTime("gaussian") << " " << Stoper::getUnitName() << "\n";
     for (unsigned int i=0; i < controller.getNrScales(); ++i)
     {
+      out << ";" << Stoper::getTime("gaussian" + std::to_string(i));
       std::cout << "Gaussian " << i << " took: " << Stoper::getTime("gaussian" + std::to_string(i)) << " " << Stoper::getUnitName() << "\n";
     }
   }
