@@ -35,19 +35,33 @@ void ProgramController::processArgs(int argc, char*argv[])
   device_info = opt >> GetOpt::OptionPresent("device_info");
   if (opt.options_remain())
   {
-    std::cout << "Unexpected options.\n";
-    printHelp();
+    error_message = "Unexpected options";
+    help = true;
   }
-  //TODO: check if some unparsed options left
 }
 
 void ProgramController::printHelp() const
 {
-  std::cout << "Help\n";
   if (error_message != "")
   {
+    std::cout << "Error: \n";
     std::cout << error_message << "\n";
   }
+  std::cout << "Usage:\n";
+  std::cout << "ScaleSpace [options]\n";
+  std::cout << "If options is not provided as input will be used JAI camera and 10 scales with step 10. If mode is not provided it will calculate only Scale Space representation.\n";
+
+  std::cout << "Options:\n";
+  std::cout << "\t-i,--in\t\tinput file instead of use camera. Default input file type is gray.\n";
+  std::cout << "\t-m,--mode\tScale Space mode. One of: blob, corner, edge, ridge.\n";
+  std::cout << "\t-t,--type\tInput file type. Can be bayer or gray. It works only with file.\n";
+  std::cout << "\t-p,--processor\tSelect implementation. It can be:\n";
+  std::cout << "\t\t\t\tcl, opencl - for OpenCL implementation\n";
+  std::cout << "\t\t\t\tcv, opencv, cpu - for OpenCV implementation\n";
+  std::cout << "\t\t\t\tcv_gpu, opencv_gpu, gpu - for OpenCV GPU implementation\n";
+  std::cout << "\t-s,--scale\tSet scales in format a b, where a is scale step and b is number of scales\n";
+  //std::cout << "\t-,--\t\n";
+  //std::cout << "\t-,--\t\n";
 }
 
 bool ProgramController::areOptionsValid() const
@@ -60,7 +74,7 @@ void ProgramController::getModeFromOptions()
   std::string mode_s;
   if (opt >> GetOpt::Option('m', "mode", mode_s))
   {
-    if (mode_s == "blob")
+    if (mode_s == "laplacian")
     {
       mode = ScaleSpaceMode::Laplacian;
     }
@@ -68,7 +82,7 @@ void ProgramController::getModeFromOptions()
     {
       mode = ScaleSpaceMode::Edges;
     }
-    else if (mode_s == "blob2")
+    else if (mode_s == "blob")
     {
       mode = ScaleSpaceMode::Blobs;
     }
