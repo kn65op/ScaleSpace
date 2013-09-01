@@ -158,3 +158,16 @@ void ScaleSpaceOpenCVCPU::setLowValuesToZero(cv::Mat& mat) const
   });
 }
 */
+
+void ScaleSpaceOpenCVCPU::convertInput(cv::Mat & input, cv::Mat & output) const
+{
+  //cv::cvtColor(input, output, CV_RGB2GRAY);
+//  input.copyTo(output);
+  input.convertTo(output, temp_image_type, 1.0f/255.0f);
+
+#ifdef SS_DEBUG
+  std::ofstream of("image.txt");
+  of << output;
+#endif
+
+}

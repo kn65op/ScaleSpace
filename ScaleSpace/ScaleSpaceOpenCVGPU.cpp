@@ -182,3 +182,11 @@ void ScaleSpaceOpenCVGPU::setLowValuesToZero(cv::gpu::GpuMat& in, cv::gpu::GpuMa
   out.create(in.size(), temp_image_type);
   setMatToZero(in, out);
 }*/
+
+void ScaleSpaceOpenCVGPU::convertInput(cv::Mat & input, cv::Mat & output) const
+{
+  GpuMat in_gpu, out_gpu;
+  in_gpu.upload(input);
+  in_gpu.convertTo(out_gpu, temp_image_type, 1.0f/255.0f);
+  out_gpu.download(output);
+}

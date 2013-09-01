@@ -139,15 +139,7 @@ void ScaleSpaceOpenCV::changeBayerToFloat(cv::Mat& input, cv::Mat& output) const
 
 void ScaleSpaceOpenCV::changeGrayToFloat(cv::Mat& input, cv::Mat& output) const
 {
-  //cv::cvtColor(input, output, CV_RGB2GRAY);
-//  input.copyTo(output);
-  input.convertTo(output, temp_image_type, 1.0f/255.0f);
-
-#ifdef SS_DEBUG
-  std::ofstream of("image.txt");
-  of << output;
-#endif
-
+  convertInput(input, output);
 }
 
 void ScaleSpaceOpenCV::doBlob(ScaleSpaceImage& image) const
