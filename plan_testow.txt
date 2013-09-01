@@ -1,0 +1,23 @@
+10 testowych obrazów - dodanie mo¿liwoœci wiêkszej liczby obrazów wejœciowych.
+Wszystko w skrypcie:
+
+Poprawnoœæ:
+	Do zrobienia
+		Zapisanie wyników zgodnie z u¿ytym procesorem.
+		Porówanie (np. matlab), utworzenie obrazów ró¿nicowych.
+	W pracy:
+		Pokazanie obrazów ró¿nicowych - wynik jest binarny, tylko czy s¹ takie same, czy nie.
+		Informacje na temat obrazów (ile pikseli jest niezerowych, jak wielkie s¹ ró¿nice, np. ile &)
+	Cel:
+		Pojedyncze piksele powinny siê ró¿niæ.
+	
+Szybkoœæ:
+	Do zrobienia:
+		Zapisywanie czasów do pliku.
+		Porównianie czasów (rêczne). Œrednia itp.
+	W pracy:
+		Tabela z wynikami.
+	Cel:
+		Moja implemetacja szybsza.
+	Uwagi:
+		Dla du¿ych gaussianów nie bêdzie to prawd¹.
