@@ -25,6 +25,7 @@ public:
   ScaleSpaceSourceImageType getSourceImageType() const;
   ScaleSpaceProcessor getProcessor() const;
   std::string getInputFile() const;
+  std::string getInputPrefix() const;
   std::string getOutputPrefix() const;
   unsigned int getNrScales() const
   {
@@ -40,6 +41,8 @@ public:
   bool isDeviceInfo() const;
 
   void printProgramInfo() const;
+
+  bool oneInputFile() const;
   
 private:
   ProgramController(const ProgramController & ); //non copyable
@@ -50,6 +53,9 @@ private:
   void getScalesFromOptions();
   void getTypeFromOptions();
   void getProcessorFromOptions();
+  void getInputFromOptions();
+  void getOutputPrefixFromOptions();
+  void getInputPrefixFromOptions();
 
   GetOpt::GetOpt_pp opt;
   
@@ -62,6 +68,7 @@ private:
   ScaleSpaceProcessor processor;
   std::string in_file;
   std::string out_prefix;
+  std::string in_prefix;
 
   unsigned int scale_step;
   unsigned int nr_scales;

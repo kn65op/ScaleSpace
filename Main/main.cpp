@@ -36,33 +36,52 @@ int main(int argc, char * argv[])
   ScaleSpaceImage output;
   try
   {
-    prepare.start();
+    prepare.start(false);
     ScaleSpace *ss = ScaleSpaceFactory::getScaleSpace(controller.getProcessor(), controller.getMode());
     ss->setScaleStep(controller.getScaleStep(), controller.getNrScales());
     ss->prepare(controller.getSourceImageType(), ScaleSpaceOutputType::IMAGE_FOR_SCALE);
     prepare.stop();
-    if (controller.useCamera())
+    if (controller.oneInputFile())
     {
-      camera = JAI::Camera::getCameraList().front();
-      input = camera->getNextFrame();
+      input = cv::imread(controller.getInputFile().c_str(), CV_LOAD_IMAGE_GRAYSCALE);
+      if (!input.size().width)
+      {
+        std::cout << "Input file is not valid image - not processing.\n";
+        return 0;
+      }
+      processScaleSpace(ss, controller, input, output, process, true);
+    }
+    else if (controller.useCamera()) //process all camera
+    {
+      while (1) //TODO: Stop condition
+      {
+        camera = JAI::Camera::getCameraList().front();
+        input = camera->getNextFrame();
+        processScaleSpace(ss, controller, input, output, process, true);
+      }
     }
     else
     {
-      input = cv::imread(controller.getInputFile().c_str(), CV_LOAD_IMAGE_GRAYSCALE);
-    }
-    if (!input.size().width)
-    {
-      std::cout << "Input file is not valid image - not processing.\n";
-      return 0;
-    }
-      
-    output.setInput(input);
-    process.start();
-    ss->processImage(output);
-    process.stop();
+      std::string prefix = controller.getInputPrefix();
 
+      unsigned int i = 0;
+      //while ((input = cv::imread(getFileWithPrefix(prefix, i++))),  input.size().width)
+      bool is_image = true;
+      while (is_image)
+      {
+        input = cv::imread(getFileWithPrefix(prefix, i++).c_str(), CV_LOAD_IMAGE_GRAYSCALE);
+        if (!input.size().width)
+        {
+          is_image = false;
+        }
+        else
+        {
+          processScaleSpace(ss, controller, input, output, process, true);
+        }
+      }
+      std::cout << "End of input files. Last file was: " << getFileWithPrefix(prefix, i - 2) << "\n";
+    }
 
-    output.show(controller.getOutputPrefix(), getStringFromScaleSpaceProcessor(controller.getProcessor()));
   }
   catch (OpenCLDeviceException &ex)
   {

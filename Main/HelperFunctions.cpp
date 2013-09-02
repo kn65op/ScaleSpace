@@ -19,3 +19,21 @@ void printCLDeviceInfo()
   std::cout << max_work_item_dimensions << "\n";
   std::cout << "Max work group size: " << max_work_group_size << "\n";
 }
+
+void processScaleSpace(ScaleSpace *ss, ProgramController & controller, cv::Mat & input, ScaleSpaceImage & output, TTime::Stoper & stoper, bool show)
+{
+  output.setInput(input);
+  stoper.start(false);
+  ss->processImage(output);
+  stoper.stop();
+  if (show)
+  {
+    output.show(controller.getOutputPrefix(), getStringFromScaleSpaceProcessor(controller.getProcessor()));
+  }
+}
+
+std::string getFileWithPrefix(std::string prefix, unsigned int i)
+{
+  return prefix + "_" + (i < 10 ? "0" + std::to_string(i) : std::to_string(i)) + ".bmp";
+}
+

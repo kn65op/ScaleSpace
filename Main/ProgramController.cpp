@@ -11,7 +11,8 @@ ProgramController::ProgramController(int argc, char* argv []) :
   opt(GetOpt::GetOpt_pp(argc, argv)),
   scale_step(10),
   nr_scales(10),
-  out_prefix("result")
+  out_prefix("result"),
+  in_prefix("")
 {
   processArgs(argc, argv);
 }
@@ -28,13 +29,15 @@ void ProgramController::processArgs(int argc, char*argv[])
     help = true;
     return;
   }
-  opt >> GetOpt::Option('i', "in", in_file);
-  opt >> GetOpt::Option('o', "out", out_prefix);
+  getInputFromOptions();
+  getOutputPrefixFromOptions();
+  getInputPrefixFromOptions();
   getModeFromOptions();
   getScalesFromOptions();
-  getTypeFromOptions();
   getProcessorFromOptions();
   device_info = opt >> GetOpt::OptionPresent("device_info");
+  getTypeFromOptions();
+
   if (opt.options_remain())
   {
     error_message = "Unexpected options";
@@ -55,14 +58,15 @@ void ProgramController::printHelp() const
 
   std::cout << "Options:\n";
   std::cout << "\t-i,--in\t\tinput file instead of use camera. Default input file type is gray.\n";
-  std::cout << "\t-o,--out\toutput files prefix. Output file will be PREFIX_PROCESSOR_IMAGENUMBER_SCALENUMBER.bmp\n";
+  std::cout << "\t-I,--in-prefix\tinput files wille be in format: prefix_XX.bmp. It ends when files ends (i. e. no next file). Default input files type is bayer.\n";
+  std::cout << "\t-o,--out\toutput files prefix. Output file will be PREFIX_PROCESSOR_IMAGENUMBER_SCALENUMBER.bmp.\n";
   std::cout << "\t-m,--mode\tScale Space mode. One of: blob, corner, edge, ridge.\n";
   std::cout << "\t-t,--type\tInput file type. Can be bayer or gray. It works only with file.\n";
   std::cout << "\t-p,--processor\tSelect implementation. It can be:\n";
-  std::cout << "\t\t\t\tcl, opencl - for OpenCL implementation\n";
-  std::cout << "\t\t\t\tcv, opencv, cpu - for OpenCV implementation\n";
-  std::cout << "\t\t\t\tcv_gpu, opencv_gpu, gpu - for OpenCV GPU implementation\n";
-  std::cout << "\t-s,--scale\tSet scales in format a b, where a is scale step and b is number of scales\n";
+  std::cout << "\t\t\t\tcl, opencl - for OpenCL implementation.\n";
+  std::cout << "\t\t\t\tcv, opencv, cpu - for OpenCV implementation.\n";
+  std::cout << "\t\t\t\tcv_gpu, opencv_gpu, gpu - for OpenCV GPU implementation.\n";
+  std::cout << "\t-s,--scale\tSet scales in format a b, where a is scale step and b is number of scales.\n";
   //std::cout << "\t-,--\t\n";
   //std::cout << "\t-,--\t\n";
 }
@@ -126,7 +130,7 @@ void ProgramController::getTypeFromOptions()
   }   
   else
   {
-    if (in_file == "")
+    if (in_file.empty() && in_prefix.empty())
     {
       type = ScaleSpaceSourceImageType::Bayer;
     }
@@ -178,6 +182,11 @@ std::string ProgramController::getOutputPrefix() const
   return out_prefix;
 }
 
+std::string ProgramController::getInputPrefix() const
+{
+  return in_prefix;
+}
+
 void ProgramController::getScalesFromOptions()
 {
   std::vector<unsigned int> scale;
@@ -196,7 +205,7 @@ void ProgramController::getScalesFromOptions()
 
 bool ProgramController::useCamera() const
 {
-  return in_file == "";
+  return in_file.empty() && in_prefix.empty();
 }
 
 ScaleSpaceSourceImageType ProgramController::getSourceImageType() const
@@ -220,16 +229,71 @@ void ProgramController::printProgramInfo() const
   std::cout << "\tProcessor: " << processor << "\n";
   std::cout << "\tMode: " << mode << "\n";
   std::cout << "\tInput: ";
-  if (in_file == "")
+  if (useCamera())
   {
     std::cout << "camera";
   }
+  else if (oneInputFile())
+  {
+    std::cout << " one file: " << in_file;
+  }
   else
   {
-    std::cout << in_file;
+    std::cout << "multiple files, prefix: " << in_prefix;
   }
   std::cout << "\n";
   std::cout << "\tOptut: " << out_prefix << "\n";
   std::cout << "\tInput image type: " << type << "\n";
   std::cout << "\tScales: " << nr_scales << "\n\tStep: " << scale_step << "\n";
+}
+
+void ProgramController::getInputFromOptions()
+{
+  if (opt >> GetOpt::Option('i', "in", in_file))
+  {
+    if (in_file == "")
+    {
+      help = true;
+      error_message = "You must specify input file";
+    }
+    if (!in_prefix.empty())
+    {
+      help = true;
+      error_message = "You can't specify input file and input prefix";
+    }
+  }
+}
+
+void ProgramController::getOutputPrefixFromOptions()
+{
+  if (opt >> GetOpt::Option('o', "out", out_prefix))
+  {
+    if (out_prefix == "")
+    {
+      help = true;
+      error_message = "You must specify output prefix file";
+    }
+  }
+}
+
+void ProgramController::getInputPrefixFromOptions()
+{
+  if (opt >> GetOpt::Option('I', "in-prefix", in_prefix))
+  {
+    if (in_prefix == "")
+    {
+      help = true;
+      error_message = "You must specify input prefix";
+    }
+    if (!in_file.empty())
+    {
+      help = true;
+      error_message = "You can't specify input file and input prefix";
+    }
+  }
+}
+
+bool ProgramController::oneInputFile() const
+{
+  return !in_file.empty() && in_prefix.empty();
 }
