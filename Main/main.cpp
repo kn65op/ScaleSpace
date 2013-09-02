@@ -49,7 +49,7 @@ int main(int argc, char * argv[])
         std::cout << "Input file is not valid image - not processing.\n";
         return 0;
       }
-      processScaleSpace(ss, controller, input, output, process, true);
+      processScaleSpace(ss, controller, input, output, process, controller.isShow());
     }
     else if (controller.useCamera()) //process all camera
     {
@@ -57,7 +57,7 @@ int main(int argc, char * argv[])
       {
         camera = JAI::Camera::getCameraList().front();
         input = camera->getNextFrame();
-        processScaleSpace(ss, controller, input, output, process, true);
+        processScaleSpace(ss, controller, input, output, process, controller.isShow());
       }
     }
     else
@@ -76,7 +76,7 @@ int main(int argc, char * argv[])
         }
         else
         {
-          processScaleSpace(ss, controller, input, output, process, true);
+          processScaleSpace(ss, controller, input, output, process, controller.isShow());
         }
       }
       std::cout << "End of input files. Last file was: " << getFileWithPrefix(prefix, i - 2) << "\n";

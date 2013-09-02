@@ -12,7 +12,8 @@ ProgramController::ProgramController(int argc, char* argv []) :
   scale_step(10),
   nr_scales(10),
   out_prefix("result"),
-  in_prefix("")
+  in_prefix(""),
+  show(true)
 {
   processArgs(argc, argv);
 }
@@ -36,6 +37,7 @@ void ProgramController::processArgs(int argc, char*argv[])
   getScalesFromOptions();
   getProcessorFromOptions();
   device_info = opt >> GetOpt::OptionPresent("device_info");
+  show = !(opt >> GetOpt::OptionPresent("no-show"));
   getTypeFromOptions();
 
   if (opt.options_remain())
@@ -67,7 +69,7 @@ void ProgramController::printHelp() const
   std::cout << "\t\t\t\tcv, opencv, cpu - for OpenCV implementation.\n";
   std::cout << "\t\t\t\tcv_gpu, opencv_gpu, gpu - for OpenCV GPU implementation.\n";
   std::cout << "\t-s,--scale\tSet scales in format a b, where a is scale step and b is number of scales.\n";
-  //std::cout << "\t-,--\t\n";
+  std::cout << "\t--no-show\t\tDon't save images on drive.\n";
   //std::cout << "\t-,--\t\n";
 }
 
@@ -245,6 +247,8 @@ void ProgramController::printProgramInfo() const
   std::cout << "\tOptut: " << out_prefix << "\n";
   std::cout << "\tInput image type: " << type << "\n";
   std::cout << "\tScales: " << nr_scales << "\n\tStep: " << scale_step << "\n";
+  std::cout << "\tSave images on drive: " << (show ? "yes" : "no") << "\n";
+  //std::cout << "\t: " << "" << "\n";
 }
 
 void ProgramController::getInputFromOptions()
@@ -296,4 +300,9 @@ void ProgramController::getInputPrefixFromOptions()
 bool ProgramController::oneInputFile() const
 {
   return !in_file.empty() && in_prefix.empty();
+}
+
+bool ProgramController::isShow() const
+{
+  return show;
 }

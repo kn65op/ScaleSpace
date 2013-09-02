@@ -43,7 +43,8 @@ public:
   void printProgramInfo() const;
 
   bool oneInputFile() const;
-  
+  bool isShow() const;
+
 private:
   ProgramController(const ProgramController & ); //non copyable
   
@@ -61,6 +62,7 @@ private:
   
   bool help;
   bool device_info;
+  bool show;
   std::string error_message;
   //parameters
   ScaleSpaceMode mode;
