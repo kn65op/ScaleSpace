@@ -21,6 +21,8 @@ void ScaleSpaceOpenCVCPU::filter2D(cv::Mat& src, cv::Mat& dst, cv::Mat& kernel) 
 void ScaleSpaceOpenCVCPU::calcBlob(cv::Mat& Lxx, cv::Mat& Lyy, float sigma, cv::Mat& L) const
 {
   L = abs(Lxx + Lyy) * sigma;
+
+  
 }
 
 void ScaleSpaceOpenCVCPU::calcCorner(cv::Mat& Lx, cv::Mat& Ly, cv::Mat& Lxx, cv::Mat& Lxy, cv::Mat& Lyy, cv::Mat& k) const
@@ -170,4 +172,15 @@ void ScaleSpaceOpenCVCPU::convertInput(cv::Mat & input, cv::Mat & output) const
   of << output;
 #endif
 
+}
+
+void ScaleSpaceOpenCVCPU::convertInputFromBayer(cv::Mat & input, cv::Mat & output) const
+{
+  cv::Mat tmp;
+  cv::cvtColor(input, tmp, CV_BayerBG2GRAY);
+  tmp.convertTo(output, temp_image_type, 1.0f/255.0f);
+#ifdef SS_DEBUG
+  std::ofstream of("image.txt");
+  of << output;
+#endif
 }

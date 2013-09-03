@@ -21,6 +21,7 @@ ScaleSpaceOpenCVGPU::ScaleSpaceOpenCVGPU(ScaleSpaceMode mode)
 
 ScaleSpaceOpenCVGPU::~ScaleSpaceOpenCVGPU(void)
 {
+  
 }
 
 void ScaleSpaceOpenCVGPU::filter2D(cv::Mat& src, cv::Mat& dst, cv::Mat& kernel) const
@@ -190,3 +191,13 @@ void ScaleSpaceOpenCVGPU::convertInput(cv::Mat & input, cv::Mat & output) const
   in_gpu.convertTo(out_gpu, temp_image_type, 1.0f/255.0f);
   out_gpu.download(output);
 }
+
+void ScaleSpaceOpenCVGPU::convertInputFromBayer(cv::Mat & input, cv::Mat & output) const
+{
+  GpuMat in_gpu, out_gpu, tmp;
+  in_gpu.upload(input);
+  cvtColor(input, tmp, CV_BayerBG2GRAY);
+  tmp.convertTo(out_gpu, temp_image_type, 1.0f/255.0f);
+  out_gpu.download(output);
+}
+

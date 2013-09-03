@@ -77,6 +77,7 @@ private:
 protected:
   //functions that differ for CPU and GPU
   virtual void convertInput(cv::Mat & input, cv::Mat & output) const = 0;
+  virtual void convertInputFromBayer(cv::Mat & input, cv::Mat & output) const = 0;
 
   virtual void filter2D(cv::Mat & src, cv::Mat &dst, cv::Mat & kernel) const = 0;
 

@@ -134,7 +134,7 @@ void ScaleSpaceOpenCV::doGaussian(ScaleSpaceImage & image)
 
 void ScaleSpaceOpenCV::changeBayerToFloat(cv::Mat& input, cv::Mat& output) const
 {
-  //TODO: dopisa� i sprawdzi� mode
+  convertInputFromBayer(input, output);
 }
 
 void ScaleSpaceOpenCV::changeGrayToFloat(cv::Mat& input, cv::Mat& output) const

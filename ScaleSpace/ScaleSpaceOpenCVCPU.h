@@ -16,6 +16,7 @@ private:
   void filter2D(cv::Mat & src, cv::Mat &dst, cv::Mat & kernel) const;
   
   void convertInput(cv::Mat & input, cv::Mat & output) const;
+  void convertInputFromBayer(cv::Mat & input, cv::Mat & output) const;
 
   virtual void calcBlob(cv::Mat & Lxx, cv::Mat & Lyy, float sigma, cv::Mat & L) const;
   virtual void calcCorner(cv::Mat & Lx, cv::Mat & Ly, cv::Mat & Lxx, cv::Mat & Lxy, cv::Mat & Lyy, cv::Mat & k) const;
