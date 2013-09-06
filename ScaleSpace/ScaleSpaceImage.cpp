@@ -137,7 +137,9 @@ void ScaleSpaceImage::show(std::string prefix, std::string processor)
     }
 //    cv::imwrite(s.c_str(), tmp2);
     cv::imwrite(s.c_str(), output[i]);
+#ifdef DEBUG_SS
     cv::imwrite((s+"_tmp.bmp").c_str(), tmp2);
+#endif
   }
   image_nr++;
 }
