@@ -196,7 +196,6 @@ void ScaleSpaceOpenCV::doEdge(ScaleSpaceImage& image) const
     calcThirdDeriteratives(image.getImageForScale(i), Lxxx, Lxxy, Lxyy, Lyyy);
 
     calcEdge(Lx, Ly, Lxx, Lxy, Lyy, Lxxx, Lxxy, Lxyy, Lyyy, L1, L2);
-#define SS_DEBUG
 #ifdef SS_DEBUG
     std::ofstream of("L1.txt");
     of << L1;
