@@ -21,18 +21,18 @@ Rem Test validity
 
 Rem Test performance
 
-.\ScaleSpace.exe -i lena.jpg -p cl -o "PerformanceTest/lena_edge" -s 2 11 -m edge
-.\ScaleSpace.exe -i lena.jpg -p cv -o "PerformanceTest/lena_edge" -s 2 11 -m edge
-.\ScaleSpace.exe -i lena.jpg -p cv_gpu -o "PerformanceTest/lena_edge" -s 2 11 -m edge
+.\ScaleSpace.exe -i lena.jpg -p cl -o "PerformanceTest/lena_edge" -s 2 11 -m edge --no-show
+.\ScaleSpace.exe -i lena.jpg -p cv -o "PerformanceTest/lena_edge" -s 2 11 -m edge --no-show
+.\ScaleSpace.exe -i lena.jpg -p cv_gpu -o "PerformanceTest/lena_edge" -s 2 11 -m edge --no-show
 
-.\ScaleSpace.exe -i lena.jpg -p cl -o "PerformanceTest/lena_blob" -s 2 11 -m blob
-.\ScaleSpace.exe -i lena.jpg -p cv -o "PerformanceTest/lena_blob" -s 2 11 -m blob
-.\ScaleSpace.exe -i lena.jpg -p cv_gpu -o "PerformanceTest/lena_blob" -s 2 11 -m blob
+.\ScaleSpace.exe -i lena.jpg -p cl -o "PerformanceTest/lena_blob" -s 2 11 -m blob --no-show
+.\ScaleSpace.exe -i lena.jpg -p cv -o "PerformanceTest/lena_blob" -s 2 11 -m blob --no-show
+.\ScaleSpace.exe -i lena.jpg -p cv_gpu -o "PerformanceTest/lena_blob" -s 2 11 -m blob --no-show
 
-.\ScaleSpace.exe -i lena.jpg -p cl -o "PerformanceTest/lena_edge" -s 2 11 -m corner
-.\ScaleSpace.exe -i lena.jpg -p cv -o "PerformanceTest/lena_edge" -s 2 11 -m corner
-.\ScaleSpace.exe -i lena.jpg -p cv_gpu -o "PerformanceTest/lena_edge" -s 2 11 -m corner
+.\ScaleSpace.exe -i lena.jpg -p cl -o "PerformanceTest/lena_edge" -s 2 11 -m corner --no-show
+.\ScaleSpace.exe -i lena.jpg -p cv -o "PerformanceTest/lena_edge" -s 2 11 -m corner --no-show
+.\ScaleSpace.exe -i lena.jpg -p cv_gpu -o "PerformanceTest/lena_edge" -s 2 11 -m corner --no-show
 
-.\ScaleSpace.exe -i lena.jpg -p cl -o "PerformanceTest/lena_ridge" -s 2 11 -m ridge
-.\ScaleSpace.exe -i lena.jpg -p cv -o "PerformanceTest/lena_ridge" -s 2 11 -m ridge
-.\ScaleSpace.exe -i lena.jpg -p cv_gpu -o "PerformanceTest/lena_ridge" -s 2 11 -m ridge
+.\ScaleSpace.exe -i lena.jpg -p cl -o "PerformanceTest/lena_ridge" -s 2 11 -m ridge --no-show
+.\ScaleSpace.exe -i lena.jpg -p cv -o "PerformanceTest/lena_ridge" -s 2 11 -m ridge --no-show
+.\ScaleSpace.exe -i lena.jpg -p cv_gpu -o "PerformanceTest/lena_ridge" -s 2 11 -m ridge --no-show
