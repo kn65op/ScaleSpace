@@ -7,6 +7,6 @@
 
 void printCLDeviceInfo();
 
-void processScaleSpace(ScaleSpace *ss, ProgramController & controller, cv::Mat & input, ScaleSpaceImage & output, TTime::Stoper & stoper, bool show);
+void processScaleSpace(ScaleSpace *ss, ProgramController & controller, cv::Mat & input, ScaleSpaceImage & output, TTime::Stoper & stoper, bool show, unsigned int image_number);
 
 std::string getFileWithPrefix(std::string prefix, unsigned int i);

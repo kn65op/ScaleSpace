@@ -119,7 +119,7 @@ void ScaleSpaceOpenCV::doGaussian(ScaleSpaceImage & image)
 #ifdef SS_DEBUG
     std::cout << gaussian <<"\n";
 #endif
-    Stoper::start("gaussian" + std::to_string(i));
+    Stoper::start("gaussian" + std::to_string(i) ,false);
     cv::filter2D(input, image.getImageForScale(i), -1, gaussian);
     Stoper::stop("gaussian" + std::to_string(i));
     
@@ -198,7 +198,7 @@ void ScaleSpaceOpenCV::doEdge(ScaleSpaceImage& image) const
     calcEdge(Lx, Ly, Lxx, Lxy, Lyy, Lxxx, Lxxy, Lxyy, Lyyy, L1, L2);
 #ifdef SS_DEBUG
     std::ofstream of("L1.txt");
-    of << L1;
+    of << L1; 
 #endif
 #ifdef SS_DEBUG
     std::ofstream of2("L2.txt");

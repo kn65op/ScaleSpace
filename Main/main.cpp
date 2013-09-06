@@ -49,15 +49,16 @@ int main(int argc, char * argv[])
         std::cout << "Input file is not valid image - not processing.\n";
         return 0;
       }
-      processScaleSpace(ss, controller, input, output, process, controller.isShow());
+      processScaleSpace(ss, controller, input, output, process, controller.isShow(), 0);
     }
     else if (controller.useCamera()) //process all camera
     {
+      unsigned int i = 0;
       while (1) //TODO: Stop condition
       {
         camera = JAI::Camera::getCameraList().front();
         input = camera->getNextFrame();
-        processScaleSpace(ss, controller, input, output, process, controller.isShow());
+        processScaleSpace(ss, controller, input, output, process, controller.isShow(), i++);
       }
     }
     else
@@ -65,6 +66,7 @@ int main(int argc, char * argv[])
       std::string prefix = controller.getInputPrefix();
 
       unsigned int i = 0;
+      unsigned int in = 0;
       //while ((input = cv::imread(getFileWithPrefix(prefix, i++))),  input.size().width)
       bool is_image = true;
       while (is_image)
@@ -76,7 +78,7 @@ int main(int argc, char * argv[])
         }
         else
         {
-          processScaleSpace(ss, controller, input, output, process, controller.isShow());
+          processScaleSpace(ss, controller, input, output, process, controller.isShow(), in++);
         }
       }
       std::cout << "End of input files. Last file was: " << getFileWithPrefix(prefix, i - 2) << "\n";
@@ -110,7 +112,9 @@ int main(int argc, char * argv[])
     std::cout << "JAI camera is not connected\n";
   }
   all.stop();
-  std::ofstream out(controller.getOutputPrefix() + "_" + getStringFromScaleSpaceProcessor(controller.getProcessor()) + ".txt");
+  std::fstream out(controller.getOutputPrefix() + ".txt", std::ios_base::app | std::ios_base::out);
+
+  out << getStringFromScaleSpaceProcessor(controller.getProcessor()) << ";";
   out << all.getTime() << ";" << prepare.getTime() << ";" << process.getTime();
   std::cout << "Program took: " << all.getTime() << " " << all.getUnitName() << "\n";
   std::cout << "Prepare took: " << prepare.getTime() << " " << all.getUnitName() << "\n";
@@ -129,6 +133,7 @@ int main(int argc, char * argv[])
   {
     std::cout << (std::string)ex << "\n";
   }
+  out << "\n";
 
   return 0;
 }

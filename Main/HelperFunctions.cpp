@@ -20,7 +20,7 @@ void printCLDeviceInfo()
   std::cout << "Max work group size: " << max_work_group_size << "\n";
 }
 
-void processScaleSpace(ScaleSpace *ss, ProgramController & controller, cv::Mat & input, ScaleSpaceImage & output, TTime::Stoper & stoper, bool show)
+void processScaleSpace(ScaleSpace *ss, ProgramController & controller, cv::Mat & input, ScaleSpaceImage & output, TTime::Stoper & stoper, bool show, unsigned int image_number)
 {
   output.setInput(input);
   stoper.start(false);
@@ -28,7 +28,7 @@ void processScaleSpace(ScaleSpace *ss, ProgramController & controller, cv::Mat &
   stoper.stop();
   if (show)
   {
-    output.show(controller.getOutputPrefix(), getStringFromScaleSpaceProcessor(controller.getProcessor()));
+    output.show(controller.getOutputPrefix(), getStringFromScaleSpaceProcessor(controller.getProcessor()), image_number);
   }
 }
 
