@@ -254,12 +254,14 @@ void ScaleSpaceOpenCV::calcDX(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(2, 0) = -0.5;
   kernel.at<float>(2, 2) = 0.5;
   
+  filter2D(in, out, kernel);
+#ifdef SS_DEBUG
     { 
     std::ofstream of("kernelX.txt");
     of << kernel;
 }
 
-  filter2D(in, out, kernel);
+#endif
 }
 
 void ScaleSpaceOpenCV::calcDY(cv::Mat& in, cv::Mat& out) const
@@ -272,11 +274,13 @@ void ScaleSpaceOpenCV::calcDY(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(0, 2) = -0.5;
   kernel.at<float>(2, 2) = 0.5;
   
+  filter2D(in, out, kernel);
+#ifdef SS_DEBUG
     { 
     std::ofstream of("kernelY.txt");
     of << kernel;
 }
-  filter2D(in, out, kernel);
+#endif
 }
 
 void ScaleSpaceOpenCV::calcDXX(cv::Mat& in, cv::Mat& out) const
@@ -293,10 +297,13 @@ void ScaleSpaceOpenCV::calcDXX(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(2, 2) = 1.0f/12.0f;
 
   filter2D(in, out, kernel);
+
+#ifdef SS_DEBUG
   { 
     std::ofstream of("kernelXX.txt");
     of << kernel;
 }
+#endif
 }
 
 void ScaleSpaceOpenCV::calcDYY(cv::Mat& in, cv::Mat& out) const
@@ -312,11 +319,13 @@ void ScaleSpaceOpenCV::calcDYY(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(2, 1) = 5.0f/6.0f;
   kernel.at<float>(2, 2) = 1.0f/12.0f;
   
+  filter2D(in, out, kernel);
+#ifdef SS_DEBUG
     { 
     std::ofstream of("kernelYY.txt");
     of << kernel;
 }
-  filter2D(in, out, kernel);
+#endif
 }
 
 void ScaleSpaceOpenCV::calcDXY(cv::Mat& in, cv::Mat& out) const
@@ -327,11 +336,13 @@ void ScaleSpaceOpenCV::calcDXY(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(2, 0) = -1.0f/4.0f;
   kernel.at<float>(2, 2) = 1.0f/4.0f;
   
+  filter2D(in, out, kernel);
+#ifdef SS_DEBUG
     { 
     std::ofstream of("kernelXY.txt");
     of << kernel;
 }
-  filter2D(in, out, kernel);
+#endif
 }
 
 void ScaleSpaceOpenCV::calcDYYY(cv::Mat& in, cv::Mat& out) const
@@ -344,12 +355,14 @@ void ScaleSpaceOpenCV::calcDYYY(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(2, 1) = -1.0;
   kernel.at<float>(2, 2) = -1.0f/2.0f;
   
+  filter2D(in, out, kernel);
+#ifdef SS_DEBUG
     { 
     std::ofstream of("kernelYYY.txt");
     of << kernel;
 }
 
-  filter2D(in, out, kernel);
+#endif
 }
 
 void ScaleSpaceOpenCV::calcDXYY(cv::Mat& in, cv::Mat& out) const
@@ -361,11 +374,14 @@ void ScaleSpaceOpenCV::calcDXYY(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(0, 2) = 1.0f/8.0f;
   kernel.at<float>(1, 2) = -1.0f/4.0f;
   kernel.at<float>(2, 2) = 1.0f/8.0f;
+  
+  filter2D(in, out, kernel);
+#ifdef SS_DEBUG
   { 
     std::ofstream of("kernelXYY.txt");
     of << kernel;
 }
-  filter2D(in, out, kernel);
+#endif
 }
 
 void ScaleSpaceOpenCV::calcDXXY(cv::Mat& in, cv::Mat& out) const
@@ -377,11 +393,14 @@ void ScaleSpaceOpenCV::calcDXXY(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(2, 0) = 1.0f/8.0f;
   kernel.at<float>(2, 1) = -1.0f/4.0f;
   kernel.at<float>(2, 2) = 1.0f/8.0f;
-    { 
+  
+  filter2D(in, out, kernel);
+#ifdef SS_DEBUG
+  { 
     std::ofstream of("kernelXXY.txt");
     of << kernel;
 }
-  filter2D(in, out, kernel);
+#endif
 }
 
 void ScaleSpaceOpenCV::calcDXXX(cv::Mat& in, cv::Mat& out) const
@@ -394,11 +413,13 @@ void ScaleSpaceOpenCV::calcDXXX(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(1, 2) = -1.0;
   kernel.at<float>(2, 2) = -1.0f/2.0f;
   
+  filter2D(in, out, kernel);
+#ifdef SS_DEBUG
     { 
     std::ofstream of("kernelXXX.txt");
     of << kernel;
 }
-  filter2D(in, out, kernel);
+#endif
 }
 
 void ScaleSpaceOpenCV::calcFirstDeriteratives(cv::Mat& in, cv::Mat& Lx, cv::Mat& Ly) const

@@ -95,8 +95,7 @@ void ScaleSpaceImage::show(std::string prefix, std::string processor)
   {
     throw ScaleSpaceImageException("Not supported output image type");
   }
-  cv::imwrite("original.bmp", input);
-  //cv::imwrite("original.bmp", tmp2);
+  cv::imwrite(prefix + "_" + processor + "_original.bmp", input);
 
   for (unsigned int i = 0; i < nr_scales; ++i)
   {

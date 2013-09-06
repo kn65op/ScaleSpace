@@ -344,7 +344,9 @@ void ScaleSpaceOpenCL::processImage(ScaleSpaceImage & image)
 
         post_processing->prepare();
         post_processing->processData(image.getDataForScale(i), image.getDataForOutput(i));
+#ifdef DEBUG_SS
         cv::imwrite("outp" + std::to_string(i) + ".bmp", image.getOutput(i));
+#endif
       }
     }
   }
@@ -375,8 +377,10 @@ void ScaleSpaceOpenCL::processImage(ScaleSpaceImage & image)
   default: //and Pure
     break;
   }
+#ifdef DEBUG_SS
 
   cv::imwrite("outp.bmp", outp);//*/
   //output /= nr_scales;
   //output.show("after");
+#endif
 }
