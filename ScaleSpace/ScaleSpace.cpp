@@ -97,7 +97,7 @@ cv::Mat ScaleSpace::getGaussianForScale(unsigned int scale)
   {
     throw ScaleSpaceException("Wrong scale parameter: " + std::to_string(scale) + ". Can be 0 -" + std::to_string(nr_scales - 1));
   }
-  unsigned int gaussian_size = getGaussianForScale(scale);
+  unsigned int gaussian_size = getGaussianSizeForScale(scale);
   cv::Mat gaussian_kernel = cv::getGaussianKernel(gaussian_size, sigmas[scale], CV_32F);
   return gaussian_kernel * gaussian_kernel.t();
 
