@@ -34,7 +34,7 @@
 #endif
 
 using namespace TTime;
-   
+
 ScaleSpaceOpenCL::ScaleSpaceOpenCL(ScaleSpaceMode mode /* = Pure */)
 {
   if (OpenCLDevice::getDevices().empty())
@@ -78,11 +78,11 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
   }
 
   OpenCLDevice device = OpenCLDevice::getDevices().front();
- 
+
   for (unsigned int i=0; i< nr_scales; ++i)
   {
     auto s = new OpenCLAlgorithmsStream();
-    
+
     OpenCL2DTo2DImageAlgorithmForStream *itf = new OpenCLIntToFloat();
     s->pushAlgorithm(itf);
 
@@ -100,13 +100,13 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
     unsigned int scale = 1 + scale_step * (i + 1);
     OpenCL2DTo2DImageAlgorithmForStream *gaussian = new OpenCLGaussianImage(scale/2);
 
-    #ifdef INFO_SS
+#ifdef INFO_SS
     std::cout << "Scale: " << scale << "\n";
-    #endif
+#endif
 
-    
+
     cv::Mat gaussian_kernel_2d = getGaussianForScale(i);
-    #ifdef DEBUG_SS_GAUSSIAN
+#ifdef DEBUG_SS_GAUSSIAN
     for (unsigned int i = 0; i < scale; ++i)
     {
       for (unsigned int j = 0; j < scale; ++j)
@@ -115,7 +115,7 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
       }
       std::cout << "\n";
     }
-    #endif
+#endif
     OpenCLGaussianParams params;
     params.setMask(scale, gaussian_kernel_2d.data);
     gaussian->setParams(params);
@@ -131,9 +131,9 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
       recognizer->setParams(laplacian_params);
       s->pushAlgorithm(recognizer);
       type = CV_32FC1;
-      #ifdef INFO_SS
+#ifdef INFO_SS
       std::cout << "Mode: laplacian\n";
-      #endif
+#endif
       switch (out_type)
       {
       case ScaleSpaceOutputType::ONE_IMAGE:
@@ -148,9 +148,9 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
       recognizer = new OpenCLEdgeDetector();
       s->pushAlgorithm(recognizer);
       type = CV_32FC1;
-      #ifdef INFO_SS
+#ifdef INFO_SS
       std::cout << "Mode: edges\n";
-      #endif
+#endif
       switch (out_type)
       {
       case ScaleSpaceOutputType::ONE_IMAGE:
@@ -165,9 +165,9 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
       recognizer = new OpenCLBlobDetector();
       s->pushAlgorithm(recognizer);
       type = CV_32FC1;
-      #ifdef INFO_SS
+#ifdef INFO_SS
       std::cout << "Mode: blobs\n";
-      #endif
+#endif
       switch (out_type)
       {
       case ScaleSpaceOutputType::ONE_IMAGE:
@@ -182,9 +182,9 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
       recognizer = new OpenCLCornerDetector();
       s->pushAlgorithm(recognizer);
       type = CV_32FC1;
-      #ifdef INFO_SS
+#ifdef INFO_SS
       std::cout << "Mode: corners\n";
-      #endif
+#endif
       switch (out_type)
       {
       case ScaleSpaceOutputType::ONE_IMAGE:
@@ -199,9 +199,9 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
       recognizer = new OpenCLRidgeDetector();
       s->pushAlgorithm(recognizer);
       type = CV_32FC1;
-      #ifdef INFO_SS
+#ifdef INFO_SS
       std::cout << "Mode: ridges\n";
-      #endif
+#endif
       switch (out_type)
       {
       case ScaleSpaceOutputType::ONE_IMAGE:
@@ -219,7 +219,7 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
       type = CV_8UC1;
       break;
     }
-    
+
     if(post_processing)
     {
       post_processing->setDevice(device);
@@ -261,9 +261,9 @@ void ScaleSpaceOpenCL::processImage(ScaleSpaceImage & image)
     last_height = image.size().height;
     last_width = image.size().width;
     last_scale = nr_scales;
-    #ifdef INFO_SS
+#ifdef INFO_SS
     std::cout << "NEW\n";
-    #endif
+#endif
     if (post_processing)
     {
       post_processing->setDataSize(image.size().width, image.size().height, nr_scales);
@@ -289,50 +289,50 @@ void ScaleSpaceOpenCL::processImage(ScaleSpaceImage & image)
   int i = 0;
   for (auto s : streams)
   {
-    #ifdef INFO_SS
+#ifdef INFO_SS
     std::cout << "processing: " << i << " - ";
-    #endif
+#endif
     Stoper::start("gaussian" + std::to_string(i));
     Stoper::start("gaussian", false);
     s->processImage(image.getInputData(), image.getDataForScale(i));
     Stoper::stop("gaussian");
     Stoper::stop("gaussian" + std::to_string(i));
     void * additional_output = s->getLastAlgorithmAdditionalOutput();
-    #ifdef DEBUG_SS
+#ifdef DEBUG_SS
     std::cout << "additional_output = " << additional_output << "\n";
-    #endif
+#endif
     if (additional_output)
     {
-      #ifdef INFO_SS
+#ifdef INFO_SS
       std::cout << "Storing additional output\n";
-      #endif
+#endif
       memcpy(image.getDataForScale(i, 1), additional_output, image.getOneImageSize());
     }
-    #ifdef NOTICE_SS
+#ifdef NOTICE_SS
     std::cout << s->getTime() << "\n";
     //std::cout << (int)(*((unsigned char*)output.getDataForScale(i - 1))) << "\n";
-    #endif
+#endif
     ++i;
   }
   //image.show("before"); 
   cv::Mat outp = cv::Mat::zeros(image.size(), image.type());
   if (post_processing)
   {
-    #ifdef INFO_SS
+#ifdef INFO_SS
     std::cout << "Post processing\n";
-    #endif
+#endif
     if (output_type == ScaleSpaceOutputType::ONE_IMAGE)
     {
-      #ifdef INFO_SS
+#ifdef INFO_SS
       std::cout << "One image output\n";
-      #endif
+#endif
       post_processing->processData(image.getDataForScale(0), outp.data);
     }
     else if (output_type == ScaleSpaceOutputType::IMAGE_FOR_SCALE)
     {
-      #ifdef INFO_SS
+#ifdef INFO_SS
       std::cout << "Image for scale output\n";
-      #endif
+#endif
       for (unsigned int i = 0; i < nr_scales ; ++i)
       {
         if (calc_mode == ScaleSpaceMode::Edges || calc_mode == ScaleSpaceMode::Ridges)
@@ -356,13 +356,13 @@ void ScaleSpaceOpenCL::processImage(ScaleSpaceImage & image)
   switch (calc_mode)
   {
   case ScaleSpaceMode::Laplacian:
-   // output.show(outp, sigmas); 
+    // output.show(outp, sigmas); 
     outp = outp * 255 / nr_scales;
     break;
   case ScaleSpaceMode::Edges:
     break;
   case ScaleSpaceMode::Blobs:
-  //  output.show(outp, sigmas); 
+    //  output.show(outp, sigmas); 
     outp = outp * 255 / nr_scales;
     break;
   case ScaleSpaceMode::Corners:
