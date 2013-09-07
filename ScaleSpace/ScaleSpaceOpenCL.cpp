@@ -23,7 +23,8 @@
 
 using namespace TTime;
 
-ScaleSpaceOpenCL::ScaleSpaceOpenCL(ScaleSpaceMode mode /* = Pure */)
+ScaleSpaceOpenCL::ScaleSpaceOpenCL(ScaleSpaceMode mode /* = Pure */) :
+  ScaleSpace(mode)
 {
   if (OpenCLDevice::getDevices().empty())
   {
@@ -35,8 +36,6 @@ ScaleSpaceOpenCL::ScaleSpaceOpenCL(ScaleSpaceMode mode /* = Pure */)
   prepared = false;
 
   last_height = last_width = last_scale = 0;
-
-  calc_mode = mode;
 
   post_processing = nullptr;
 }
@@ -173,9 +172,9 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
       break;
     default: //and Pure
       //throw ScaleSpaceException("Pure not working for now");
-      recognizer = new OpenCLFloatToInt();
-      s->pushAlgorithm(recognizer);
-      type = CV_8UC1;
+      //recognizer = new OpenCLFloatToInt();
+      //s->pushAlgorithm(recognizer);
+      type = CV_32FC1;
       break;
     }
 
@@ -191,7 +190,7 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
   prepared = true;
 }
 
-void ScaleSpaceOpenCL::processImage(ScaleSpaceImage & image, bool first_image)
+void ScaleSpaceOpenCL::process(ScaleSpaceImage & image, bool first_image)
 {
   if (!prepared)
   {

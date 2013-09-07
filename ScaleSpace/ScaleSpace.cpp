@@ -6,6 +6,7 @@
 
 ScaleSpace::ScaleSpace(ScaleSpaceMode mode /*= ScaleSpaceMode::Pure*/)
 {
+  calc_mode = mode;
 }
 
 
@@ -177,4 +178,12 @@ std::string getStringFromScaleSpaceProcessor(const ScaleSpaceProcessor & process
 void ScaleSpace::setParameters(ScaleSpaceParameters par)
 {
   parameters = par;
+}
+
+
+void ScaleSpace::processImage(ScaleSpaceImage & image, bool first_image)
+{
+  image.setGaussian(calc_mode == ScaleSpaceMode::Pure);
+
+  process(image, first_image);
 }

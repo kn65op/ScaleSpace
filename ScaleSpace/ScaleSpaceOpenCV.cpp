@@ -8,7 +8,8 @@
 
 using namespace TTime;
 
-ScaleSpaceOpenCV::ScaleSpaceOpenCV(ScaleSpaceMode mode)
+ScaleSpaceOpenCV::ScaleSpaceOpenCV(ScaleSpaceMode mode) :
+  ScaleSpace(mode)
 {
   changeToFloat = nullptr;
   temp_image_type = CV_32FC1;
@@ -63,7 +64,7 @@ void ScaleSpaceOpenCV::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
   }
 }
 
-void ScaleSpaceOpenCV::processImage(ScaleSpaceImage & image, bool first_image)
+void ScaleSpaceOpenCV::process(ScaleSpaceImage & image, bool first_image)
 {
   run_stoper = !first_image || parameters.calc_first_image;
 

@@ -129,7 +129,7 @@ public:
    * If ScaleSpace is not prepared it will be. If error occure during preparation will throw ScaleSpaceException.
    * @param output ScaleSpaceImage with input image and computed representations in specified scales.
    */
-  virtual void processImage(ScaleSpaceImage & image, bool first_image) = 0;
+  virtual void processImage(ScaleSpaceImage & image, bool first_image);
   
   /**
    * Reutnrs unsigned int with number of scales.
@@ -174,6 +174,10 @@ protected:
   
   //sigmas
   std::vector<float> sigmas;
+
+  ScaleSpaceMode calc_mode;
+
+  virtual void process(ScaleSpaceImage & image, bool first_image) = 0;
   
 private:
   void makeSigmas();

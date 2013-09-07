@@ -96,6 +96,11 @@ public:
    */
   cv::Mat & getInput();
 
+  /**
+   * Set procesing type (Gaussian or not). true is gaussian
+   */
+  void setGaussian(bool g);
+
   void show(std::string prefix, std::string processor, unsigned int image_number = 0);
   void show(cv::Mat &blobs, std::vector<float> & sigmas);
 
@@ -116,6 +121,8 @@ private:
   vector_mat_t output;
   
   cv::Mat input;
+
+  bool gaussian;
   
   unsigned int nr_scales;
   unsigned int nr_images;

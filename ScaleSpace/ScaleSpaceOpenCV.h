@@ -14,12 +14,6 @@ public:
 
   ~ScaleSpaceOpenCV(void);
 
-  /** Process cv::Mat image.
-   * If ScaleSpace is not prepared it will be. If error occure during preparation will throw ScaleSpaceException.
-   * @param output ScaleSpaceImage with input image and computed representations in specified scales.
-   */
-  virtual void processImage(ScaleSpaceImage & image, bool first_image);
-
   /**
    * Prepare stream for computing.
    */
@@ -27,6 +21,12 @@ public:
 
 protected:
   int temp_image_type;
+
+  /** Process cv::Mat image.
+   * If ScaleSpace is not prepared it will be. If error occure during preparation will throw ScaleSpaceException.
+   * @param output ScaleSpaceImage with input image and computed representations in specified scales.
+   */
+  virtual void process(ScaleSpaceImage & image, bool first_image);
 
 private:
   unsigned int nr_images;
