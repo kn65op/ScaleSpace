@@ -276,9 +276,15 @@ void ScaleSpaceOpenCL::processImage(ScaleSpaceImage & image, bool first_image)
     {
       for (unsigned int i = 0; i < nr_scales ; ++i)
       {
-        if (calc_mode == ScaleSpaceMode::Edges || calc_mode == ScaleSpaceMode::Ridges)
+        if (calc_mode == ScaleSpaceMode::Edges)
         {
           OpenCLFindEdgesIn2DImageParams params;
+          params.setData(image.getDataForScale(i,1));
+          post_processing->setParams(params);
+        }
+        if (calc_mode == ScaleSpaceMode::Ridges)
+        {
+          OpenCLFindRidgesIn2DImageParams params;
           params.setData(image.getDataForScale(i,1));
           post_processing->setParams(params);
         }
