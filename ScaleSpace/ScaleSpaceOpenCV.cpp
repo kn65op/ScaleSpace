@@ -6,15 +6,6 @@
 //#define SS_DEBUG
 #define SS_INFO
 
-#ifdef SS_INFO
-#include <iostream>
-#endif
-
-#ifdef SS_DEBUG
-#include <fstream>
-#endif
-#include <fstream> //tmp
-
 using namespace TTime;
 
 ScaleSpaceOpenCV::ScaleSpaceOpenCV(ScaleSpaceMode mode)

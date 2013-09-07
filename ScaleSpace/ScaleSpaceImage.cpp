@@ -4,11 +4,6 @@
 
 #include <fstream>
 
-//#define DEBUG_SS
-#ifdef DEBUG_SS
-//#define DEBUG_SS_TWO_OUTPUT
-#endif
-
 ScaleSpaceImage::ScaleSpaceImage(void)
 {
   nr_scales = 0;
@@ -114,19 +109,7 @@ void ScaleSpaceImage::show(std::string prefix, std::string processor, unsigned i
     s += std::to_string(image_number);
     s += ".bmp";
     memcpy(tmp.data, getDataForScale(i), scale_space_images[0][0].elemSize() * input.size().width * input.size().height);
-#ifdef DEBUG_SS
-    std::ofstream out("data1" + std::to_string(image_nr) +  std::to_string(i) + ".txt");
-    out << tmp; //very slow
-    out.close();
-    //for some algorithms
-#ifdef DEBUG_SS_TWO_OUTPUT
-    cv::Mat tmp3(input.size().height, input.size().width, scale_space_images[1].type());
-    memcpy(tmp3.data, getDataForScale(i, 1), scale_space_images[1][0].elemSize() * input.size().width * input.size().height);
-    std::ofstream out2("data2" + std::to_string(image_nr) +  std::to_string(i) + ".txt");
-    out2 << tmp3;
-    out2.close();//*/ //very slow
-#endif //DEBUG_SS_TWO_OUTPUT
-#endif //DEBUG_SS
+
     cv::Mat tmp2;
     if (temporary_image_type == CV_32FC1)
     {
@@ -140,11 +123,7 @@ void ScaleSpaceImage::show(std::string prefix, std::string processor, unsigned i
     {
       throw ScaleSpaceImageException("Not supported output image type");
     }
-//    cv::imwrite(s.c_str(), tmp2);
     cv::imwrite(s.c_str(), output[i]);
-#ifdef DEBUG_SS
-    cv::imwrite((s+"_tmp.bmp").c_str(), tmp2);
-#endif
   }
   image_nr++;
 }

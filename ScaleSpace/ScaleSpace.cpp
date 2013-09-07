@@ -100,17 +100,6 @@ cv::Mat ScaleSpace::getGaussianForScale(unsigned int scale)
   unsigned int gaussian_size = getGaussianSizeForScale(scale);
   cv::Mat gaussian_kernel = cv::getGaussianKernel(gaussian_size, sigmas[scale], CV_32F);
   return gaussian_kernel * gaussian_kernel.t();
-
-#ifdef DEBUG_SS_GAUSSIAN
-    for (unsigned int i = 0; i < scale; ++i)
-    {
-      for (unsigned int j = 0; j < scale; ++j)
-      {
-        std::cout << gaussian_kernel.at<float>(i,j) << " ";
-      }
-      std::cout << "\n";
-    }
-#endif
 }
 
 unsigned int ScaleSpace::getGaussianSizeForScale(unsigned int scale)
