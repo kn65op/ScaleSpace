@@ -129,7 +129,7 @@ public:
    * If ScaleSpace is not prepared it will be. If error occure during preparation will throw ScaleSpaceException.
    * @param output ScaleSpaceImage with input image and computed representations in specified scales.
    */
-  virtual void processImage(ScaleSpaceImage & image) = 0;
+  virtual void processImage(ScaleSpaceImage & image, bool first_image) = 0;
   
   /**
    * Reutnrs unsigned int with number of scales.
@@ -168,7 +168,7 @@ protected:
   unsigned int nr_scales; //number of scales
   unsigned int scale_step; //scale step
   
-  ScaleSpaceParameters paraneters;
+  ScaleSpaceParameters parameters;
 
   bool prepared; //if streams is prepared
   

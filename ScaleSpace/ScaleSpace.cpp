@@ -176,5 +176,5 @@ std::string getStringFromScaleSpaceProcessor(const ScaleSpaceProcessor & process
 
 void ScaleSpace::setParameters(ScaleSpaceParameters par)
 {
-  paraneters = par;
+  parameters = par;
 }

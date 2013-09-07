@@ -63,14 +63,22 @@ void ScaleSpaceOpenCV::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
   }
 }
 
-void ScaleSpaceOpenCV::processImage(ScaleSpaceImage & image)
+void ScaleSpaceOpenCV::processImage(ScaleSpaceImage & image, bool first_image)
 {
+  run_stoper = !first_image || parameters.calc_first_image;
+
   //create output
   image.createImage(nr_scales, temp_image_type, nr_images);
 
-  Stoper::start("gaussian", false);
+  if (run_stoper)
+  {
+    Stoper::start("gaussian", false);
+  }
   doGaussian(image);
-  Stoper::stop("gaussian");
+  if (run_stoper)
+  {
+    Stoper::stop("gaussian");
+  }
 
   (this->*doMode)(image);
 
@@ -90,14 +98,20 @@ void ScaleSpaceOpenCV::doGaussian(ScaleSpaceImage & image)
   }
 
   (this->*changeToFloat)(image.getInput(), input);
-  
+
   for (unsigned int i = 0; i < nr_scales; ++i)
   {
     cv::Mat gaussian = getGaussianForScale(i);
 
-    Stoper::start("gaussian" + std::to_string(i) ,false);
+    if (run_stoper)
+    {
+      Stoper::start("gaussian" + std::to_string(i) ,false);
+    }
     cv::filter2D(input, image.getImageForScale(i), -1, gaussian);
-    Stoper::stop("gaussian" + std::to_string(i));
+    if (run_stoper)
+    {
+      Stoper::stop("gaussian" + std::to_string(i));
+    }
   }
 
     

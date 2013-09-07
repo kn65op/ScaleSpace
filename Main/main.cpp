@@ -34,11 +34,17 @@ int main(int argc, char * argv[])
 
   cv::Mat input;
   ScaleSpaceImage output;
+  ScaleSpaceParameters ssp;
+  ssp.calc_first_image = controller.calcFirstImage();
+  ssp.debug = controller.isDebug();
+  ssp.quiet = controller.isQuiet();
   try
   {
     prepare.start(false);
     ScaleSpace *ss = ScaleSpaceFactory::getScaleSpace(controller.getProcessor(), controller.getMode());
     ss->setScaleStep(controller.getScaleStep(), controller.getNrScales());
+    ss->setParameters(ssp);
+
     ss->prepare(controller.getSourceImageType(), ScaleSpaceOutputType::IMAGE_FOR_SCALE);
     prepare.stop();
     if (controller.oneInputFile())

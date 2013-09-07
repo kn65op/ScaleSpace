@@ -29,7 +29,7 @@ void processScaleSpace(ScaleSpace *ss, ProgramController & controller, cv::Mat &
   {
     stoper.start(false);
   }
-  ss->processImage(output);
+  ss->processImage(output, image_number == 0);
   try
   {
     stoper.stop();

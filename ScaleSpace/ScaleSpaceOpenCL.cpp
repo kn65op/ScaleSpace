@@ -191,7 +191,7 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
   prepared = true;
 }
 
-void ScaleSpaceOpenCL::processImage(ScaleSpaceImage & image)
+void ScaleSpaceOpenCL::processImage(ScaleSpaceImage & image, bool first_image)
 {
   if (!prepared)
   {
@@ -246,11 +246,17 @@ void ScaleSpaceOpenCL::processImage(ScaleSpaceImage & image)
   int i = 0;
   for (auto s : streams)
   {
-    Stoper::start("gaussian" + std::to_string(i), false);
-    Stoper::start("gaussian", false);
+    if (!first_image || parameters.calc_first_image)
+    {
+      Stoper::start("gaussian" + std::to_string(i), false);
+      Stoper::start("gaussian", false);
+    }
     s->processImage(image.getInputData(), image.getDataForScale(i));
-    Stoper::stop("gaussian");
-    Stoper::stop("gaussian" + std::to_string(i));
+    if (!first_image || parameters.calc_first_image)
+    {
+      Stoper::stop("gaussian");
+      Stoper::stop("gaussian" + std::to_string(i));
+    }
     void * additional_output = s->getLastAlgorithmAdditionalOutput();
     if (additional_output)
     {
