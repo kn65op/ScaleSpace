@@ -155,6 +155,13 @@ public:
    */
   cv::Mat getGaussianForScale(unsigned int scale);
 
+  /**
+   * Return gaussian size for selected scale.
+   * @param scale Scale for which gaussian size will be computed.
+   * @return unsigned int with gaussian size.
+   */
+  unsigned int getGaussianSizeForScale(unsigned int scale);
+
   void setParameters(ScaleSpaceParameters par);
 
 protected:
