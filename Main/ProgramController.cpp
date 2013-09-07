@@ -16,7 +16,7 @@ ProgramController::ProgramController(int argc, char* argv []) :
   show(true),
   quiet(false),
   debug(false),
-  calc_first_image(false)
+  calc_first_image(true)
 {
   processArgs(argc, argv);
 }

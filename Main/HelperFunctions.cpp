@@ -25,7 +25,7 @@ void printCLDeviceInfo()
 void processScaleSpace(ScaleSpace *ss, ProgramController & controller, cv::Mat & input, ScaleSpaceImage & output, Stoper & stoper, bool show, unsigned int image_number, bool calc_first_image)
 {
   output.setInput(input);
-  if (image_number != 0 || !calc_first_image)
+  if (image_number != 0 || calc_first_image)
   {
     stoper.start(false);
   }
