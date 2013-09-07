@@ -81,24 +81,12 @@ void ScaleSpaceOpenCV::processImage(ScaleSpaceImage & image)
   doGaussian(image);
   Stoper::stop("gaussian");
 
-#ifdef SS_INFO
-  std::cout << "gaussian\n";
-#endif
-
   (this->*doMode)(image);
-
-#ifdef SS_INFO
-  std::cout << "mode\n";
-#endif
 
   if (doPostProcessing)
   {
     (this->*doPostProcessing)(image);
   }
-#ifdef SS_INFO
-  std::cout << "post ptocessing\n";
-#endif
-
 }
 
 void ScaleSpaceOpenCV::doGaussian(ScaleSpaceImage & image)
@@ -116,17 +104,9 @@ void ScaleSpaceOpenCV::doGaussian(ScaleSpaceImage & image)
   {
     cv::Mat gaussian = getGaussianForScale(i);
 
-#ifdef SS_DEBUG
-    std::cout << gaussian <<"\n";
-#endif
     Stoper::start("gaussian" + std::to_string(i) ,false);
     cv::filter2D(input, image.getImageForScale(i), -1, gaussian);
     Stoper::stop("gaussian" + std::to_string(i));
-    
-#ifdef SS_DEBUG
-    std::ofstream of("pogau.txt");
-    of << image.getImageForScale(i);
-#endif
   }
 
     
@@ -154,11 +134,6 @@ void ScaleSpaceOpenCV::doBlob(ScaleSpaceImage& image) const
   
     calcBlob(Lxx, Lyy, sigmas[i], L);
 
-#ifdef SS_DEBUG
-    std::ofstream of("pochodnaL.txt");
-    of << L;
-#endif
-
     image.getImageForScale(i) = L;
   }
 }
@@ -175,11 +150,7 @@ void ScaleSpaceOpenCV::doCorner(ScaleSpaceImage& image) const
     calcSecondDeriteratives(image.getImageForScale(i), Lxx, Lxy, Lyy);
 
     calcCorner(Lx, Ly, Lxx, Lxy, Lyy, k);
-    
-#ifdef SS_DEBUG
-    std::ofstream of("k.txt");
-    of << k;
-#endif
+
     image.getImageForScale(i) = k;
   }
 }
@@ -196,15 +167,6 @@ void ScaleSpaceOpenCV::doEdge(ScaleSpaceImage& image) const
     calcThirdDeriteratives(image.getImageForScale(i), Lxxx, Lxxy, Lxyy, Lyyy);
 
     calcEdge(Lx, Ly, Lxx, Lxy, Lyy, Lxxx, Lxxy, Lxyy, Lyyy, L1, L2);
-#ifdef SS_DEBUG
-    std::ofstream of("L1.txt");
-    of << L1; 
-#endif
-#ifdef SS_DEBUG
-    std::ofstream of2("L2.txt");
-    of2 << L2;
-#endif
-#undef SS_DEBUG
 
     image.getImageForScale(i, 0) = L1;
     image.getImageForScale(i, 1) = L2;
@@ -221,16 +183,6 @@ void ScaleSpaceOpenCV::doRidge(ScaleSpaceImage& image) const
     calcSecondDeriteratives(image.getImageForScale(i), Lxx, Lxy, Lyy);
 
     calcRidge(Lx, Ly, Lxx, Lxy, Lyy, L1, L2);
-
-#ifdef SS_DEBUG
-    std::ofstream of("L1.txt");
-    of << L1;
-#endif
-
-#ifdef SS_DEBUG
-    std::ofstream of2("L2.txt");
-    of2 << L2;
-#endif
 
     image.getImageForScale(i, 0) = L1;
     image.getImageForScale(i, 1) = L2;
@@ -254,13 +206,6 @@ void ScaleSpaceOpenCV::calcDX(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(2, 2) = 0.5;
   
   filter2D(in, out, kernel);
-#ifdef SS_DEBUG
-    { 
-    std::ofstream of("kernelX.txt");
-    of << kernel;
-}
-
-#endif
 }
 
 void ScaleSpaceOpenCV::calcDY(cv::Mat& in, cv::Mat& out) const
@@ -274,12 +219,6 @@ void ScaleSpaceOpenCV::calcDY(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(2, 2) = 0.5;
   
   filter2D(in, out, kernel);
-#ifdef SS_DEBUG
-    { 
-    std::ofstream of("kernelY.txt");
-    of << kernel;
-}
-#endif
 }
 
 void ScaleSpaceOpenCV::calcDXX(cv::Mat& in, cv::Mat& out) const
@@ -296,13 +235,6 @@ void ScaleSpaceOpenCV::calcDXX(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(2, 2) = 1.0f/12.0f;
 
   filter2D(in, out, kernel);
-
-#ifdef SS_DEBUG
-  { 
-    std::ofstream of("kernelXX.txt");
-    of << kernel;
-}
-#endif
 }
 
 void ScaleSpaceOpenCV::calcDYY(cv::Mat& in, cv::Mat& out) const
@@ -319,12 +251,6 @@ void ScaleSpaceOpenCV::calcDYY(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(2, 2) = 1.0f/12.0f;
   
   filter2D(in, out, kernel);
-#ifdef SS_DEBUG
-    { 
-    std::ofstream of("kernelYY.txt");
-    of << kernel;
-}
-#endif
 }
 
 void ScaleSpaceOpenCV::calcDXY(cv::Mat& in, cv::Mat& out) const
@@ -336,12 +262,6 @@ void ScaleSpaceOpenCV::calcDXY(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(2, 2) = 1.0f/4.0f;
   
   filter2D(in, out, kernel);
-#ifdef SS_DEBUG
-    { 
-    std::ofstream of("kernelXY.txt");
-    of << kernel;
-}
-#endif
 }
 
 void ScaleSpaceOpenCV::calcDYYY(cv::Mat& in, cv::Mat& out) const
@@ -355,13 +275,6 @@ void ScaleSpaceOpenCV::calcDYYY(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(2, 2) = -1.0f/2.0f;
   
   filter2D(in, out, kernel);
-#ifdef SS_DEBUG
-    { 
-    std::ofstream of("kernelYYY.txt");
-    of << kernel;
-}
-
-#endif
 }
 
 void ScaleSpaceOpenCV::calcDXYY(cv::Mat& in, cv::Mat& out) const
@@ -375,12 +288,6 @@ void ScaleSpaceOpenCV::calcDXYY(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(2, 2) = 1.0f/8.0f;
   
   filter2D(in, out, kernel);
-#ifdef SS_DEBUG
-  { 
-    std::ofstream of("kernelXYY.txt");
-    of << kernel;
-}
-#endif
 }
 
 void ScaleSpaceOpenCV::calcDXXY(cv::Mat& in, cv::Mat& out) const
@@ -394,12 +301,6 @@ void ScaleSpaceOpenCV::calcDXXY(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(2, 2) = 1.0f/8.0f;
   
   filter2D(in, out, kernel);
-#ifdef SS_DEBUG
-  { 
-    std::ofstream of("kernelXXY.txt");
-    of << kernel;
-}
-#endif
 }
 
 void ScaleSpaceOpenCV::calcDXXX(cv::Mat& in, cv::Mat& out) const
@@ -413,12 +314,6 @@ void ScaleSpaceOpenCV::calcDXXX(cv::Mat& in, cv::Mat& out) const
   kernel.at<float>(2, 2) = -1.0f/2.0f;
   
   filter2D(in, out, kernel);
-#ifdef SS_DEBUG
-    { 
-    std::ofstream of("kernelXXX.txt");
-    of << kernel;
-}
-#endif
 }
 
 void ScaleSpaceOpenCV::calcFirstDeriteratives(cv::Mat& in, cv::Mat& Lx, cv::Mat& Ly) const
@@ -432,11 +327,6 @@ void ScaleSpaceOpenCV::calcSecondDeriteratives(cv::Mat& in, cv::Mat& Lxx, cv::Ma
   calcDXX(in, Lxx);
   calcDXY(in, Lxy);
   calcDYY(in, Lyy);
-#ifdef SS_DEBUG
-  
-  std::ofstream of("pochodnaLxx second.txt");
-  of << Lxx;
-#endif
 }
 
 void ScaleSpaceOpenCV::calcThirdDeriteratives(cv::Mat& in, cv::Mat& Lxxx, cv::Mat& Lxxy, cv::Mat& Lxyy, cv::Mat& Lyyy) const
