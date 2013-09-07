@@ -76,7 +76,7 @@ void ProgramController::printHelp() const
   std::cout << "\t\t\t\tcv_gpu, opencv_gpu, gpu - for OpenCV GPU implementation.\n";
   std::cout << "\t-s,--scale\tSet scales in format a b, where a is scale step and b is number of scales.\n";
   std::cout << "\t--no-show\t\tDon't save images on drive.\n";
-  std::cout << "\t-d,--debug\t\tShow intermediate images.\n";
+  std::cout << "\t-d,--debug\t\tShow intermediate images. It can be very slow.\n";
   std::cout << "\t-q,--quiet\t\tDon't show any output.\n";
   std::cout << "\t--no-first-image\t\tDon't measure time for first image.\n";
   //std::cout << "\t-,--\t\n";
@@ -236,6 +236,11 @@ bool ProgramController::isDeviceInfo() const
 
 void ProgramController::printProgramInfo() const
 {
+  if (quiet)
+  {
+    return;
+  }
+
   std::cout << "Program parameters:\n";
   std::cout << "\tProcessor: " << processor << "\n";
   std::cout << "\tMode: " << mode << "\n";
@@ -258,7 +263,7 @@ void ProgramController::printProgramInfo() const
   std::cout << "\tScales: " << nr_scales << "\n\tStep: " << scale_step << "\n";
   std::cout << "\tSave images on drive: " << (show ? "yes" : "no") << "\n";
   std::cout << "\tSave intermediate images: " << (debug ? "yes" : "no") << "\n";
-  std::cout << "\tBe quiet: " << (quiet ? "yes" : "no") << "\n";
+//  std::cout << "\tBe quiet: " << (quiet ? "yes" : "no") << "\n";
   std::cout << "\tCalculate first image: " << (calc_first_image ? "yes" : "no") << "\n";
   //std::cout << "\t: " << "" << "\n";
 }

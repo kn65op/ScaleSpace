@@ -168,3 +168,8 @@ std::string getStringFromScaleSpaceProcessor(const ScaleSpaceProcessor & process
   ss << processor;
   return ss.str();
 }
+
+void ScaleSpace::setParameters(ScaleSpaceParameters par)
+{
+  paraneters = par;
+}

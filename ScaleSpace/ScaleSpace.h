@@ -79,6 +79,13 @@ std::ostream & operator<<(std::ostream& out, ScaleSpaceSourceImageType type);
 
 std::string getStringFromScaleSpaceProcessor(const ScaleSpaceProcessor & processor);
 
+struct ScaleSpaceParameters
+{
+  bool quiet;
+  bool calc_first_image;
+  bool debug;
+};
+
 /** Scale Space process.
  * It contains all data, which is need to process image with Scale Space algorithm.
  * Currently step can be only even.
@@ -148,10 +155,14 @@ public:
    */
   cv::Mat getGaussianForScale(unsigned int scale);
 
+  void setParameters(ScaleSpaceParameters par);
+
 protected:
   unsigned int nr_scales; //number of scales
   unsigned int scale_step; //scale step
   
+  ScaleSpaceParameters paraneters;
+
   bool prepared; //if streams is prepared
   
   //sigmas
