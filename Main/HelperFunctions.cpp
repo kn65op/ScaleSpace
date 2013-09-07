@@ -3,6 +3,8 @@
 #include <iostream>
 #include <OpenCLDevice.h>
 
+using namespace TTime;
+
 void printCLDeviceInfo()
 {
   OpenCLDevice dev = OpenCLDevice::getDevices().front();
@@ -20,12 +22,25 @@ void printCLDeviceInfo()
   std::cout << "Max work group size: " << max_work_group_size << "\n";
 }
 
-void processScaleSpace(ScaleSpace *ss, ProgramController & controller, cv::Mat & input, ScaleSpaceImage & output, TTime::Stoper & stoper, bool show, unsigned int image_number)
+void processScaleSpace(ScaleSpace *ss, ProgramController & controller, cv::Mat & input, ScaleSpaceImage & output, Stoper & stoper, bool show, unsigned int image_number, bool calc_first_image)
 {
   output.setInput(input);
-  stoper.start(false);
+  if (image_number != 0 || !calc_first_image)
+  {
+    stoper.start(false);
+  }
   ss->processImage(output);
-  stoper.stop();
+  try
+  {
+    stoper.stop();
+  }
+  catch (NotStartedStoperException ex)
+  {
+    if (image_number != 0 && calc_first_image)
+    {
+      throw ex;
+    }
+  }
   if (show)
   {
     output.show(controller.getOutputPrefix(), getStringFromScaleSpaceProcessor(controller.getProcessor()), image_number);
