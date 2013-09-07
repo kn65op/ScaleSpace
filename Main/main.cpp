@@ -116,17 +116,26 @@ int main(int argc, char * argv[])
 
   out << getStringFromScaleSpaceProcessor(controller.getProcessor()) << ";";
   out << all.getTime() << ";" << prepare.getTime() << ";" << process.getTime();
-  std::cout << "Program took: " << all.getTime() << " " << all.getUnitName() << "\n";
-  std::cout << "Prepare took: " << prepare.getTime() << " " << all.getUnitName() << "\n";
-  std::cout << "Process took: " << process.getTime() << " " << all.getUnitName() << "\n";
+  if (!quiet)
+  {
+    std::cout << "Program took: " << all.getTime() << " " << all.getUnitName() << "\n";
+    std::cout << "Prepare took: " << prepare.getTime() << " " << all.getUnitName() << "\n";
+    std::cout << "Process took: " << process.getTime() << " " << all.getUnitName() << "\n";
+  }
   try
   {
     out << ";" << Stoper::getTime("gaussian");
-    std::cout << "Gaussians took: " << Stoper::getTime("gaussian") << " " << Stoper::getUnitName() << "\n";
+    if !(!quiet)
+    {
+      std::cout << "Gaussians took: " << Stoper::getTime("gaussian") << " " << Stoper::getUnitName() << "\n";
+    }
     for (unsigned int i=0; i < controller.getNrScales(); ++i)
     {
       out << ";" << Stoper::getTime("gaussian" + std::to_string(i));
-      std::cout << "Gaussian " << i << " took: " << Stoper::getTime("gaussian" + std::to_string(i)) << " " << Stoper::getUnitName() << "\n";
+      if (!quiet)
+      {
+        std::cout << "Gaussian " << i << " took: " << Stoper::getTime("gaussian" + std::to_string(i)) << " " << Stoper::getUnitName() << "\n";
+      }
     }
   }
   catch(StoperException & ex)
