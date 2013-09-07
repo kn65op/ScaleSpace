@@ -125,7 +125,7 @@ int main(int argc, char * argv[])
   try
   {
     out << ";" << Stoper::getTime("gaussian");
-    if !(!controller.isQuiet())
+    if (!controller.isQuiet())
     {
       std::cout << "Gaussians took: " << Stoper::getTime("gaussian") << " " << Stoper::getUnitName() << "\n";
     }
