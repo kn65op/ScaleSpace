@@ -116,7 +116,7 @@ int main(int argc, char * argv[])
 
   out << getStringFromScaleSpaceProcessor(controller.getProcessor()) << ";";
   out << all.getTime() << ";" << prepare.getTime() << ";" << process.getTime();
-  if (!quiet)
+  if (!controller.isQuiet())
   {
     std::cout << "Program took: " << all.getTime() << " " << all.getUnitName() << "\n";
     std::cout << "Prepare took: " << prepare.getTime() << " " << all.getUnitName() << "\n";
@@ -125,14 +125,14 @@ int main(int argc, char * argv[])
   try
   {
     out << ";" << Stoper::getTime("gaussian");
-    if !(!quiet)
+    if !(!controller.isQuiet())
     {
       std::cout << "Gaussians took: " << Stoper::getTime("gaussian") << " " << Stoper::getUnitName() << "\n";
     }
     for (unsigned int i=0; i < controller.getNrScales(); ++i)
     {
       out << ";" << Stoper::getTime("gaussian" + std::to_string(i));
-      if (!quiet)
+      if (!controller.isQuiet())
       {
         std::cout << "Gaussian " << i << " took: " << Stoper::getTime("gaussian" + std::to_string(i)) << " " << Stoper::getUnitName() << "\n";
       }
