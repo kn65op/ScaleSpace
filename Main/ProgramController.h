@@ -44,6 +44,9 @@ public:
 
   bool oneInputFile() const;
   bool isShow() const;
+  bool isQuiet() const;
+  bool isDebug() const;
+  bool calcFirstImage() const;
 
 private:
   ProgramController(const ProgramController & ); //non copyable
@@ -63,6 +66,10 @@ private:
   bool help;
   bool device_info;
   bool show;
+  bool quiet;
+  bool debug;
+  bool calc_first_image;
+
   std::string error_message;
   //parameters
   ScaleSpaceMode mode;

@@ -13,7 +13,10 @@ ProgramController::ProgramController(int argc, char* argv []) :
   nr_scales(10),
   out_prefix("result"),
   in_prefix(""),
-  show(true)
+  show(true),
+  quiet(false),
+  debug(false),
+  calc_first_image(false)
 {
   processArgs(argc, argv);
 }
@@ -38,6 +41,9 @@ void ProgramController::processArgs(int argc, char*argv[])
   getProcessorFromOptions();
   device_info = opt >> GetOpt::OptionPresent("device_info");
   show = !(opt >> GetOpt::OptionPresent("no-show"));
+  debug = opt >> GetOpt::OptionPresent('d', "debug");
+  quiet = opt >> GetOpt::OptionPresent('q', "quiet");
+  calc_first_image = !(opt >> GetOpt::OptionPresent("no-first-image"));
   getTypeFromOptions();
 
   if (opt.options_remain())
@@ -70,6 +76,9 @@ void ProgramController::printHelp() const
   std::cout << "\t\t\t\tcv_gpu, opencv_gpu, gpu - for OpenCV GPU implementation.\n";
   std::cout << "\t-s,--scale\tSet scales in format a b, where a is scale step and b is number of scales.\n";
   std::cout << "\t--no-show\t\tDon't save images on drive.\n";
+  std::cout << "\t-d,--debug\t\tShow intermediate images.\n";
+  std::cout << "\t-q,--quiet\t\tDon't show any output.\n";
+  std::cout << "\t--no-first-image\t\tDon't measure time for first image.\n";
   //std::cout << "\t-,--\t\n";
 }
 
@@ -248,6 +257,9 @@ void ProgramController::printProgramInfo() const
   std::cout << "\tInput image type: " << type << "\n";
   std::cout << "\tScales: " << nr_scales << "\n\tStep: " << scale_step << "\n";
   std::cout << "\tSave images on drive: " << (show ? "yes" : "no") << "\n";
+  std::cout << "\tSave intermediate images: " << (debug ? "yes" : "no") << "\n";
+  std::cout << "\tBe quiet: " << (quiet ? "yes" : "no") << "\n";
+  std::cout << "\tCalculate first image: " << (calc_first_image ? "yes" : "no") << "\n";
   //std::cout << "\t: " << "" << "\n";
 }
 
@@ -305,4 +317,19 @@ bool ProgramController::oneInputFile() const
 bool ProgramController::isShow() const
 {
   return show;
+}
+
+bool ProgramController::isDebug() const
+{
+  return debug;
+}
+
+bool ProgramController::isQuiet() const
+{
+  return quiet;
+}
+
+bool ProgramController::calcFirstImage() const
+{
+  return calc_first_image;
 }
