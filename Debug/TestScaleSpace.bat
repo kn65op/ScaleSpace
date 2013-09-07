@@ -1,4 +1,7 @@
 Rem Test validity
+
+del ValidityTest\* /Q
+
 start .\ScaleSpace.exe -I "ValidityData/cos" -s 2 1 -p cl -o "ValidityTest/in_edge" -m edge
 start .\ScaleSpace.exe -I "ValidityData/cos" -s 2 1 -p cv -o "ValidityTest/in_edge" -m edge
 start .\ScaleSpace.exe -I "ValidityData/cos" -s 2 1 -p cv_gpu -o "ValidityTest/in_edge" -m edge
@@ -22,6 +25,8 @@ start .\ScaleSpace.exe -I "ValidityData/cos" -s 2 1 -p cv_gpu -o "ValidityTest/i
 timeout 10
 
 Rem Test performance
+
+del PerformanceTest\* /Q
 
 .\ScaleSpace.exe -I "PerformanceData/cos" -p cl -o "PerformanceTest/lena_edge" -s 2 11 -m edge --no-show -q --no-first-image
 .\ScaleSpace.exe -I "PerformanceData/cos" -p cv -o "PerformanceTest/lena_edge" -s 2 11 -m edge --no-show -q --no-first-image
