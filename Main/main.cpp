@@ -81,7 +81,10 @@ int main(int argc, char * argv[])
           processScaleSpace(ss, controller, input, output, process, controller.isShow(), in++);
         }
       }
-      std::cout << "End of input files. Last file was: " << getFileWithPrefix(prefix, i - 2) << "\n";
+      if (!controller.isQuiet())
+      {
+        std::cout << "End of input files. Last file was: " << getFileWithPrefix(prefix, i - 2) << "\n";
+      }
     }
 
   }
