@@ -72,26 +72,11 @@ void ScaleSpaceImage::setInput(cv::Mat image)
   }*/
 }
 
-void ScaleSpaceImage::show(std::string prefix, std::string processor, unsigned int image_number)
+void ScaleSpaceImage::show(std::string prefix, std::string processor, unsigned int image_number, bool debug)
 {
   static int image_nr = 0;
   cv::Mat to_write;
-  /*
-  cv::Mat tmp(input.size().height, input.size().width, scale_space_images[0][0].type());
-  memcpy(tmp.data, getDataForScale(0), scale_space_images[0][0].elemSize() * input.size().width * input.size().height);
-  cv::Mat tmp2;
-  if (temporary_image_type == CV_32FC1)
-  {
-    tmp.convertTo(tmp2, CV_8UC1, 255.0);
-  }
-  else if (temporary_image_type == CV_8UC1)
-  {
-    tmp2 = tmp;
-  }
-  else
-  {
-    throw ScaleSpaceImageException("Not supported output image type");
-  }*/
+ 
   cv::imwrite(prefix + "_" + processor + "_original.bmp", input);
 
   for (unsigned int i = 0; i < nr_scales; ++i)
@@ -109,8 +94,17 @@ void ScaleSpaceImage::show(std::string prefix, std::string processor, unsigned i
       s += "0";
     }
     s += std::to_string(image_number);
+    if (debug)
+    {
+      std::string ds1 = s + "_1.bmp";
+      std::string ds2 = s + "_2.bmp";
+      scale_space_images[0][i].convertTo(to_write, CV_8UC1, 255.0);
+      cv::imwrite(ds1.c_str(), to_write);
+
+      scale_space_images[1][i].convertTo(to_write, CV_8UC1, 255.0);
+      cv::imwrite(ds2.c_str(), to_write);
+    }
     s += ".bmp";
-    //memcpy(tmp.data, getDataForScale(i), scale_space_images[0][0].elemSize() * input.size().width * input.size().height);
 
     if (gaussian)
     {
@@ -118,19 +112,6 @@ void ScaleSpaceImage::show(std::string prefix, std::string processor, unsigned i
     }
     else
     {
-    /*  cv::Mat tmp2;
-      if (temporary_image_type == CV_32FC1)
-      {
-        tmp.convertTo(tmp2, CV_8UC1, 255.0);
-      }
-      else if (temporary_image_type == CV_8UC1)
-      {
-        tmp2 = tmp;
-      }
-      else
-      {
-        throw ScaleSpaceImageException("Not supported output image type");
-      }*/
       to_write = output[i];
     }
     cv::imwrite(s.c_str(), to_write);
