@@ -16,6 +16,7 @@ using namespace TTime;
 
 int main(int argc, char * argv[])
 {
+  bool exception = false;
   Stoper prepare, process, all;
   all.start();
   JAI::Camera *camera = nullptr;
@@ -96,27 +97,33 @@ int main(int argc, char * argv[])
   }
   catch (OpenCLDeviceException &ex)
   {
+    exception = true;
     std::cout << "OpenCLDeviceException: " << ex.getFullMessage() << "\n";
     std::cout << "Source:\n" << ex.getSource() << "\n";
   }
   catch(OpenCLException &ex)
   {
+    exception = true;
     std::cout << "OpenCLException: " << ex.getFullMessage() << "\n";
   }
   catch (NoPlatformScaleSpaceException &ex)
   {
+    exception = true;
     std::cout << "Platform for this processor is no available:\n\t" << (std::string)ex << "\n";
   }
   catch (ScaleSpaceException &ex)
   {
+    exception = true;
     std::cout << "ScaleSpaceExcetpion: " << (std::string)ex << "\n";
   }
   catch (ScaleSpaceImageException &ex)
   {
+    exception = true;
     std::cout << "ScaleSpaceImageException: " << (std::string)ex << "\n";
   }
   catch (JAI::CameraException &ex)
   {
+    exception = true;
     std::cout << (std::string)ex << "\n";
     std::cout << "JAI camera is not connected\n";
   }
@@ -149,9 +156,16 @@ int main(int argc, char * argv[])
   }
   catch(StoperException & ex)
   {
+    exception = true;
     std::cout << (std::string)ex << "\n";
   }
   out << "\n";
+
+  if (exception)
+  {
+    std::ofstream out_err("err" + controller.getOutputPrefix() + ".txt");
+    out_err << "Exception occured\n";
+  }
 
   return 0;
 }
