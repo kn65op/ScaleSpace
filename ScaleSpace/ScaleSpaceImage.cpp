@@ -97,19 +97,23 @@ void ScaleSpaceImage::show(std::string prefix, std::string processor, unsigned i
     if (debug)
     {
       std::string ds1 = s + "_1.bmp";
-      std::string ds2 = s + "_2.bmp";
       std::string ds1txt = s + "_1.txt";
-      std::string ds2txt = s + "_2.txt";
+      std::ofstream im1(ds1txt);
+
       scale_space_images[0][i].convertTo(to_write, CV_8UC1, 255.0);
       cv::imwrite(ds1.c_str(), to_write);
-
-      std::ofstream im1(ds1txt);
-      std::ofstream im2(ds2txt);
       im1 << scale_space_images[0][i];
-      im2 << scale_space_images[1][i];
 
-      scale_space_images[1][i].convertTo(to_write, CV_8UC1, 255.0);
-      cv::imwrite(ds2.c_str(), to_write);
+      if (scale_space_images.size() > 1)
+      {
+        std::string ds2 = s + "_2.bmp";
+        std::string ds2txt = s + "_2.txt";
+        std::ofstream im2(ds2txt);
+
+        scale_space_images[1][i].convertTo(to_write, CV_8UC1, 255.0);
+        cv::imwrite(ds2.c_str(), to_write);
+        im2 << scale_space_images[1][i];
+      }
     }
     s += ".bmp";
 
