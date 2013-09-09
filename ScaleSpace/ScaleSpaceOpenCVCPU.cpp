@@ -25,7 +25,7 @@ void ScaleSpaceOpenCVCPU::calcBlob(cv::Mat& Lxx, cv::Mat& Lyy, float sigma, cv::
 
 void ScaleSpaceOpenCVCPU::calcCorner(cv::Mat& Lx, cv::Mat& Ly, cv::Mat& Lxx, cv::Mat& Lxy, cv::Mat& Lyy, cv::Mat& k) const
 {
-  k = abs(Lx.mul(Lx).mul(Lyy) +  Ly.mul(Ly).mul(Lxx) - Lx.mul(Ly.mul(Lxy)) * 2.0);
+  k = abs(Lx.mul(Lx).mul(Lyy) + Ly.mul(Ly).mul(Lxx) - Lx.mul(Ly).mul(Lxy) * 2.0);
 }
 
 void ScaleSpaceOpenCVCPU::calcEdge(cv::Mat& Lx, cv::Mat& Ly, cv::Mat& Lxx, cv::Mat& Lxy, cv::Mat& Lyy, cv::Mat& Lxxx, cv::Mat& Lxxy, cv::Mat& Lxyy, cv::Mat& Lyyy, cv::Mat& L1, cv::Mat& L2) const
