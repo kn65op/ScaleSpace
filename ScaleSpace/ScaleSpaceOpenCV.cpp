@@ -390,7 +390,7 @@ void ScaleSpaceOpenCV::calcEdgeMax(cv::Mat& L1, cv::Mat& L2, cv::Mat& out) const
     {
       for (int j = -1; j < 2; ++j)
       {
-        if (i && j) continue;
+        if (!i && !j) continue;
         if (in.at<float>(x + i, y + j) * centre < 0 && in_sec.at<float>(x, y) < 0)
         {
           return 255;
