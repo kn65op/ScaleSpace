@@ -42,6 +42,7 @@ void ScaleSpaceOpenCVCPU::calcRidge(cv::Mat& Lx, cv::Mat& Ly, cv::Mat& Lxx, cv::
   setLowValuesToZero(L1);
 
   L2 = (Ly.mul(Ly) - Lx.mul(Lx)).mul(Lxx - Lyy) - 4 * Lx.mul(Ly).mul(Lxy);
+  setLowValuesToZero(L2);
 }
 /*
 void ScaleSpaceOpenCVCPU::calcRidgeMax(cv::Mat& L1, cv::Mat& L2, cv::Mat& out) const

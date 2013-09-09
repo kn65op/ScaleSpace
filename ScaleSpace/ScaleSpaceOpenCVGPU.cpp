@@ -158,8 +158,9 @@ void ScaleSpaceOpenCVGPU::calcRidge(cv::Mat& cpu_Lx, cv::Mat& cpu_Ly, cv::Mat& c
   multiply(LyLydLxLx, LxxdLyy, LyLydLxLxLxxdLyy);
   multiply(LxLy, Lxy, LxLyLxy);
   multiply(LxLyLxy, 4, LxLyLxy4);
-  subtract(LyLydLxLx, LxLyLxy4, L2);
+  subtract(LyLydLxLxLxxdLyy, LxLyLxy4, L2);
   L2.download(cpu_L2);
+  setLowValuesToZero(cpu_L2);
 }
 
 /*
