@@ -2,9 +2,9 @@ Rem Test validity
 
 del ValidityTest\* /Q
 
-.\ScaleSpace.exe -I "ValidityData/cos2" -s 2 1 -p cl -o "ValidityTest/in_edge" -m ridge -d
-.\ScaleSpace.exe -I "ValidityData/cos2" -s 2 1 -p cv -o "ValidityTest/in_edge" -m ridge -d
-.\ScaleSpace.exe -I "ValidityData/cos2" -s 2 1 -p cv_gpu -o "ValidityTest/in_edge" -m ridge -d
+start .\ScaleSpace.exe -I "ValidityData/cos" -s 2 1 -p cl -o "ValidityTest/in_edge" -m edge
+start .\ScaleSpace.exe -I "ValidityData/cos" -s 2 1 -p cv -o "ValidityTest/in_edge" -m edge
+start .\ScaleSpace.exe -I "ValidityData/cos" -s 2 1 -p cv_gpu -o "ValidityTest/in_edge" -m edge
 
 start .\ScaleSpace.exe -I "ValidityData/cos" -s 2 1 -p cl -o "ValidityTest/in_blob2" -m blob
 start .\ScaleSpace.exe -I "ValidityData/cos" -s 2 1 -p cv -o "ValidityTest/in_blob2" -m blob
