@@ -414,7 +414,7 @@ void ScaleSpaceOpenCV::calcMaxInScale(cv::Mat& L, cv::Mat& out) const
         {
           return 0;
         }
-        if (in.at<float>(x + i, y + j) >= centre && i && j)
+        if (in.at<float>(x + i, y + j) > centre)
         {
           return 0;
         }

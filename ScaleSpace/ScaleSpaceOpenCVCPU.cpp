@@ -20,9 +20,7 @@ void ScaleSpaceOpenCVCPU::filter2D(cv::Mat& src, cv::Mat& dst, cv::Mat& kernel) 
 
 void ScaleSpaceOpenCVCPU::calcBlob(cv::Mat& Lxx, cv::Mat& Lyy, float sigma, cv::Mat& L) const
 {
-  L = abs(Lxx + Lyy) * sigma;
-
-  
+  L = abs(Lxx + Lyy);// * sigma;
 }
 
 void ScaleSpaceOpenCVCPU::calcCorner(cv::Mat& Lx, cv::Mat& Ly, cv::Mat& Lxx, cv::Mat& Lxy, cv::Mat& Lyy, cv::Mat& k) const
