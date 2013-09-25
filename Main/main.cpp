@@ -78,7 +78,7 @@ int main(int argc, char * argv[])
       bool is_image = true;
       while (is_image)
       {
-        input = cv::imread(getFileWithPrefix(prefix, i++).c_str(), CV_LOAD_IMAGE_GRAYSCALE);
+        input = readFileFromDir(prefix, i++);
         if (!input.size().width)
         {
           is_image = false;

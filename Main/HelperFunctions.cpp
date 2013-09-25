@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <OpenCLDevice.h>
+#include <opencv2\highgui\highgui.hpp>
 
 using namespace TTime;
 
@@ -49,6 +50,19 @@ void processScaleSpace(ScaleSpace *ss, ProgramController & controller, cv::Mat &
 
 std::string getFileWithPrefix(std::string prefix, unsigned int i)
 {
-  return prefix + "_" + (i < 10 ? "0" + std::to_string(i) : std::to_string(i)) + ".bmp";
+  return prefix + "_" + (i < 10 ? "0" + std::to_string(i) : std::to_string(i));
 }
 
+cv::Mat readFileFromDir(std::string prefix, unsigned int i)
+{
+  cv::Mat image = cv::imread((getFileWithPrefix(prefix, i) + ".bmp").c_str(), CV_LOAD_IMAGE_GRAYSCALE);
+  if (!image.size().width)
+  {
+    image = cv::imread((getFileWithPrefix(prefix, i) + ".jpg").c_str(), CV_LOAD_IMAGE_GRAYSCALE);
+  }
+  if (!image.size().width)
+  {
+    image = cv::imread((getFileWithPrefix(prefix, i) + ".png").c_str(), CV_LOAD_IMAGE_GRAYSCALE);
+  }
+  return image;
+}
