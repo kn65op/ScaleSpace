@@ -76,24 +76,26 @@ void ScaleSpaceImage::show(std::string prefix, std::string processor, unsigned i
 {
   static int image_nr = 0;
   cv::Mat to_write;
- 
-  cv::imwrite(prefix + "_" + processor + "_original.bmp", input);
+
+  std::string image_number_string;
+  if (image_number < 10)
+  {
+    image_number_string = "0";
+  }
+  image_number_string += std::to_string(image_number);
+  cv::imwrite(prefix + "_" + processor + image_number_string + "_original.bmp", input);
 
   for (unsigned int i = 0; i < nr_scales; ++i)
   {
     std::string s;
     s = prefix + "_" + processor + "_";
+    s += image_number_string;
     if (i < 10)
     {
       s += "0";
     }
-    s += std::to_string(i);
     s += "_";
-    if (image_number < 10)
-    {
-      s += "0";
-    }
-    s += std::to_string(image_number);
+    s += std::to_string(i);
     if (debug)
     {
       std::string ds1 = s + "_1.bmp";
