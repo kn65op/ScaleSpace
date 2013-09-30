@@ -174,8 +174,8 @@ void ScaleSpaceOpenCV::doEdge(ScaleSpaceImage& image) const
 
     calcEdge(Lx, Ly, Lxx, Lxy, Lyy, Lxxx, Lxxy, Lxyy, Lyyy, L1, L2);
 
-    image.getImageForScale(i, 0) = L1;
-    image.getImageForScale(i, 1) = L2;
+    L1.copyTo(image.getImageForScale(i, 0));
+    L2.copyTo(image.getImageForScale(i, 1));
   }
 }
 
