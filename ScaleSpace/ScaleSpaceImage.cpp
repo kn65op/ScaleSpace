@@ -18,8 +18,8 @@ void ScaleSpaceImage::createImage(unsigned int scales, int type, unsigned int im
 {
   scale_space_images.clear();
   int *dims =  new int [2];
-  dims[0] = input.size().width;
-  dims[1] = input.size().height;
+  dims[0] = input.size().height;
+  dims[1] = input.size().width;
   for (unsigned int i=0; i < images; ++i)
   {
     vector_mat_t scale_vec;
@@ -90,11 +90,11 @@ void ScaleSpaceImage::show(std::string prefix, std::string processor, unsigned i
     std::string s;
     s = prefix + "_" + processor + "_";
     s += image_number_string;
+    s += "_";
     if (i < 10)
     {
       s += "0";
     }
-    s += "_";
     s += std::to_string(i);
     if (debug)
     {
