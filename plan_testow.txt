@@ -10,7 +10,25 @@ Poprawnoœæ:
 		Informacje na temat obrazów (ile pikseli jest niezerowych, jak wielkie s¹ ró¿nice, np. ile &)
 	Cel:
 		Pojedyncze piksele powinny siê ró¿niæ.
-	
+		
+blob
+01_09
+corner
+01_07
+02_06
+03_05
+edge
+00_00
+00_03
+02_03
+pure
+02_09
+03_09
+ridge
+01_01
+04_07
+02_05
+
 Szybkoœæ:
 	Do zrobienia:
 		Zapisywanie czasów do pliku.
