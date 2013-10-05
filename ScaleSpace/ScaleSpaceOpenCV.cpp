@@ -386,16 +386,17 @@ void ScaleSpaceOpenCV::calcEdgeMax(cv::Mat& L1, cv::Mat& L2, cv::Mat& out) const
   processTwoImagesNonBorder(L1, L2, out, [] (cv::Mat & in, cv::Mat & in_sec, int x, int y)->unsigned char
   {
     float centre = in.at<float>(x,y);
-    for (int i = -1; i < 2; ++i)
+    if (in.at<float>(x + 1, y) * centre < 0 && in_sec.at<float>(x, y) < 0)
     {
-      for (int j = -1; j < 2; ++j)
-      {
-        if (!i && !j) continue;
-        if (in.at<float>(x + i, y + j) * centre < 0 && in_sec.at<float>(x, y) < 0)
-        {
-          return 255;
-        }
-      }
+      return 255;
+    }
+    if (in.at<float>(x, y + 1) * centre < 0 && in_sec.at<float>(x, y) < 0)
+    {
+      return 255;
+    }
+    if (in.at<float>(x + 1, y + 1) * centre < 0 && in_sec.at<float>(x, y) < 0)
+    {
+      return 255;
     }
     return 0;
   });
