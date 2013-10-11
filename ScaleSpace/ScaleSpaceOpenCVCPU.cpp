@@ -15,7 +15,7 @@ ScaleSpaceOpenCVCPU::~ScaleSpaceOpenCVCPU(void)
 
 void ScaleSpaceOpenCVCPU::filter2D(cv::Mat& src, cv::Mat& dst, cv::Mat& kernel) const
 {
-  cv::filter2D(src, dst, -1, kernel);
+  cv::filter2D(src, dst, -1, kernel, cv::Point(-1, -1), 0.0, cv::BORDER_REPLICATE);
 }
 
 void ScaleSpaceOpenCVCPU::calcBlob(cv::Mat& Lxx, cv::Mat& Lyy, float sigma, cv::Mat& L) const

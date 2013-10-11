@@ -29,7 +29,7 @@ void ScaleSpaceOpenCVGPU::filter2D(cv::Mat& src, cv::Mat& dst, cv::Mat& kernel) 
   GpuMat src_gpu, dst_gpu;
   src_gpu.upload(src);
 
-  cv::gpu::filter2D(src_gpu, dst_gpu, -1, kernel);
+  cv::gpu::filter2D(src_gpu, dst_gpu, -1, kernel, cv::Point(-1, -1), cv::BORDER_REPLICATE);
 
   dst_gpu.download(dst);
 }
