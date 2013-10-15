@@ -39,7 +39,7 @@ void ScaleSpaceImage::createImage(unsigned int scales, int type, unsigned int im
   dims[1] = input.size().width;
   for (unsigned int j = 0; j < scales; ++j)
   {
-    output.push_back(cv::Mat(2, dims, CV_8UC1));
+    output.push_back(cv::Mat(2, dims, CV_8UC1, cv::Scalar(0)));
   }
   
   delete [] dims;
