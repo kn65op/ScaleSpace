@@ -76,6 +76,7 @@
     <Import Project="TTimeR.props" />
     <Import Project="..\ScaleSpaceR.props" />
     <Import Project="..\..\PropertySheets\OpenCLR.props" />
+    <Import Project="..\..\PropertySheets\OpenCVR.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -92,7 +93,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Jai_Factory.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ProjectReference />
     <Bscmake>

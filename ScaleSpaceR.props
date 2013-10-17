@@ -3,7 +3,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <IncludePath>..\ScaleSpace;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\ScaleSpace;$(IncludePath)</IncludePath>
     <LibraryPath>..\Release;$(LibraryPath)</LibraryPath>
     <_PropertySheetDisplayName>ScaleSpaceR</_PropertySheetDisplayName>
   </PropertyGroup>

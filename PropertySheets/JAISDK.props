@@ -13,6 +13,9 @@
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>Jai_Factory.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>
