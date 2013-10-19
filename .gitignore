@@ -172,3 +172,4 @@ Makefile
 
 # reg
 *.reg
+Diagrams/*
