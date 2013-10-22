@@ -61,10 +61,16 @@ int main(int argc, char * argv[])
     else if (controller.useCamera()) //process all camera
     {
       unsigned int i = 0;
+	  camera = JAI::Camera::getCameraList().front();
+	  camera->open();
+	  camera->start();
+	  std::this_thread::sleep_for(std::chrono::seconds(1)); //Wait for camera to start working
+		
       while (1) //TODO: Stop condition
       {
-        camera = JAI::Camera::getCameraList().front();
         input = camera->getNextFrame();
+        processScaleSpace(ss, controller, input, output, process, controller.isShow());
+      }
         processScaleSpace(ss, controller, input, output, process, controller.isShow(), i++, controller.calcFirstImage(), controller.isDebug());
       }
     }
