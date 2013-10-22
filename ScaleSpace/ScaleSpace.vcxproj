@@ -29,11 +29,6 @@
     <ClCompile Include="ScaleSpaceOpenCVCPU.cpp" />
     <ClCompile Include="ScaleSpaceOpenCVGPU.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <CudaCompile Include="ScaleSpaceCUDAKernels.cu">
-      <FileType>Document</FileType>
-    </CudaCompile>
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{CE2E28E3-0A39-427E-891B-0353B0AAF61D}</ProjectGuid>
     <RootNamespace>ScaleSpace</RootNamespace>
