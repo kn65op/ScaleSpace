@@ -288,7 +288,6 @@ void ScaleSpaceOpenCL::process(ScaleSpaceImage & image, bool first_image)
           post_processing->setParams(params);
         }
 
-        post_processing->prepare();
         post_processing->processData(image.getDataForScale(i), image.getDataForOutput(i));
       }
     }

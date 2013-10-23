@@ -183,6 +183,8 @@ void ScaleSpace::setParameters(ScaleSpaceParameters par)
 
 void ScaleSpace::processImage(ScaleSpaceImage & image, bool first_image)
 {
+  image.zeroOutputImage();
+
   image.setGaussian(calc_mode == ScaleSpaceMode::Pure);
 
   process(image, first_image);

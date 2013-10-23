@@ -101,6 +101,8 @@ public:
    */
   void setGaussian(bool g);
 
+  void zeroOutputImage();
+
   void show(std::string prefix, std::string processor, unsigned int image_number = 0, bool debug = false);
   void show(cv::Mat &blobs, std::vector<float> & sigmas);
 

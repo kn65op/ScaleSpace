@@ -14,7 +14,15 @@ ScaleSpaceImage::~ScaleSpaceImage(void)
 {
 }
 
-void ScaleSpaceImage::createImage(unsigned int scales, int type, unsigned int images)//TODO: temp
+void ScaleSpaceImage::zeroOutputImage()
+{
+  for (unsigned int j = 0; j < nr_scales; ++j)
+  {
+    output[j] = 0;
+  }
+}
+
+void ScaleSpaceImage::createImage(unsigned int scales, int type, unsigned int images)
 {
   scale_space_images.clear();
   int *dims =  new int [2];
@@ -25,7 +33,7 @@ void ScaleSpaceImage::createImage(unsigned int scales, int type, unsigned int im
     vector_mat_t scale_vec;
     for (unsigned int j = 0; j < scales; ++j)
     {
-      scale_vec.push_back(cv::Mat(2, dims, type));
+      scale_vec.push_back(cv::Mat(2, dims, type, cv::Scalar(0)));
     }
     scale_space_images.push_back(scale_vec);
   }
