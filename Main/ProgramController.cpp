@@ -1,4 +1,5 @@
 #include "ProgramController.h"
+#include <DeviceSelector.h>
 
 #include <iostream>
 #include <vector>
@@ -39,6 +40,7 @@ void ProgramController::processArgs(int argc, char*argv[])
   getModeFromOptions();
   getScalesFromOptions();
   getProcessorFromOptions();
+  getOpenCLFromOptions();
   device_info = opt >> GetOpt::OptionPresent("device_info");
   show = !(opt >> GetOpt::OptionPresent("no-show"));
   debug = opt >> GetOpt::OptionPresent('d', "debug");
@@ -74,6 +76,9 @@ void ProgramController::printHelp() const
   std::cout << "\t\t\t\tcl, opencl - for OpenCL implementation.\n";
   std::cout << "\t\t\t\tcv, opencv, cpu - for OpenCV implementation.\n";
   std::cout << "\t\t\t\tcv_gpu, opencv_gpu, gpu - for OpenCV GPU implementation.\n";
+  std::cout << "\t-c,--opencl\tSelect opencl device. If not specified user can choose. It can be:\n";
+  std::cout << "\t\t\t\tnvidia - for NVIDIA device.\n";
+  std::cout << "\t\t\t\tintel - for Intel device.\n";
   std::cout << "\t-s,--scale\tSet scales in format a b, where a is scale step and b is number of scales.\n";
   std::cout << "\t--no-show\t\tDon't save images on drive.\n";
   std::cout << "\t-d,--debug\t\tShow intermediate images. It can be very slow.\n";
@@ -337,4 +342,30 @@ bool ProgramController::isQuiet() const
 bool ProgramController::calcFirstImage() const
 {
   return calc_first_image;
+}
+
+std::string ProgramController::getOpenCL() const
+{
+  return opencl;
+}
+
+void ProgramController::getOpenCLFromOptions()
+{
+  if (opt >> GetOpt::Option('c', "opencl", opencl))
+  {
+    if (opencl == "")
+    {
+      help = true;
+      error_message = "You must specify OpenCL device";
+    }
+    try
+    {
+      opencl = DeviceSelector::getOpenCLPlatformString(DeviceSelector::getPlatformFromUserString(opencl));
+    }
+    catch (DeviceSelector::WrongPlatorfmException & w)
+    {
+      help = true;
+      error_message = "You specyfied wrong opencl deivce";
+    }
+  }
 }

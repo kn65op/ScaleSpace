@@ -39,6 +39,9 @@
     <ClInclude Include="ScaleSpaceCUDAKernels.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DeviceSelector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ScaleSpaceImage.cpp">
@@ -62,10 +65,8 @@
     <ClCompile Include="ScaleSpaceOpenCVCPU.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <CudaCompile Include="ScaleSpaceCUDAKernels.cu">
+    <ClCompile Include="DeviceSelector.cpp">
       <Filter>Source Files</Filter>
-    </CudaCompile>
+    </ClCompile>
   </ItemGroup>
 </Project>

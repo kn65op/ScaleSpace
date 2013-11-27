@@ -1,4 +1,5 @@
 #include "ScaleSpaceOpenCL.h"
+#include "DeviceSelector.h"
 
 #include <opencv\cv.h>
 
@@ -64,7 +65,8 @@ void ScaleSpaceOpenCL::prepare(ScaleSpaceSourceImageType si_type, ScaleSpaceOutp
     //throw ScaleSpaceZeroException("prepare: There is no scales to prepare");
   }
 
-  OpenCLDevice device = OpenCLDevice::getDevices().front();
+  DeviceSelector ds;
+  OpenCLDevice device = ds.selectDevice(parameters.device);
 
   for (unsigned int i=0; i< nr_scales; ++i)
   {

@@ -84,6 +84,7 @@ struct ScaleSpaceParameters
   bool quiet;
   bool calc_first_image;
   bool debug;
+  std::string device;
 };
 
 /** Scale Space process.

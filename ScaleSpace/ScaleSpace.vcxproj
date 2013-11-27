@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DeviceSelector.h" />
     <ClInclude Include="ScaleSpace.h" />
     <ClInclude Include="ScaleSpaceCUDAKernels.h" />
     <ClInclude Include="ScaleSpaceFactory.h" />
@@ -21,6 +22,7 @@
     <ClInclude Include="ScaleSpaceOpenCVGPU.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DeviceSelector.cpp" />
     <ClCompile Include="ScaleSpace.cpp" />
     <ClCompile Include="ScaleSpaceFactory.cpp" />
     <ClCompile Include="ScaleSpaceImage.cpp" />

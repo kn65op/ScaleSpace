@@ -2,6 +2,7 @@
 #include <Camera.h>
 #include <CameraException.h>
 #include <Stoper.h>
+#include <DeviceSelector.h>
 
 #include "ProgramController.h"
 #include "HelperFunctions.h"
@@ -40,6 +41,7 @@ int main(int argc, char * argv[])
   ssp.calc_first_image = controller.calcFirstImage();
   ssp.debug = controller.isDebug();
   ssp.quiet = controller.isQuiet();
+  ssp.device = controller.getOpenCL();
   try
   {
     prepare.start(false);
@@ -131,6 +133,11 @@ int main(int argc, char * argv[])
     exception = true;
     std::cout << (std::string)ex << "\n";
     std::cout << "JAI camera is not connected\n";
+  }
+  catch (DeviceSelector::NotFoundDeviceException &ex)
+  {
+    exception = true;
+    std::cout << "Specified device: " << controller.getOpenCL() << " not found\n";
   }
   all.stop();
   std::fstream out(controller.getOutputPrefix() + ".txt", std::ios_base::app | std::ios_base::out);

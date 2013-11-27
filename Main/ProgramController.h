@@ -47,6 +47,7 @@ public:
   bool isQuiet() const;
   bool isDebug() const;
   bool calcFirstImage() const;
+  std::string getOpenCL() const;
 
 private:
   ProgramController(const ProgramController & ); //non copyable
@@ -60,6 +61,7 @@ private:
   void getInputFromOptions();
   void getOutputPrefixFromOptions();
   void getInputPrefixFromOptions();
+  void getOpenCLFromOptions();
 
   GetOpt::GetOpt_pp opt;
   
@@ -78,6 +80,7 @@ private:
   std::string in_file;
   std::string out_prefix;
   std::string in_prefix;
+  std::string opencl;
 
   unsigned int scale_step;
   unsigned int nr_scales;
