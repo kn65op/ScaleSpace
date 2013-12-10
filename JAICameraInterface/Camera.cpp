@@ -1,6 +1,7 @@
 #include "Camera.h"
 #include "CameraException.h"
 
+#include <cstdlib>
 #include <iostream>
 #include <opencv2\highgui\highgui.hpp>
 
@@ -96,6 +97,12 @@ std::cout << info.sDescription << "\n"<< info.sDescription << "\n";
   return TRUE;
 }
 
+bool Camera::checkIfJaiSdkIsInstalled()
+{
+  char * jai_env = getenv("JAI_SDK_BIN");
+  return jai_env;
+}
+
 std::list<Camera*> Camera::getCameraList()
 {
   std::list<Camera*> ret; //TODO: autoptr
@@ -103,13 +110,19 @@ std::list<Camera*> Camera::getCameraList()
   uint32_t        iSize;
   uint32_t        iNumDev;
   bool8_t         bHasChange;
+
+  std::cout << J_REG_DATABASE << "\n";
   
-  // Open factory
-  retval = J_Factory_Open(reinterpret_cast<const int8_t*>("") , &m_hFactory);
+  if (!checkIfJaiSdkIsInstalled())
+  {
+    throw CameraException("There is no JAISDK installed or it is broken!");
+  }
+  
+  retval = J_Factory_Open(reinterpret_cast<const int8_t*>(J_REG_DATABASE), &m_hFactory);
+  
   if (retval != J_ST_SUCCESS)
   {
     throw CameraException("Could not open factory!");
-    return ret;
   }
   std::cout << "Opening factory succeeded\n";
 

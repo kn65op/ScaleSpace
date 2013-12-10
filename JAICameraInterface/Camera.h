@@ -80,6 +80,8 @@ public:
   static std::list<Camera*> getCameraList();
 
 private:
+  static bool checkIfJaiSdkIsInstalled();
+
   int index;
 
   //JAI specific objects
